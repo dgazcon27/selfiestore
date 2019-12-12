@@ -17,6 +17,7 @@ $section1 = $word->AddSection(["paperSize" => "Letter", 'marginLeft' => 600, 'ma
 $word->addFontStyle('r2Style', array('bold'=>true,'size'=>15));
 $word->addFontStyle('r3Style', array('bold'=>true,'size'=>10));
 $word->addParagraphStyle('p2Style', array('align'=>'center'));
+$word->addFontStyle('estilofecha', array('bold'=>true,'size'=>10));
 $word->addFontStyle('estilocelda', array(
                                             'bold'=>true,
                                             'size'=>7,
@@ -28,8 +29,8 @@ $word->addFontStyle('estilocelda', array(
                                         ));
 $nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
 $section1->addText($nombreDeSucursal,'r2Style', 'p2Style');
-$section1->addText("CLIENTES",'r3Style', 'p2Style');
-
+$section1->addText("CLIENTES",'r2Style', 'p2Style');
+$section1->addText(date("d/m/Y", strtotime($sells[0]->created_at)),'estilofecha', 'p2Style');
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
 $styleFirstRow = array('borderBottomColor' => '0000FF', 'bgColor' => 'AAAAAA');
@@ -64,11 +65,11 @@ $table1->addCell(2000)->addText($credito,'estilocelda', 'p2Style');
 $word->addTableStyle('table1', $styleTable,$styleFirstRow);
 /// datos bancarios
 
-$filename = "clients-".time().".docx";
+$filename = "clients-".time().".doc";
 #$word->setReadDataOnly(true);
 $word->save($filename,"Word2007");
 //chmod($filename,0444);
-header("Content-Disposition: attachment; filename='$filename'");
+header("Content-Disposition: attachment; filename=$filename");
 readfile($filename); // or echo file_get_contents($filename);
 unlink($filename);  // remove temp file
 

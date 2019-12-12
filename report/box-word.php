@@ -217,7 +217,7 @@ $filename = "box-".time().".doc";
 #$word->setReadDataOnly(true);
 $word->save($filename,"Word2007");
 //chmod($filename,0444);
-header("Content-Disposition: attachment; filename='$filename'");
+header("Content-Disposition: attachment; filename=$filename");
 readfile($filename); // or echo file_get_contents($filename);
 unlink($filename);  // remove temp file
 
