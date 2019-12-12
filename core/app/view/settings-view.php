@@ -8,7 +8,7 @@ $settings = ConfigurationData::getAll();
           <div class="row">
             <div class="col-md-12">
 
-            <h1>Ajustes Generales</h1>
+            <h1>AJUSTES GENERALES</h1>
             </div>
             </div>
 <br>
@@ -16,7 +16,7 @@ $settings = ConfigurationData::getAll();
             <div class="col-md-12">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <i class="fa fa-wrench"></i> Ajustes Generales
+                  <i class="fa fa-wrench"></i> AJUSTES
                 </div>
 <form method="post" action="./?action=updatesettings" enctype="multipart/form-data">
                     <table class="table table-bordered">

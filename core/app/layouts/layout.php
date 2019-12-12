@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>SISTEMA | SELFIE</title>
+    <title>SISTEMA | <?php echo ConfigurationData::getByPreffix("company_name")->val;?></title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.3.4 -->
     <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -41,9 +41,9 @@
         <!-- Logo -->
         <a href="./" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><b>S</b></span>
+          <span class="logo-mini"><b></b></span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>SELFIE </b></span>
+          <span class="logo-lg"><b><?php echo ConfigurationData::getByPreffix("company_name")->val;?> </b></span>
         </a>
 
         <!-- Header Navbar -->
@@ -200,8 +200,9 @@ if( $q==0 ||  $q<=$product->inventary_min){
 <?php if(Core::$user->kind==1):?>
        
    <?php endif; ?>
-				<li><a href="./?view=sellscredit">Creditos</a></li>
-				<li><a href="./?view=bycob">Consignaciones</a></li>
+				  <li><a href="./?view=bycob">Consignaciones</a></li>
+				<li><a href="./?view=sellscredit">Creditos</a></li>			
+				 <li><a href="./?view=sellscancel">Canceladas</a></li>
                 
               </ul>
             </li>
@@ -357,15 +358,15 @@ if( $q==0 ||  $q<=$product->inventary_min){
 
         <footer class="main-footer">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 9.0
+          <b>Version</b> 1
         </div>
-        <strong>Copyright &copy; 2019 <a href="" target="_blank">Selfie</a></strong>
+        <strong>COPYRIGHT &copy; 2019 <?php echo ConfigurationData::getByPreffix("company_name")->val;?></strong>
       </footer>
       <?php else:?>
         <?php if(isset($_GET["view"]) && $_GET["view"]=="clientaccess"):?>
 <div class="login-box">
       <div class="login-logo">
-        <a href="./"><b>SELFIE</b></a>
+        <a href="./"><b><?php echo ConfigurationData::getByPreffix("company_name")->val;?></b></a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
       <center><h4>CLIENTE</h4></center>
@@ -391,7 +392,10 @@ if( $q==0 ||  $q<=$product->inventary_min){
         <?php else:?>
 <div class="login-box" >
       <div class="login-logo">
-        <a href="./"><b>SELFIE</b></a>
+		  
+		  
+	    <img src="<?php echo ConfigurationData::getByPreffix("report_image")->val;?>" width="120" height="120" alt=""/> 
+		  
       </div><!-- /.login-logo -->
       <div class="login-box-body" >
    

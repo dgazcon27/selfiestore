@@ -1,6 +1,7 @@
 <?php
 
 $client = PersonData::getById($_GET["id"]);
+$currentSell = $_GET["sell"];
 $total = PaymentData::sumByClientId($client->id)->total;
 
 ?>
@@ -29,6 +30,7 @@ $total = PaymentData::sumByClientId($client->id)->total;
       <input type="text" name="" id="" class="form-control" placeholder="Total adeudado" value="$ <?php echo $total; ?>" readonly>
 
       <input type="hidden" name="" id="total" class="form-control"  value="<?php echo $total; ?>">
+      <input type="hidden" name="sellid" id="sellid" class="form-control"  value="<?php echo $currentSell; ?>">
 
     </div>
   </div>

@@ -19,8 +19,9 @@ if($product!=null):
 		<form class="form-horizontal" method="post" id="addproduct" enctype="multipart/form-data" action="index.php?view=updateproduct" role="form">
 
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-3 control-label">IMAGEN*</label>
+    <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-6">
+		<label class="control-label">IMAGEN</label>
       <input type="file" name="image" id="name" placeholder="">
 <?php if($product->image!=""):?>
   <br>
@@ -34,25 +35,12 @@ if($product!=null):
 <div class="form-group">
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-3">
-    <label class="control-label">CODIGO INTERNO*</label>
-      <input type="text" name="code" class="form-control" id="code" value="<?php echo $product->code; ?>" placeholder="Codigo Interno del Producto">
+    <label class="control-label">NOMBRE*</label>
+      <input type="text" name="name" class="form-control" id="name" value="<?php echo $product->name; ?>" placeholder="INGRESAR EL NOMBRE DEL PRODUCTO">
     </div>
     <div class="col-md-3">
     <label class="control-label">CODIGO DE BARRAS</label>
-      <input type="text" name="barcode" class="form-control" id="barcode" value="<?php echo $product->barcode; ?>" placeholder="Codigo de barras del Producto">
-    </div>
-  </div>		
-			
-
-<div class="form-group">
-    <label for="inputEmail1" class="col-lg-3 control-label"></label>
-    <div class="col-md-3">
-    <label class="control-label">NOMBRE*</label>
-      <input type="text" name="name" class="form-control" id="name" value="<?php echo $product->name; ?>" placeholder="Nombre del Producto">
-    </div>
-    <div class="col-md-3">
-    <label class="control-label">UNIDAD*</label>
-      <input type="text" name="unit" class="form-control" id="unit" value="<?php echo $product->unit; ?>" placeholder="Unidad del Producto">
+      <input type="text" name="barcode" class="form-control" id="barcode" value="<?php echo $product->barcode; ?>" placeholder="INGRESAR EL CODIGO DE BARRAS DEL PRODUCTO">
     </div>
   </div>		
 			
@@ -86,34 +74,24 @@ if($product!=null):
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE ENTRADA*</label>
-      <input type="text" name="price_in" class="form-control" value="<?php echo $product->price_in; ?>" id="price_in" placeholder="Precio de entrada">
+      <input type="number" name="price_in" class="form-control" value="<?php echo $product->price_in; ?>" id="price_in" placeholder="INGRESAR EL PRECIO DE ENTRADA">
     </div>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE SALIDA*</label>
-      <input type="text" name="price_out" class="form-control" id="price_out" value="<?php echo $product->price_out; ?>" placeholder="Precio de salida">
+      <input type="number" name="price_out" class="form-control" id="price_out" value="<?php echo $product->price_out; ?>" placeholder="INGRESAR EL PRECIO DE SALIDA">
     </div>
   </div>		
 			
   
 
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-3 control-label">Minima en inventario:</label>
+    <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-6">
-      <input type="text" name="inventary_min" class="form-control" value="<?php echo $product->inventary_min;?>" id="inputEmail1" placeholder="Minima en Inventario (Default 10)">
+    <label class="control-label">MINIMA EN INVENTARIO</label>
+      <input type="number" name="inventary_min" class="form-control" value="<?php echo $product->inventary_min;?>" id="inputEmail1" placeholder="INGRESAR EL MINIMO EN EL INVENTARIO(DEFAULT 10)">
     </div>
   </div>
 
-
-  <div class="form-group">
-    <label for="inputEmail1" class="col-lg-3 control-label" >Esta activo</label>
-    <div class="col-md-6">
-<div class="checkbox">
-    <label>
-      <input type="checkbox" name="is_active" <?php if($product->is_active){ echo "checked";}?>> 
-    </label>
-  </div>
-    </div>
-  </div>
 
   <div class="form-group">
     <div class="col-lg-offset-3 col-lg-8">

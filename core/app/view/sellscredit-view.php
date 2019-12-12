@@ -85,7 +85,8 @@ $total= $sell->total-$sell->discount;
 		<td><?php echo $sell->created_at; ?></td>
 		<td style="width:30px;">
 <?php if(isset($_SESSION["user_id"])):?>
-		<a href="index.php?view=delsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+		<a href="./?action=pay3&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES COBRAR ESTA VENTA');">Cobrar</a>
+		<!--a href="index.php?view=delsell&id=<?php //echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA VENTA');"><i class="fa fa-trash"></i></a-->
 <?php endif;?>
 		</td>
 	</tr>

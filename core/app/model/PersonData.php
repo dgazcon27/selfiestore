@@ -13,14 +13,14 @@ class PersonData {
 	}
 
 	public function add_client(){
-		$sql = "insert into person (no,name,lastname,email1,phone1,is_active_access,password,kind,credit_limit,has_credit,created_at) ";
+		$sql = "insert into person (no,name,lastname,address1,phone1,is_active_access,password,kind,credit_limit,has_credit,created_at) ";
 		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->lastname\",\"$this->address1\",\"$this->phone1\",\"$this->is_active_access\",\"$this->password\",1,\"$this->credit_limit\",$this->has_credit,$this->created_at)";
 		Executor::doit($sql);
 	}
 
 	public function add_provider(){
-		$sql = "insert into person (no,name,lastname,address1,email1,phone1,kind,created_at) ";
-		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->lastname\",\"$this->address1\",\"$this->email1\",\"$this->phone1\",2,$this->created_at)";
+		$sql = "insert into person (no,name,address1,phone1,kind,created_at) ";
+		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->address1\",\"$this->phone1\",2,$this->created_at)";
 		Executor::doit($sql);
 	}
 
@@ -52,7 +52,7 @@ class PersonData {
 	}
 
 	public function update_provider(){
-		$sql = "update ".self::$tablename." set no=\"$this->no\",name=\"$this->name\",email1=\"$this->email1\",address1=\"$this->address1\",lastname=\"$this->lastname\",phone1=\"$this->phone1\" where id=$this->id";
+		$sql = "update ".self::$tablename." set no=\"$this->no\",name=\"$this->name\",address1=\"$this->address1\",phone1=\"$this->phone1\" where id=$this->id";
 		Executor::doit($sql);
 	}
 

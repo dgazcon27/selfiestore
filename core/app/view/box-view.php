@@ -2,59 +2,205 @@
 <div class="row">
 	<div class="col-md-12">
 <div class="btn-group pull-right">
-<a href="./index.php?view=boxhistory" class="btn btn-primary "><i class="fa fa-clock-o"></i> Historial</a>
-<a href="./index.php?view=processbox" class="btn btn-primary ">Procesar Ventas <i class="fa fa-arrow-right"></i></a>
+<a href="./index.php?view=boxhistory" class="btn btn-primary "><i class="fa fa-clock-o"></i> HISTORIAL</a>
+<a href="./index.php?view=processbox" class="btn btn-primary ">REALIZAR CIERRE DE CAJA <i class="fa fa-arrow-right"></i></a>
 </div>
-		<h1><i class='fa fa-archive'></i> Caja</h1>
-		<p>Al procesar ventas se generara un corte de caja para todas las ventas del almacen: <b><?php echo StockData::getPrincipal()->name;?></b></p>
-		<div class="clearfix"></div>
-
-
 <?php
 $products = SellData::getSellsUnBoxed();
+$currentDay = "";
+if(isset($products[0]->created_at) && ($products[0]->created_at != ""))
+{
+	$currentDay =  " - Día: ".date("d/m/Y", strtotime($products[0]->created_at));
+}
+?>
+<h1><i class='fa fa-archive'></i> Caja<?php echo $currentDay; ?></h1>
+<p>AL REALIZAR EL CIERRE DE CAJA SE GENERARA UN CORTE DE CAJA PARA TODAS LAS VENTAS DEL ALMACEN: <b><?php echo strtoupper(StockData::getPrincipal()->name);?></b></p>
+<div class="clearfix"></div>
+
+
+<?php
 if(count($products)>0){
-$total_total = 0;
-?>
-<br>
-<div class="box box-primary">
-<table class="table table-bordered table-hover	">
-	<thead>
-		<th></th>
-		<th>Producto</th>
-		<th>Total</th>
-		<th>Almacen</th>
-		<th>Fecha</th>
-	</thead>
-	<?php foreach($products as $sell):?>
+	$total_total = 0;
+	$efectivo = 1;
+	$transferencia = 2;
+	$zelle = 3;
+	$dual = 4;
+	$punto = 5;
+	$total_efectivo = 0;
+	$total_transferencia = 0;
+	$total_zelle = 0;
+	$total_dual = 0;
+	$total_punto = 0;
+	$total_descuento = 0;
+	?>
+	<br>
+	<div class="box box-primary">
+	<table class="table table-bordered table-hover	">
+		<thead>
+			<th></th>
+			<th style="text-align: center;">FACTURA</th>
+			<th style="text-align: center;">PRODUCTOS</th>
+			<th style="text-align: center;">METODO DE PAGO</th>
+			<th style="text-align: center;">REFERENCIA</th>
+			<th style="text-align: center;">TOTAL</th>
+			<th style="text-align: center;">ALMACEN</th>
+		</thead>
+		<?php foreach($products as $sell):?>
 
-	<tr>
-		<td style="width:30px;">
-</td>
-		<td>
+			<tr>
+				<td style="width:30px;">
+					<a href="./index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-default btn-xs"><i class="fa fa-arrow-right"></i></a>
+				</td>
+				<td style="text-align: center;"><?php echo "#".$sell->ref_id; ?></td>
+				<td style="text-align: center;">
+					<?php
+					$operations = OperationData::getAllProductsBySellId($sell->id);
+					echo count($operations);
+					?>
+				</td>
+				<?php		
+			if($sell->f_id == 1)
+			{
+				$variable = "EFECTIVO";
+				$total_efectivo = $total_efectivo + $sell->total-$sell->discount;
+			}
+			elseif($sell->f_id == 2)
+			{
+				$variable = "TRANSFERENCIA";
+				$total_transferencia = $total_transferencia + $sell->total-$sell->discount;
+			}
+			elseif($sell->f_id == 3)
+			{
+				$variable = "ZELLE";
+				$total_zelle = $total_zelle + $sell->total-$sell->discount;
+			}
+			elseif($sell->f_id == 4)
+			{
+				$variable = "PAGO DUAL";
+				$total_efectivo = $total_efectivo + $sell->efe;
+				$total_transferencia = $total_transferencia + $sell->tra;	
+				$total_zelle = $total_zelle + $sell->zel;
+				$total_punto = $total_punto + $sell->pun;
+			}
+			elseif($sell->f_id == 5)
+			{
+				$variable = "PUNTO DE VENTA";	
+				$total_punto = $total_punto + $sell->total-$sell->discount;
+			}
+			$total_total += $sell->total-$sell->discount;
+			?>	
 
-<?php
-$operations = OperationData::getAllProductsBySellId($sell->id);
-echo count($operations);
-?>
-</td>
-		<td>
-
-<?php
-		$total_total += $sell->total-$sell->discount;
-		echo "<b>$ ".number_format($sell->total-$sell->discount,2,".",",")."</b>";
-
-?>			
-
-		</td>
-		<td><?php echo $sell->getStockTo()->name; ?></td>
-		<td><?php echo $sell->created_at; ?></td>
-	</tr>
-
-<?php endforeach; ?>
-
-</table>
+			<?php		
+			if($sell->refe == 0 )
+				$variablerefe = "N/A";
+			else
+				$variablerefe = $sell->refe;	
+			?>
+			<td style="text-align: center;"><?php echo strtoupper($variable); ?></td>
+			<td style="text-align: center;"><?php echo $variablerefe; ?></td>
+			<td style="text-align: center;">
+				<?php
+				if($sell->f_id == 4)
+				{
+				?>
+				<table width="100%">
+					<tbody>
+						<tr>
+						  	<?php
+							if($sell->efe>0 && $sell->efe!=""){
+							?>
+							<td style="width: 300px;">
+								EFECTIVO
+							</td>
+							<?php
+							}
+							if($sell->tra>0 && $sell->tra!=""){
+							?>
+							<td style="width: 200px;">
+								TRANSFERENCIA
+							</td>
+							<?php
+							}
+							if($sell->zel>0 && $sell->zel!=""){
+							?>
+							<td style="width: 200px;">
+								ZELLE
+							</td>
+							<?php
+							}
+							if($sell->pun>0 && $sell->pun!=""){
+							?>
+							<td style="width: 200px;">
+								PUNTO
+							</td>
+							<?php
+							}
+							?>
+						</tr>
+						<tr>
+							<?php
+							if($sell->efe>0 && $sell->efe!=""){
+							?>
+							<td>
+								<?php
+									echo "<b>$ ".number_format($sell->efe,2,".",",")."</b>";
+								?>
+							</td>
+							<?php
+							}
+							if($sell->tra>0 && $sell->tra!=""){
+							?>
+							<td>
+								<?php
+									echo "<b>$ ".number_format($sell->tra,2,".",",")."</b>";
+								?>
+							</td>
+							<?php
+							}
+							if($sell->zel>0 && $sell->zel!=""){
+							?>
+							<td>
+								<?php
+									echo "<b>$ ".number_format($sell->zel,2,".",",")."</b>";
+								?>
+							</td>
+							<?php
+							}
+							if($sell->pun>0 && $sell->pun!=""){
+							?>
+							<td>
+								<?php
+									echo "<b>$ ".number_format($sell->pun,2,".",",")."</b>";
+								?>
+							</td>
+							<?php
+							}
+							?>
+						</tr>
+					</tbody>
+				</table>
+			
+			<?php
+				}
+				else
+				{
+					echo "<b>$ ".number_format($sell->total-$sell->discount,2,".",",")."</b>";
+				}
+			?>
+			</td>
+			
+			<td style="text-align: center;"><?php echo $sell->getStockTo()->name; ?></td>
+		</tr>
+		<?php 
+			$total_descuento = $total_descuento + $sell->discount;
+		endforeach; 
+		?>
+	</table>
 </div>
-<h1>Total: <?php echo "$ ".number_format($total_total,2,".",","); ?></h1>
+<h1>TOTAL: <?php echo "$ ".number_format($total_total,2,".",","); ?></h1>
+
+<h4>TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL PUNTO DE VENTA: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL DESCUENTO: $ ".number_format($total_descuento,2,".",","); ?></h4>
+		
 	<?php
 }else {
 

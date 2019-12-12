@@ -20,7 +20,6 @@ if(count($products)>0){
     	<th>CODIGO</th>
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
-		<th>UNIDAD</th>
 		<th>TIPO</th>
 		<th>PRECIO UNITARIO</th>
 		<th>EN INVENTARIO</th>
@@ -38,7 +37,6 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<td style="width:80px;"><?php echo $product->id; ?></td>
         <td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo strtoupper($product->name); ?></td>
-		<td><?php echo $product->unit; ?></td>
 <td>
   <?php
 if($product->kind==1){

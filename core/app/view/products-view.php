@@ -18,8 +18,7 @@
     <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="report/products-word.php">Word</a></li>
-<li><a onclick="thePDF()" id="makepdf" class="">PDF</a>
+    <li><a href="report/products-word.php">DOCUMENTO</a></li>
 
   </ul>
 </div>
@@ -48,7 +47,7 @@ if(count($products)>0){
 		<th>CATEGORIA</th>
 		<th>MARCA</th>
     	<th>TIPO</th>
-		<th>ACTIVO</th>
+	
 		<th></th>
 	</thead>
 	<?php foreach($products as $product):?>
@@ -59,7 +58,7 @@ if(count($products)>0){
 				<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
 			<?php endif;?>
 		</td>
-		<td><?php echo $product->name; ?></td>
+		<td><?php echo strtoupper($product->name); ?></td>
 		<td>$ <?php echo number_format($product->price_in,2,'.',','); ?></td>
 		<td>$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
 		<td><?php if($product->category_id!=null){echo $product->getCategory()->name;}else{ echo "<center>----</center>"; }  ?></td>
@@ -76,13 +75,13 @@ if($product->kind==1){
 
 
 </td>
-		<td><?php if($product->is_active): ?><i class="fa fa-check"></i><?php endif;?></td>
+		
 		
 
 		<td style="width:90px;">
 		<a target="_blank" href="index.php?action=productqr&id=<?php echo $product->id; ?>" class="btn btn-xs btn-default"><i class="fa fa-qrcode"></i></a>
 		<a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-		<a href="index.php?view=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+		<a href="index.php?view=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE PRODUCTO');"><i class="fa fa-trash"></i></a>
 		</td>
 	</tr>
 	<?php endforeach;?>
@@ -97,7 +96,7 @@ if($product->kind==1){
 	?>
 	<div class="alert alert-info">
 		<h2>NO HAY PRODUCTOS</h2>
-		<p>No se han agregado productos a la base de datos, puedes agregar uno dando click en el boton <b>"AGREGAR PRODUCTO"</b>.</p>
+		<p>NO SE HAN AGREGADO PRODUCTOS, PUEDES AGREGAR UNO DANDO CLICK EN EL BOTON <b>"AGREGAR PRODUCTO"</b>.</p>
 	</div>
 	<?php
 }
@@ -112,28 +111,29 @@ if($product->kind==1){
 <script type="text/javascript">
         function thePDF() {
 var doc = new jsPDF('p', 'pt');
-        doc.setFontSize(26);
+        doc.setFontSize(15);
         doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 40, 65);
-        doc.setFontSize(18);
-        doc.text("LISTADO DE PRODUCTOS", 40, 80);
+        doc.setFontSize(10);
+        doc.text("PRODUCTOS", 40, 80);
         doc.setFontSize(12);
-        doc.text("Usuario: <?php echo Core::$user->name." ".Core::$user->lastname; ?>  -  Fecha: <?php echo date("d-m-Y h:i:s");?> ", 40, 90);
 var columns = [
-    {title: "Id", dataKey: "id"}, 
-    {title: "Codigo", dataKey: "code"}, 
-    {title: "Nombre del Producto", dataKey: "name"}, 
-    {title: "Precio de entrada", dataKey: "price_in"}, 
-    {title: "Precio de Salida", dataKey: "price_in"}, 
+    {title: "ID", dataKey: "id"},  
+    {title: "NOMBRE DEL PRODUCTO", dataKey: "name"}, 
+    {title: "PRECIO DE ENTRADA", dataKey: "price_in"}, 
+    {title: "PRECIO DE SALIDA", dataKey: "price_out"},
+	{title: "CATEGORIA", dataKey: "category_id"},
+	{title: "MARCA", dataKey: "brand_id"},
 ];
 var rows = [
   <?php foreach($products as $product):
   ?>
     {
       "id": "<?php echo $product->id; ?>",
-      "code": "<?php echo $product->barcode; ?>",
       "name": "<?php echo $product->name; ?>",
       "price_in": "$ <?php echo number_format($product->price_in,2,'.',',');?>",
       "price_out": "$ <?php echo number_format($product->price_out,2,'.',',');?>",
+		"category_id": "<?php if($product->category_id!=null){echo $product->getCategory()->name;}else{ echo "<center>----</center>"; }  ?>",
+		"brand_id": "<?php if($product->brand_id!=null){echo $product->getBrand()->name;}else{ echo "<center>----</center>"; }  ?>",
       },
  <?php endforeach; ?>
 ];

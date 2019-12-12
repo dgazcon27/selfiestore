@@ -13,8 +13,9 @@ class ProductData {
 		$this->created_at = "NOW()";
 	}
 
-	public function getCategory(){ return CategoryData::getById($this->category_id);}
 	public function getBrand(){ return BrandData::getById($this->brand_id);}
+	public function getCategory(){ return CategoryData::getById($this->category_id);}
+	
 
 	public function add(){
 		$sql = "insert into ".self::$tablename." (image,kind,code,brand_id,barcode,name,price_in,price_out,user_id,unit,category_id,inventary_min,created_at) ";
@@ -34,12 +35,17 @@ class ProductData {
 
 // partiendo de que ya tenemos creado un objecto ProductData previamente utilizamos el contexto
 	public function update(){
-		$sql = "update ".self::$tablename." set barcode=\"$this->barcode\",name=\"$this->name\",price_in=\"$this->price_in\",price_out=\"$this->price_out\",unit=\"$this->unit\",category_id=$this->category_id,inventary_min=\"$this->inventary_min\",is_active=\"$this->is_active\",code=\"$this->code\",brand_id=$this->brand_id where id=$this->id";
+		$sql = "update ".self::$tablename." set barcode=\"$this->barcode\",name=\"$this->name\",price_in=\"$this->price_in\",price_out=\"$this->price_out\",category_id=$this->category_id,inventary_min=\"$this->inventary_min\",is_active=\"$this->is_active\",code=\"$this->code\",brand_id=$this->brand_id where id=$this->id";
 		Executor::doit($sql);
 	}
 
 	public function del_category(){
 		$sql = "update ".self::$tablename." set category_id=NULL where id=$this->id";
+		Executor::doit($sql);
+	}
+	
+	public function del_brand(){
+		$sql = "update ".self::$tablename." set brand_id=NULL where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -71,6 +77,12 @@ class ProductData {
 
 	public static function getAllByCategoryId($id){
 		$sql = "select * from ".self::$tablename." where category_id=$id";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+	
+		public static function getAllByBrandId($id){
+		$sql = "select * from ".self::$tablename." where brand_id=$id";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}

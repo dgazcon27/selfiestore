@@ -9,6 +9,7 @@ $sell->efe = $_POST["efe"];
 $sell->tra = $_POST["tra"];
 $sell->zel = $_POST["zel"];
 $sell->total = $_POST["total"];
+$sell->discount = $_POST["discount"];
 
 $sell->invoice_code = $_POST["invoice_code"];
 

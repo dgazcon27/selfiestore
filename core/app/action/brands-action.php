@@ -13,13 +13,13 @@ else if(isset($_GET["opt"]) && $_GET["opt"]=="upd"){
 
 }
 else if(isset($_GET["opt"]) && $_GET["opt"]=="del"){
-$category = BrandData::getById($_GET["id"]);
-$products = ProductData::getAllByCategoryId($category->id);
+$brand = BrandData::getById($_GET["id"]);
+$products = ProductData::getAllByBrandId($brand->id);
 foreach ($products as $product) {
-	$product->del_category();
+	$product->del_brand();
 }
 
-$category->del();
+$brand->del();
 Core::redir("./index.php?view=brands&opt=all");
 }
 

@@ -103,8 +103,8 @@ $total= $sell->total-$sell->discount;
 		<td style="width:120px;">
 <?php if(isset($_SESSION["user_id"])):?>
 			
-		<a href="./?action=pay2&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">Cobrar</a>
-		<a href="index.php?view=delsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+		<a href="./?action=pay2&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES COBRAR ESTA VENTA');">Cobrar</a>
+		<!--a href="index.php?view=delsell&id=<?php //echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA VENTA');"><i class="fa fa-trash"></i></a-->
 <?php endif;?>
 
 

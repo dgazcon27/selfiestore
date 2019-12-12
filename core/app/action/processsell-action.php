@@ -61,11 +61,12 @@ $_SESSION["errors"] = $errors;
 			$sell->discount = $_POST["discount"];
 			$sell->stock_to_id = StockData::getPrincipal()->id;
 			$sell->person_id=$_POST["client_id"]!=""?$_POST["client_id"]:"NULL";
+
 			$sell->refe = $_POST["refe"];
 			$sell->efe = $_POST["efe"];
-			$sell->pun = $_POST["pun"];
 			$sell->tra = $_POST["tra"];
 			$sell->zel = $_POST["zel"];
+			$sell->pun = $_POST["pun"];
 
 			$s = $sell->add();
 

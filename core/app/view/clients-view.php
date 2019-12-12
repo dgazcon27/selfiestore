@@ -2,19 +2,18 @@
 <div class="row">
 	<div class="col-md-12">
 <div class="btn-group pull-right">
-	<a href="index.php?view=newclient" class="btn btn-default"><i class='fa fa-smile-o'></i> Nuevo Cliente</a>
+	<a href="index.php?view=newclient" class="btn btn-default"><i class='fa fa-smile-o'></i> NUEVO CLIENTE</a>
 <div class="btn-group pull-right">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    <i class="fa fa-download"></i> Descargar <span class="caret"></span>
+    <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="report/clients-word.php">Word 2007 (.docx)</a></li>
-<li><a onclick="thePDF()" id="makepdf" class="">PDF (.pdf)</a>
+    <li><a href="report/clients-word.php">CLIENTES</a></li>
 
   </ul>
 </div>
 </div>
-		<h1>Directorio de Clientes</h1>
+		<h1>DIRECTORIO DE CLIENTES</h1>
 <br>
 		<?php
 
@@ -26,10 +25,11 @@
 <div class="box-body">
 			<table class="table table-bordered datatable table-hover">
 			<thead>
-			<th>Número de identificación</th>
-			<th>Nombre completo</th>
-			<th>Direccion</th>
-			<th>Telefono</th>
+			<th>IDENTIFICACION</th>
+			<th>NOMBRE</th>
+			<th>DIRECCION</th>
+			<th>TELEFONO</th>
+			<th>CREDITO</th>
 			<th></th>
 			</thead>
 			<?php
@@ -37,12 +37,13 @@
 				?>
 				<tr>
 				<td><?php echo $user->no; ?></td>
-				<td><?php echo $user->name." ".$user->lastname; ?></td>
-				<td><?php echo $user->address1; ?></td>
+				<td><?php echo strtoupper($user->name." ".$user->lastname); ?></td>
+				<td><?php echo strtoupper($user->address1); ?></td>
 				<td><?php echo $user->phone1; ?></td>
+				<td><?php if($user->has_credit): ?><i class="fa fa-check"></i><?php endif;?></td>
 				<td style="width:130px;">
-				<a href="index.php?view=editclient&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
-				<a href="index.php?view=delclient&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs">Eliminar</a>
+				<a href="index.php?view=editclient&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">EDITAR</a>
+				<a href="index.php?view=delclient&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE CLIENTE');">ELIMINAR</a>
 				</td>
 				</tr>
 				<?php
@@ -53,7 +54,7 @@
 			</div>
 			<?php
 		}else{
-			echo "<p class='alert alert-danger'>No hay clientes</p>";
+			echo "<p class='alert alert-danger'>NO HAY CLIENTES</p>";
 		}
 
 

@@ -2,19 +2,18 @@
 <div class="row">
 	<div class="col-md-12">
 <div class="btn-group pull-right">
-	<a href="index.php?view=newprovider" class="btn btn-default"><i class='fa fa-truck'></i> Nuevo Proveedor</a>
+	<a href="index.php?view=newprovider" class="btn btn-default"><i class='fa fa-truck'></i> NUEVO PROVEEDOR</a>
 <div class="btn-group pull-right">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    <i class="fa fa-download"></i> Descargar <span class="caret"></span>
+    <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="report/providers-word.php">Word 2007 (.docx)</a></li>
-<li><a onclick="thePDF()" id="makepdf" class="">PDF (.pdf)</a>
+    <li><a href="report/providers-word.php">PROVEEDORES</a></li>
 
   </ul>
 </div>
 </div>
-		<h1>Directorio de Proveedores</h1>
+		<h1>DIRECTORIO DE PROVEEDORES</h1>
 <br>
 		<?php
 
@@ -27,10 +26,9 @@
 			<table class="table table-bordered datatable table-hover">
 			<thead>
 			<th>RFC/RUT</th>
-			<th>Nombre completo</th>
-			<th>Direccion</th>
-			<th>Email</th>
-			<th>Telefono</th>
+			<th>NOMBRE COMPLETO</th>
+			<th>DIRECCION</th>
+			<th>TELEFONO</th>
 			<th></th>
 			</thead>
 			<?php
@@ -40,11 +38,10 @@
 				<td><?php echo $user->no; ?></td>
 				<td><?php echo $user->name." ".$user->lastname; ?></td>
 				<td><?php echo $user->address1; ?></td>
-				<td><?php echo $user->email1; ?></td>
 				<td><?php echo $user->phone1; ?></td>
 				<td style="width:130px;">
-				<a href="index.php?view=editprovider&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
-				<a href="index.php?view=delprovider&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs">Eliminar</a>
+				<a href="index.php?view=editprovider&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">EDITAR</a>
+				<a href="index.php?view=delprovider&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE PROVEEDOR');">ELIMINAR</a>
 
 				</td>
 				</tr>
@@ -60,7 +57,7 @@
 
 
 		}else{
-			echo "<p class='alert alert-danger'>No hay proveedores</p>";
+			echo "<p class='alert alert-danger'>NO HAY PROVEEDORES</p>";
 		}
 
 

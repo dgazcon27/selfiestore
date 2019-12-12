@@ -24,7 +24,6 @@ $user = $sell->getUser();
 $section1 = $word->AddSection();
 $section1->addText("RESUMEN DE VENTA",array("size"=>22,"bold"=>true,"align"=>"right"));
 
-
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
 $styleFirstRow = array('borderBottomColor' => '0000FF', 'bgColor' => 'AAAAAA');
 

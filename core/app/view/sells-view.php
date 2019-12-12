@@ -11,9 +11,7 @@
     <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="report/sells-word.php">Word 2007 (.docx)</a></li>
-    <li><a href="report/sells-xlsx.php">Excel 2007 (.xlsx)</a></li>
-<li><a onclick="thePDF()" id="makepdf" class="">PDF (.pdf)</a></li>
+<li><a onclick="thePDF()" id="makepdf" class="">VENTAS</a></li>
   </ul>
 </div>
 		<h1><i class='glyphicon glyphicon-shopping-cart'></i> VENTAS</h1>
@@ -52,14 +50,14 @@ if(count($products)>0){
 <table class="table table-bordered table-hover table-responsive datatable	">
 	<thead>
 		<th></th>
-		<th width="1px">FACTURA</th>
-		<th width="1px">FOLIO</th>
-		<th width="10px">VENDEDOR</th>
-		<th width="10px">CLIENTE</th>
-		<th width="10px">METODO DE PAGO</th>
-		<th width="10px">REFERENCIA</th>
+		<th width="1px">FACTURA Nº</th>
+		<TH width="1px">FOLIO</TH>
+		<th width="15px">VENDEDOR</th>
+		<th width="15px">CLIENTE</th>
+		<th width="6px">METODO DE PAGO</th>
+		<th width="6px">REFERENCIA</th>
 		<th width="10px">TOTAL</th>
-		<th width="10px">FECHA</th>
+		<th width="18px">FECHA</th>
 		<th></th>
 	</thead>
 	<?php foreach($products as $sell):
@@ -73,8 +71,9 @@ if(count($products)>0){
 	<tr>
 		<td style="width:30px;">
 		<a href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a></td>
-		<td>#<?php echo $sell->ref_id; ?></td>
+		<td>#<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?></td>
 		<td>#<?php echo $sell->id; ?></td>
+		
 		<td> <?php if($sell->user_id!=null){$c= $sell->getUser();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
 		<td> <?php if($sell->person_id!=null){$c= $sell->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
 		
@@ -82,16 +81,27 @@ if(count($products)>0){
 		if($sell->f_id == 1)
 	$variable = "EFECTIVO";
 elseif($sell->f_id == 2)
-	$variable = "PUNTO DE VENTA";
-elseif($sell->f_id == 3)
 	$variable = "TRANSFERENCIA";
-elseif($sell->f_id == 4)
+elseif($sell->f_id == 3)
 	$variable = "ZELLE";
+elseif($sell->f_id == 4)
+	$variable = "PAGO DUAL";
 elseif($sell->f_id == 5)
-	$variable = "PAGO DUAL";	
+	$variable = "PUNTO DE VENTA";	
 		?>
+		
+		
+	<?php		
+		if($sell->refe == 0 )
+			$variablerefe = "N/A";
+		else
+			$variablerefe = $sell->refe;	
+		?>		
+		
 		<td><?php echo strtoupper($variable); ?></td>
-		<td><?php echo strtoupper($sell->refe); ?></td>
+		<td><?php echo $variablerefe; ?></td>
+		
+		
 		
 		<td>
 
@@ -102,19 +112,16 @@ elseif($sell->f_id == 5)
 ?>			
 		</td>
 		
-	
-	
-		
 		<td><?php echo $sell->created_at; ?></td>
 		<td style="width:130px;">
 		<a  target="_blank" href="ticket.php?id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class='fa fa-ticket'></i> TICKET</a>
 <?php if(isset($_SESSION["user_id"]) && Core::$user->kind==1):?>
-		<a href="index.php?action=cancelsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger">CANCELAR</a>
-		<a href="index.php?view=delsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+		<a href="index.php?action=cancelsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA VENTA');">CANCELAR</a>
+		<!--a href="index.php?view=delsell&id=<?php //echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA VENTA');"><i class="fa fa-trash"></i></a-->
 <?php endif;?>
 		</td>
 	</tr>
-
+	
 <?php endforeach; ?>
 
 </table>
@@ -145,31 +152,31 @@ var doc = new jsPDF('p', 'pt');
         doc.setFontSize(26);
         doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 40, 65);
         doc.setFontSize(18);
-        doc.text("VENTAS CANCELADAS", 40, 80);
+        doc.text("VENTAS", 40, 80);
         doc.setFontSize(12);
         doc.text("Usuario: <?php echo Core::$user->name." ".Core::$user->lastname; ?>  -  Fecha: <?php echo date("d-m-Y h:i:s");?> ", 40, 90);
 var columns = [
-    {title: "Id", dataKey: "id"}, 
-    {title: "Cliente", dataKey: "client"}, 
-    {title: "Total", dataKey: "total"}, 
-    {title: "Estado de pago", dataKey: "p"}, 
-    {title: "Estado de entrega", dataKey: "d"}, 
-    {title: "Almacen", dataKey: "stock"}, 
-    {title: "Fecha", dataKey: "created_at"}, 
+        {title: "FACTURA Nº", dataKey: "id"}, 
+    {title: "VENDEDOR", dataKey: "client"}, 
+    {title: "CLIENTE", dataKey: "total"}, 
+    {title: "METODO DE PAGO", dataKey: "p"}, 
+    {title: "REFERENCIA", dataKey: "d"}, 
+    {title: "TOTAL", dataKey: "stock"}, 
+    {title: "FECHA", dataKey: "created_at"}, 
 ];
 var rows = [
   <?php foreach($products as $sell):
   ?>
     {
-      "id": "<?php echo $sell->id; ?>",
-      "client": "<?php if($sell->person_id!=null){$c= $sell->getPerson();echo $c->name." ".$c->lastname;} ?>",
-      "total": "<?php
+      "id": "#<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?>",
+      "client": "<?php if($sell->user_id!=null){$c= $sell->getUser();echo strtoupper($c->name." ".$c->lastname);} ?>",
+      "total": "<?php if($sell->person_id!=null){$c= $sell->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?>",
+      "p": "<?php echo strtoupper($variable); ?>",
+      "d": "<?php echo $variablerefe; ?>",
+      "stock": "<?php
 $total= $sell->total-$sell->discount;
 		echo "$ ".number_format($total,2,".",",");
 ?>	",
-      "p": "<?php echo $sell->getP()->name; ?>",
-      "d": "<?php echo $sell->getD()->name; ?>",
-      "stock": "<?php echo $sell->getStockTo()->name; ?>",
       "created_at": "<?php echo $sell->created_at; ?>",
       },
  <?php endforeach; ?>
@@ -190,7 +197,7 @@ doc.autoTable(columns, rows, {
 doc.setFontSize(12);
 doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+25);
 <?php 
-$con = ConfigurationData::getByPreffix("report_image");
+$con = ConfigurationData::getByPreffix("");
 if($con!=null && $con->val!=""):
 ?>
 var img = new Image();
@@ -204,6 +211,3 @@ doc.save('sells-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 <?php endif; ?>
 }
 </script>
-
-
-

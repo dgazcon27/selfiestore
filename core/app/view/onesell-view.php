@@ -7,9 +7,8 @@ $sell = SellData::getById($_GET["id"]);
     <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="ticket.php?id=<?php echo $_GET["id"];?>">Ticket (.pdf)</a></li>
-    <li><a href="report/onesell-word.php?id=<?php echo $_GET["id"];?>">Word 2007 (.docx)</a></li>
-<li><a onclick="thePDF()" id="makepdf" class=""><i class="fa fa-download"></i> Descargar PDF</a>
+    <li><a href="ticket.php?id=<?php echo $_GET["id"];?>" class="fa fa-download"> &nbsp;&nbsp;&nbsp;Recibo</a></li>
+<li><a onclick="thePDF()" id="makepdf" class=""><i class="fa fa-download"></i> Garantia</a>
   </ul>
 </div>
 <h1>RESUMEN DE VENTA #<?php echo $sell->ref_id;?></h1>
@@ -235,6 +234,16 @@ $clients = FData::getAll();
   </div>
   </div>
 	
+	
+	<div class="row">
+
+<div class="col-md-12">
+    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCUENTO</label>
+    <div class="col-lg-12">
+      <input type="text" name="discount" value="<?php echo $sell->discount;?>" class="form-control" id="discount" placeholder="DESCUENTO">
+    </div>
+  </div>
+</div>
 
 
 
@@ -251,9 +260,9 @@ $clients = FData::getAll();
 		<div class="row" >
 
 <div class="col-md-6">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INVOICE</label>
+
     <div class="col-lg-12">
-      <input type="text" name="invoice_code" value="<?php echo $costo; ?>" class="form-control" id="invoice_code" placeholder="ACTUALIZAR VENTA">
+      <input type="hidden" name="invoice_code" value="<?php echo $costo; ?>" class="form-control" id="invoice_code" placeholder="ACTUALIZAR VENTA">
     </div>
   </div>
 </div>
@@ -313,7 +322,7 @@ $clients = FData::getAll();
     <div class="col-lg-offset-2 col-lg-10">
       <div class="checkbox">
         <label>
-        <button class="btn btn-success"> ACTUALIZAR VENTA</button>
+        <button class="btn btn-success" style="position: relative; left: 60px; top: 20px;"> ACTUALIZAR VENTA</button>
         </label>
       </div>
     </div>
@@ -332,21 +341,14 @@ $clients = FData::getAll();
         function thePDF() {
 
 var columns = [
-//    {title: "Reten", dataKey: "reten"},
-    {title: "Codigo", dataKey: "code"}, 
-    {title: "Cantidad", dataKey: "q"}, 
-    {title: "Nombre del Producto", dataKey: "product"}, 
-    {title: "Precio unitario", dataKey: "pu"}, 
-    {title: "Total", dataKey: "total"}, 
-//    ...
+
+
 ];
 
 
 var columns2 = [
-//    {title: "Reten", dataKey: "reten"},
-    {title: "", dataKey: "clave"}, 
-    {title: "", dataKey: "valor"}, 
-//    ...
+
+	
 ];
 
 var rows = [
@@ -371,39 +373,71 @@ $person = $sell->getPerson();
 
     {
       "clave": "Cliente",
-      "valor": "<?php echo $person->name." ".$person->lastname; ?>",
+      "valor": "<?php echo $person->name." ".$person->lastname." ".$person->no." ".$person->phone1." ".$person->address1; ?>",
       },
       <?php endif; ?>
-    {
-      "clave": "Atendido por",
-      "valor": "<?php echo $user->name." ".$user->lastname; ?>",
-      },
+
 
 ];
+			
+
+     
+
 
 var rows3 = [
 
-    {
-      "clave": "Descuento",
-      "valor": "$ <?php echo number_format($sell->discount,2,'.',',');; ?>",
-      },
-    {
-      "clave": "Subtotal",
-      "valor": "$ <?php echo number_format($sell->total,2,'.',',');; ?>",
-      },
-    {
-      "clave": "Total",
-      "valor": "$ <?php echo number_format($sell->total-$sell->discount,2,'.',',');; ?>",
-      },
+   ,
 ];
 
 
 // Only pt supported (not mm or in)
 var doc = new jsPDF('p', 'pt');
+			img = new Image();
+img.src = "garantia.png";
+doc.addImage(img, 'PNG', 0, 0, 600, 850, 'monkey'); // Cache the image using the alias 'monkey'
         doc.setFontSize(26);
-        doc.text("NOTA DE VENTA #<?php echo $sell->ref_id; ?>", 40, 65);
-        doc.setFontSize(14);
-        doc.text("Fecha: <?php echo $sell->created_at; ?>", 40, 80);
+        doc.text("#<?php echo $sell->ref_id; ?>", 285, 476);
+        doc.setFontSize(9);
+			
+		<?php	
+		$fecha_actual = $sell->created_at;
+		?>		
+					
+        doc.text("DESDE: <?php echo date("d-m-Y",strtotime($fecha_actual)); ?>", 156, 170);
+				
+		doc.text("HASTA: <?php echo date("d-m-Y",strtotime($fecha_actual."+ 3 month")); ?>", 364, 170);
+		doc.setFontSize(12);	
+		doc.text("<?php
+					 
+					 if($sell->person_id!="")
+					 $client = $sell->getPerson();
+					 
+					 echo $person->name." ".$person->lastname; ?>", 50, 545);
+				 
+		doc.text("<?php
+					 
+					 if($sell->person_id!="")
+					 $client = $sell->getPerson();
+					 
+					 echo $person->no; ?>", 250, 545);
+				 
+		doc.text("<?php
+					 
+					 if($sell->person_id!="")
+					 $client = $sell->getPerson();
+					 
+					 echo $person->phone1; ?>", 450, 545);
+				 
+		doc.text("<?php
+					 
+					 if($sell->person_id!="")
+					 $client = $sell->getPerson();
+					 
+					 echo $person->address1; ?>", 50, 595);		 
+				 
+					 
+					 
+					 
 //        doc.text("Operador:", 40, 150);
 //        doc.text("Header", 40, 30);
   //      doc.text("Header", 40, 30);
@@ -453,14 +487,11 @@ doc.autoTable(columns2, rows3, {
 //        doc.text("Header", 40, 30);
     }
 });
-
 //doc.setFontsize
-//img = new Image();
-//img.src = "liberacion2.jpg";
-//doc.addImage(img, 'JPEG', 40, 10, 610, 100, 'monkey'); // Cache the image using the alias 'monkey'
+
 doc.setFontSize(20);
 doc.setFontSize(12);
-doc.text("Generado por el Sistema de inventario", 40, doc.autoTableEndPosY()+25);
+
 doc.save('sell-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 //doc.output("datauri");
 

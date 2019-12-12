@@ -85,7 +85,7 @@ $total= $sell->total-$sell->discount;
 		<td style="width:130px;">
 <?php if(isset($_SESSION["user_id"])):?>
 		<a href="index.php?action=cancelsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger">Cancelar</a>
-		<a href="index.php?view=delsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+		<!--a href="index.php?view=delsell&id=<?php //echo $sell->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a-->
 <?php endif;?>
 		</td>
 	</tr>

@@ -7,15 +7,9 @@ if(count($_POST)>0){
 	$product->name = $_POST["name"];
 	$product->price_in = $_POST["price_in"];
 	$product->price_out = $_POST["price_out"];
-	$product->unit = $_POST["unit"];
 
 
   $product->inventary_min = $_POST["inventary_min"];
-
-
-
-  $product->code = $_POST["code"];
-
 
   $product->brand_id=$_POST["brand_id"]!=""?$_POST["brand_id"]:"NULL";
   $product->category_id=$_POST["category_id"]!=""?$_POST["category_id"]:"NULL";

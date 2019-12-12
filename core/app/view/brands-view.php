@@ -2,13 +2,13 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Marcas
+            MARCAS
           </h1>
         </section>
 
         <!-- Main content -->
         <section class="content">
-<a href="index.php?view=brands&opt=new" class="btn btn-default"><i class='fa fa-th-list'></i> Nueva Marca</a>
+<a href="index.php?view=brands&opt=new" class="btn btn-default"><i class='fa fa-th-list'></i> NUEVA MARCA</a>
 
 <div class="row">
 	<div class="col-md-12">
@@ -21,14 +21,14 @@
 			?>
 <div class="box">
   <div class="box-header">
-    <h3 class="box-title">Marcas</h3>
+    <h3 class="box-title">MARCAS</h3>
 	
   </div><!-- /.box-header -->
   <div class="box-body">
 
 			<table class="table table-bordered datatable table-hover">
 			<thead>
-			<th>Nombre</th>
+			<th>NOMBRE</th>
 			<th></th>
 			</thead>
 			<?php
@@ -36,7 +36,7 @@
 				?>
 				<tr>
 				<td><?php echo $user->name." ".$user->lastname; ?></td>
-				<td style="width:130px;"><a href="index.php?view=brands&opt=edit&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a> <a href="index.php?action=brands&opt=del&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs">Eliminar</a></td>
+				<td style="width:130px;"><a href="index.php?view=brands&opt=edit&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">EDITAR</a> <a href="index.php?action=brands&opt=del&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA MARCA');">ELIMINAR</a></td>
 				</tr>
 				<?php
 
@@ -51,7 +51,7 @@
 
 
 		}else{
-			echo "<p class='alert alert-danger'>No hay Marcas</p>";
+			echo "<p class='alert alert-danger'>NO HAY MARCAS</p>";
 		}
 
 
@@ -65,22 +65,22 @@
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
-	<h1>Nueva Marca</h1>
+	<h1>NUEVA MARCA</h1>
 	<br>
   <div class="box box-primary">
   <table class="table">
   <tr><td>
 		<form class="form-horizontal" method="post" id="addcategory" action="index.php?action=brands&opt=add" role="form">
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>
+    <label for="inputEmail1" class="col-lg-2 control-label">NOMBRE*</label>
     <div class="col-md-6">
-      <input type="text" name="name" required class="form-control" id="name" placeholder="Nombre">
+      <input type="text" name="name" required class="form-control" id="name" placeholder="INGRESAR EL NOMBRE DE LA MARCA">
     </div>
   </div>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-      <button type="submit" class="btn btn-primary">Agregar Marca</button>
+      <button type="submit" class="btn btn-primary">AGREGAR MARCA</button>
     </div>
   </div>
 </form>
@@ -96,7 +96,7 @@
 <?php $user = BrandData::getById($_GET["id"]);?>
 <div class="row">
 	<div class="col-md-12">
-	<h1>Editar Marca</h1>
+	<h1>EDITAR MARCA</h1>
 	<br>
   <div class="box box-primary">
   <table class="table">
@@ -105,16 +105,16 @@
 
 
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>
+    <label for="inputEmail1" class="col-lg-2 control-label">NOMBRE*</label>
     <div class="col-md-6">
-      <input type="text" name="name" value="<?php echo $user->name;?>" class="form-control" id="name" placeholder="Nombre">
+      <input type="text" name="name" value="<?php echo $user->name;?>" class="form-control" id="name" placeholder="INGRESAR EL NOMBRE DE LA MARCA">
     </div>
   </div>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
     <input type="hidden" name="user_id" value="<?php echo $user->id;?>">
-      <button type="submit" class="btn btn-success">Actualizar Marca</button>
+      <button type="submit" class="btn btn-success">ACTUALIZAR MARCA</button>
     </div>
   </div>
 </form>

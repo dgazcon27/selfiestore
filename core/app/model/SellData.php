@@ -79,7 +79,7 @@ public function add_with_client(){
 	}
 
 	public function update(){
-		$sql = "update ".self::$tablename." set refe=$this->refe,efe=$this->efe,tra=$this->tra,zel=$this->zel,pun=$this->pun,total=$this->total,f_id=$this->f_id,person_id=$this->person_id,invoice_code=\"$this->invoice_code\",invoice_file=\"$this->invoice_file\",comment=\"$this->comment\" where id=$this->id";
+		$sql = "update ".self::$tablename." set refe=$this->refe,efe=$this->efe,tra=$this->tra,zel=$this->zel,pun=$this->pun,total=$this->total,f_id=$this->f_id,person_id=$this->person_id,invoice_code=\"$this->invoice_code\",invoice_file=\"$this->invoice_file\",comment=\"$this->comment\",discount=\"$this->discount\" where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -101,6 +101,10 @@ public function add_with_client(){
 
 	public function update_p(){
 		$sql = "update ".self::$tablename." set p_id=$this->p_id where id=$this->id";
+		Executor::doit($sql);
+	}
+	public function update_date(){
+		$sql = "update ".self::$tablename." set created_at=NOW() where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -151,6 +155,12 @@ public function add_with_client(){
 
 	public static function getCreditsByUserId($id){
 		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=4 and is_draft=0 and user_id=$id order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public static function getCreditsByClientId($id){
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=4 and is_draft=0 and person_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -318,6 +328,11 @@ public function add_with_client(){
 
 	}
 
+	/* Actualizar abonos de la venta */
+	public function updateSellPaymentById($id,$payments){
+		$sql = "update ".self::$tablename." set payments=$payments where id=$id";
+		Executor::doit($sql);
+	}
 
 }
 

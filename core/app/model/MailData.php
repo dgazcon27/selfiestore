@@ -28,7 +28,6 @@ class MailData {
 	}
 	public function send(){
         if(Core::$send_alert_emails){
-        $this->mail->AddAddress(ConfigurationData::getByPreffix("admin_email")->val); // recipients email
         $this->mail->Body .="<h1 style='color:#3498db;'>".ConfigurationData::getByPreffix("company_name")->val."</h1>";
         $this->mail->Body .= "<p>$this->message</p>";
         $this->mail->Body .= "<p>Usuario: ".Core::$user->name." ".Core::$user->lastname."</p>";

@@ -201,7 +201,7 @@ $clients = DData::getAll();
     <?php 
 $clients = FData::getAll();
     ?>
-    <select name="f_id" id="p_id" class="form-control">
+    <select name="f_id" id="f_id" class="form-control">
     <?php foreach(FData::getAll() as $client):?>
       <option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
     <?php endforeach;?>
@@ -213,12 +213,13 @@ $clients = FData::getAll();
 		
 <div class="row">
 
-<div class="col-md-12">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMERO DE REFERENCIA</label>
-    <div class="col-lg-12">
-      <input type="text" name="refe" value="0" class="form-control" id="refe" placeholder="NUMERO DE REFERENCIA DE TRANSFERENCIA">
-    </div>
-  </div>
+	<div class="col-md-12">
+		<label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMERO DE REFERENCIA</label>
+		<div class="col-lg-12">
+		  <input type="text" name="refe" value="0" class="form-control" id="refe" placeholder="NUMERO DE REFERENCIA DE TRANSFERENCIA">
+		</div>
+	  </div>
+	
 </div>	
 		
 		
@@ -248,8 +249,8 @@ $clients = FData::getAll();
     <div class="col-lg-12">
       <input type="text" name="zel" class="form-control" required value="0" id="zel" placeholder="ZELLE">
     </div>
-  </div>
-  </div>		
+</div>
+</div>		
 		
 		
 		
@@ -302,8 +303,8 @@ $clients = FData::getAll();
 
 
 
-      <input type="hidden" name="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
-      <div class="clearfix"></div>
+<input type="hidden" name="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
+<div class="clearfix"></div>
 <br>
   <div class="row">
 <div class="col-md-12">
@@ -356,66 +357,158 @@ $clients = FData::getAll();
 <script>
 	$("#processsell").submit(function(e){
 		discount = $("#discount").val();
-    p = $("#p_id").val();
-    client = $("#client_id").val();
+    	p = $("#f_id").val();		
+    	paymentType = $("#p_id").val();
+    	client = $("#client_id").val();
 		money = $("#money").val();
-    if(money!=""){
-    if(p!=4){
-		if(money<(<?php echo $total;?>-discount)){
-			alert("EFECTIVO INSUFICIENTE!");
-			e.preventDefault();
-		}else{
-			if(discount==""){ discount=0;}
-			go = confirm("CAMBIO: $"+(money-(<?php echo $total;?>-discount ) ) );
-			if(go){
-      e.preventDefault();
-        $.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
-          $.get("./?action=cartofsell",null,function(data2){
-            $("#cartofsell").html(data);
-            $("#show_search_results").html("");
-          });
-        });
-
-      }
-				else{e.preventDefault();}
+		referenceText = $("#refe").val();
+		//INICIO VARIABLES PARA DUAL
+		efe = parseInt($("#efe").val());
+		tra = parseInt($("#tra").val());
+		zel = parseInt($("#zel").val());
+		pun = parseInt($("#pun").val());
+		var conditionOne = false;
+		var numeroNormal = efe+tra+zel+pun;
+		//FIN VARIABLES PARA DUAL
+		// procedemos
+		cli=Array();
+		<?php 
+		foreach(PersonData::getClients() as $cli){
+		  echo " cli[$cli->id]=$cli->has_credit ;";
 		}
-    }else if(p==4){ // usaremos credito
-      if(client!=""){
-        // procedemos
-        cli=Array();
-        <?php 
-        foreach(PersonData::getClients() as $cli){
-          echo " cli[$cli->id]=$cli->has_credit ;";
-        }
-        ?>
-
-        if(cli[client]==1){
-          // si el cliente tiene credito entonces procedemos a hacer la venta a credito :D
-          e.preventDefault();
-        $.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
-            $.get("./?action=cartofsell",null,function(data2){
-              $("#cartofsell").html(data);
-              $("#show_search_results").html("");
-            });
-          });
-
-        }else{
-          // el cliente no tiene credito
-          alert("EL CLIENTE SELECCIONADO NO CUENTA CON CREDITO!");
-          e.preventDefault();
-
-        }
-      }else{
-        // 
-        alert("DEBE SELECCIONAR UN CLIENTE!");
-        e.preventDefault();
-      }
-
-    }
-  }else{
-    alert("CAMPO DE PAGO VACIO")
-    e.preventDefault();
-  }
+		?>
+		if((paymentType==4 || paymentType==2))
+		{
+			conditionOne = true;
+			if(client!="")
+			{
+				// si el cliente tiene credito entonces procedemos a hacer la venta a credito :D
+				if(cli[client]==1){
+					if(discount==""){ discount=0;}
+					
+					if(p==4 && numeroNormal == money )
+					{
+						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
+						if(go){
+							e.preventDefault();
+							$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
+								$.get("./?action=cartofsell",null,function(data2){
+									$("#cartofsell").html(data);
+									$("#show_search_results").html("");
+								  });
+							});
+						}
+						else{e.preventDefault();}
+					}
+					else if(p!=4){
+						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
+						if(go){
+							e.preventDefault();
+							$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
+								$.get("./?action=cartofsell",null,function(data2){
+									$("#cartofsell").html(data);
+									$("#show_search_results").html("");
+								  });
+							});
+						}
+						else{e.preventDefault();}
+					}
+					else{
+					  alert("EL MONTO A CANCELAR Y LOS DATOS DE PAGO NO COINCIDEN");
+					  e.preventDefault();
+					}
+				}else{
+				  // el cliente no tiene credito
+				  alert("EL CLIENTE SELECCIONADO NO CUENTA CON CREDITO!");
+				  e.preventDefault();
+				}
+			}else{
+				// 
+				alert("DEBE SELECCIONAR UN CLIENTE!");
+				e.preventDefault();
+			}
+		}
+    	if(money!="")
+		{
+			if(p!=4)
+			{
+				if(money < parseInt(<?php echo $total;?>-discount))
+				{
+					if(paymentType!=4 && paymentType!=2){
+						alert("EFECTIVO INSUFICIENTE!");
+						e.preventDefault();
+					}
+				}
+				else
+				{
+					if(p!=1 && (referenceText==0 || referenceText==""))
+					{
+						alert("LA REFERENCIA ES OBLIGATORIA");
+						e.preventDefault();
+					}
+					else if(conditionOne == false){
+						if(discount==""){ discount=0;}
+						go = confirm("CAMBIO: $"+(money-(<?php echo $total;?>-discount ) ) );
+						if(go){
+							e.preventDefault();
+							$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
+								$.get("./?action=cartofsell",null,function(data2){
+									$("#cartofsell").html(data);
+									$("#show_search_results").html("");
+								  });
+							});
+						}
+						else{e.preventDefault();}
+					}
+				}
+    		}else if(p==4){ // usaremos credito
+				//validar que el monto no supere el monto menor
+				//alert("TOTAL = "+<?php echo $total;?>);
+				//alert("DESCUENTO = "+parseInt(discount));
+				//alert("numeroNormal = "+numeroNormal);
+				//alert("money = "+money);
+				e.preventDefault();
+				if((money<parseInt((<?php echo $total;?>-discount)) || (numeroNormal < ((parseInt(<?php echo $total;?>))-parseInt(discount))) && (paymentType!=4 && paymentType!=2)))
+				{
+					alert("PAGO INSUFICIENTE!");
+					e.preventDefault();
+				}
+				else
+				{
+					if(numeroNormal != parseInt(money)){
+						alert("PAGO INSUFICIENTE!");
+					}
+					else
+					{
+						if(referenceText==0 || referenceText=="")
+						{
+							alert("LA REFERENCIA ES OBLIGATORIA");
+							e.preventDefault();
+						}
+						else if(conditionOne == false){
+							if(discount==""){ discount=0;}
+							go = confirm("CAMBIO: $"+( parseInt(money) - parseInt(<?php echo $total;?>-discount ) ) );
+							if(go){
+								e.preventDefault();
+								$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
+									$.get("./?action=cartofsell",null,function(data2){
+										$("#cartofsell").html(data);
+										$("#show_search_results").html("");
+									  });
+								});
+							}
+							else{e.preventDefault();}
+						}
+					}
+						
+				}
+			}
+	    }
+		else
+		{
+			alert("CAMPO DE PAGO VACIO")
+			e.preventDefault();
+	    }
 	});
 </script>
 </div>

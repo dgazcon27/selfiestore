@@ -1,6 +1,7 @@
 <section class="content">
     <?php 
 $categories = CategoryData::getAll();
+$products = ProductData::getAll();
     ?>
 <div class="row">
 	<div class="col-md-12">
@@ -13,18 +14,20 @@ $categories = CategoryData::getAll();
 		<form class="form-horizontal" method="post" enctype="multipart/form-data" id="addproduct" action="index.php?view=addproduct" role="form">
 
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-3 control-label">TIPO</label>
+    <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-6">
+	<label class="control-label">TIPO</label>
     <select name="kind" class="form-control">
-    <option value="1">Producto</option>
-    <option value="2">Servicio</option>
+    <option value="1">PRODUCTO</option>
+    <option value="2">SERVICIO</option>
       </select>    
       </div>
   </div>
 
   <div class="form-group">
-    <label for="inputEmail1" class="col-lg-3 control-label">IMAGEN</label>
+    <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-6">
+		<label class="control-label">IMAGEN</label>
       <input type="file" name="image" id="image" placeholder="">
     </div>
   </div>
@@ -35,32 +38,15 @@ $categories = CategoryData::getAll();
 	<div class="form-group">
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-3">
-    <label class="control-label">CODIGO INTERNO*</label>
-      <input type="text" name="code" id="product_code" class="form-control" id="barcode" placeholder="Codigo Interno" required>
+    <label class="control-label">NOMBRE*</label>
+      <input type="text" name="name" required class="form-control" id="name" placeholder="INGRESAR EL NOMBRE DEL PRODUCTO">
     </div>
     <div class="col-md-3">
     <label class="control-label">CODIGO DE BARRAS</label>
-      <input type="text" name="barcode" id="product_code" class="form-control" id="barcode" placeholder="Codigo de Barras del Producto">
+      <input type="text" name="barcode" id="product_code" class="form-control" id="barcode" placeholder="INGRESAR EL CODIGO DE BARRAS DEL PRODUCTO">
     </div>
   </div>				
 			
-			
-			
-			
-			
-			
-			
-	<div class="form-group">
-    <label for="inputEmail1" class="col-lg-3 control-label"></label>
-    <div class="col-md-3">
-    <label class="control-label">NOMBRE*</label>
-      <input type="text" name="name" required class="form-control" id="name" placeholder="Nombre del Producto">
-    </div>
-    <div class="col-md-3">
-    <label class="control-label">UNIDAD*</label>
-      <input type="text" name="unit" class="form-control" id="unit" placeholder="Unidad del Producto">
-    </div>
-  </div>		
 					
 		
 			
@@ -93,11 +79,11 @@ $categories = CategoryData::getAll();
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE ENTRADA*</label>
-      <input type="text" name="price_in" required class="form-control" id="price_in" placeholder="Precio de entrada">
+      <input type="number" name="price_in" required class="form-control" id="price_in" placeholder="INGRESAR EL PRECIO DE ENTRADA">
     </div>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE SALIDA*</label>
-      <input type="text" name="price_out" required class="form-control" id="price_out" placeholder="Precio de salida">
+      <input type="number" name="price_out" required class="form-control" id="price_out" placeholder="INGRESAR EL PRECIO DE SALIDA">
     </div>
   </div>
 			
@@ -107,17 +93,45 @@ $categories = CategoryData::getAll();
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-3">
     <label class="control-label">MINIMA EN INVENTARIO:</label>
-      <input type="text" name="inventary_min" class="form-control" id="inputEmail1" placeholder="Minima en Inventario (Default 10)">
+      <input type="number" name="inventary_min" class="form-control" id="inputEmail1" placeholder="INGRESAR EL MINIMO EN EL INVENTARIO(DEFAULT 10)">
     </div>
     <div class="col-md-3">
     <label class="control-label">INVENTARIO INICIAL*</label>
-      <input type="text" name="q" class="form-control" id="inputEmail1" placeholder="Inventario inicial" required>
+      <input type="number" name="q" class="form-control" id="inputEmail1" placeholder="INGRESAR EL INVENTARIO INICIAL" required>
     </div>
   </div>
+
+			
+			
+		
+	
+	<?php 
+			
+	if(count(ProductData::getAll()) == 0)
+	{		
+		$contad = 1;		
+	}
+	else
+		$contad = count(ProductData::getAll())+1;
+	?>		
+			
+			
+			
+			
+	<div class="form-group">
+	<label for="inputEmail1" class="col-lg-3 control-label"></label>
+    <div class="col-md-3">
+      <input type="hidden" name="code" value="<?php echo $contad; ?>" id="product_code" class="form-control" id="barcode" placeholder="Codigo Interno" required>
+    </div>
+	<div class="col-md-3">
+      <input type="hidden" name="unit" class="form-control" id="unit" placeholder="Unidad del Producto">
+    </div>
+  </div>	
 			
 
-  <div class="form-group">
-    <div class="col-lg-offset-2 col-lg-10">
+  <div class="form-group">  
+  
+		<div class="col-lg-offset-3 col-lg-8">
       <button type="submit" class="btn btn-primary">AGREGAR PRODUCTO</button>
     </div>
   </div>

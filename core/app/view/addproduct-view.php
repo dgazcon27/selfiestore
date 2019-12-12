@@ -9,7 +9,6 @@ if(count($_POST)>0){
   $product->unit = $_POST["unit"];
   $product->price_in = $_POST["price_in"];
   $product->price_out = $_POST["price_out"];
-  
 	
 
   $product->brand_id=$_POST["brand_id"]!=""?$_POST["brand_id"]:"NULL";

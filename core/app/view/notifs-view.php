@@ -3,9 +3,9 @@
 	<div class="col-md-12">
 
 <?php if(isset($_SESSION["client_id"])):?>
-		<h1><i class='fa fa-flash'></i> Mis Compras</h1>
+		<h1><i class='fa fa-flash'></i> MIS COMPRAS</h1>
 <?php else:?>
-		<h1><i class='fa fa-flash'></i> Devoluciones Pendientes</h1>
+		<h1><i class='fa fa-flash'></i> DEVOLUCIONES PENDIENTES</h1>
 <?php endif;?>
 		<div class="clearfix"></div>
 
@@ -91,8 +91,7 @@ $total= $sell->total-$sell->discount;
 }else{
 	?>
 	<div class="jumbotron">
-		<h2>No hay Devoluciones Pendientes</h2>
-		<p>No se ha realizado ninguna devolucion.</p>
+		<p>NO SE HA REALIZADO NINGUNA DEVOLUCION.</p>
 	</div>
 	<?php
 }

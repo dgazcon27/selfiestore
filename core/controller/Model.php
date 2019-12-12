@@ -41,7 +41,9 @@ class Model {
 		$cnt = 0;
 		$found = null;
 		$data = new $aclass;
-		while($r = $query->fetch_array()){
+		
+		while($r = $query->fetch_array())
+		{
 			$cnt=1;
 			foreach ($r as $key => $v) {
 				if($cnt>0 && $cnt%2==0){ 

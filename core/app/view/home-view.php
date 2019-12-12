@@ -22,18 +22,12 @@ for($i=$sd;$i<=$ed;$i+=(60*60*24)){
 }
 ?>
   <section class="content-header">
-    <h1>SELFIE</h1>
+    <h1><?php echo ConfigurationData::getByPreffix("company_name")->val;?></h1>
     <h4>ALMACEN: <?php echo strtoupper(StockData::getPrincipal()->name);  ?></h4>
   </section>
 
     <section class="content">
-<div class="row">
-  <div class="col-md-12">
-  <a href="./?view=products" class="btn btn-default">PRODUCTOS</a>
 
-<!--  <a href="./?view=messages&opt=all" class="btn btn-default">Mensajes</a> -->
-  </div>
-  </div>
 
 <br>
 <div class="row">

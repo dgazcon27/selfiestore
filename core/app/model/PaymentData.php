@@ -19,8 +19,8 @@ class PaymentData {
 
 
 	public function add_payment(){
-		$sql = "insert into ".self::$tablename." (person_id,val,payment_type_id,created_at) ";
-		$sql .= "value (\"$this->person_id\",$this->val,2,NOW())";
+		$sql = "insert into ".self::$tablename." (person_id,val,payment_type_id,sell_id,created_at) ";
+		$sql .= "value (\"$this->person_id\",$this->val,2,$this->sell_id,NOW())";
 		Executor::doit($sql);
 	}
 

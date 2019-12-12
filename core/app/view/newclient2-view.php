@@ -9,26 +9,26 @@
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">IDENTIFICACION*</label>
     <div class="col-md-6">
-      <input type="text" name="no" class="form-control" id="no" placeholder="Número de identificación" required="required">
+      <input type="text" name="no" class="form-control" id="no" placeholder="INGRESAR EL NUMERO DE IDENTIFICACION" required="required">
     </div>
   </div>
 
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">NOMBRE*</label>
     <div class="col-md-6">
-      <input type="text" name="name" class="form-control" id="name" placeholder="Nombre Completo" required="required">
+      <input type="text" name="name" class="form-control" id="name" placeholder="INGRESAR EL NOMBRE COMPLETO" required="required">
     </div>
   </div>
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">DIRECCION</label>
     <div class="col-md-6">
-      <input type="text" name="address1" class="form-control" id="address1" placeholder="Dirección">
+      <input type="text" name="address1" class="form-control" id="address1" placeholder="INGRESAR LA DIRECCION">
     </div>
   </div>
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">TELEFONO</label>
     <div class="col-md-6">
-      <input type="text" name="phone1" class="form-control" id="phone1" placeholder="Teléfono">
+      <input type="text" name="phone1" class="form-control" id="phone1" placeholder="INGRESAR EL NUMERO DE TELEFONO">
     </div>
   </div>
 
