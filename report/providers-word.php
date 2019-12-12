@@ -29,7 +29,7 @@ $word->addFontStyle('estilocelda', array(
 $nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
 $section1->addText($nombreDeSucursal,'r2Style', 'p2Style');
 $section1->addText("PROVEEDORES",'r3Style', 'p2Style');
-
+$section1->addText(date("d/m/Y", strtotime($clients[0]->created_at)),'estilofecha', 'p2Style');
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
 $styleFirstRow = array('borderBottomColor' => '0000FF', 'bgColor' => 'AAAAAA');
@@ -56,7 +56,7 @@ $filename = "providers-".time().".docx";
 #$word->setReadDataOnly(true);
 $word->save($filename,"Word2007");
 //chmod($filename,0444);
-header("Content-Disposition: attachment; filename='$filename'");
+header("Content-Disposition: attachment; filename=$filename");
 readfile($filename); // or echo file_get_contents($filename);
 unlink($filename);  // remove temp file
 

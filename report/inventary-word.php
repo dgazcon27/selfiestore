@@ -7,6 +7,8 @@ include "../core/autoload.php";
 include "../core/app/model/ProductData.php";
 include "../core/app/model/OperationData.php";
 include "../core/app/model/OperationTypeData.php";
+include "../core/app/model/ConfigurationData.php";
+
 
 require_once '../core/controller/PhpWord/Autoloader.php';
 use PhpOffice\PhpWord\Autoloader;
@@ -18,8 +20,15 @@ $word = new  PhpOffice\PhpWord\PhpWord();
 $products = ProductData::getAll();
 
 
-$section1 = $word->AddSection();
-$section1->addText("INVENTARIO",array("size"=>22,"bold"=>true,"align"=>"right"));
+$section1 = $word->AddSection(["paperSize" => "Letter", 'marginLeft' => 600, 'marginRight' => 600, 'marginTop' => 600, 'marginBottom' => 600]);
+$word->addFontStyle('r2Style', array('bold'=>true,'size'=>15));
+$word->addParagraphStyle('p2Style', array('align'=>'center'));
+$word->addFontStyle('estilofecha', array('bold'=>true,'size'=>10));
+$nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
+
+$section1->addText($nombreDeSucursal,'r2Style', 'p2Style');
+$section1->addText("INVENTARIO", 'r2Style', 'p2Style');
+$section1->addText(date("d/m/Y", strtotime($products[0]->created_at)),'estilofecha', 'p2Style');
 
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
@@ -55,7 +64,7 @@ $filename = "inventary-".time().".docx";
 #$word->setReadDataOnly(true);
 $word->save($filename,"Word2007");
 //chmod($filename,0444);
-header("Content-Disposition: attachment; filename='$filename'");
+header("Content-Disposition: attachment; filename=$filename");
 readfile($filename); // or echo file_get_contents($filename);
 unlink($filename);  // remove temp file
 
