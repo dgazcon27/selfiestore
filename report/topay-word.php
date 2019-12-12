@@ -9,6 +9,7 @@ include "../core/app/model/ProductData.php";
 include "../core/app/model/OperationData.php";
 include "../core/app/model/DData.php";
 include "../core/app/model/PData.php";
+include "../core/app/model/ConfigurationData.php";
 
 require_once '../core/controller/PhpWord/Autoloader.php';
 use PhpOffice\PhpWord\Autoloader;
@@ -18,10 +19,16 @@ Autoloader::register();
 
 $word = new  PhpOffice\PhpWord\PhpWord();
 $sells = SellData::getResToPay();
+$section1 = $word->AddSection(["paperSize" => "Letter", 'marginLeft' => 600, 'marginRight' => 600, 'marginTop' => 600, 'marginBottom' => 600]);
 
-$section1 = $word->AddSection();
-$section1->addText("COMPRAS POR PAGAR",array("size"=>22,"bold"=>true,"align"=>"right"));
-
+$date = isset($sells[0]->created_at) ? date("d/m/Y", strtotime($sells[0]->created_at)) : date("d/m/Y");
+$word->addFontStyle('r2Style', array('bold'=>true,'size'=>15));
+$word->addFontStyle('estilofecha', array('bold'=>true,'size'=>10));
+$word->addParagraphStyle('p2Style', array('align'=>'center'));
+$nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
+$section1->addText($nombreDeSucursal,'r2Style', 'p2Style');
+$section1->addText("COMPRAS POR PAGAR",'r2Style', 'p2Style');
+$section1->addText($date,'estilofecha', 'p2Style');
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
 $styleFirstRow = array('borderBottomColor' => '0000FF', 'bgColor' => 'AAAAAA');
@@ -54,7 +61,7 @@ $filename = "topay-".time().".docx";
 #$word->setReadDataOnly(true);
 $word->save($filename,"Word2007");
 //chmod($filename,0444);
-header("Content-Disposition: attachment; filename='$filename'");
+header("Content-Disposition: attachment; filename=$filename");
 readfile($filename); // or echo file_get_contents($filename);
 unlink($filename);  // remove temp file
 

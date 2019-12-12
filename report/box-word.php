@@ -34,10 +34,11 @@ $word->addFontStyle('estilocelda', array(
 $word->addFontStyle('estilofecha', array('bold'=>true,'size'=>10));
 $word->addParagraphStyle('p2Style', array('align'=>'center'));
 //config table style end
+$date = isset($sells[0]->created_at) ? date("d/m/Y", strtotime($sells[0]->created_at)) : date("d/m/Y");
 $nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
 $section1->addText($nombreDeSucursal,'r2Style', 'p2Style');
 $section1->addText("CORTE DE CAJA #".$_GET["id"],'r2Style', 'p2Style');
-$section1->addText(date("d/m/Y", strtotime($sells[0]->created_at)),'estilofecha', 'p2Style');
+$section1->addText($date,'estilofecha', 'p2Style');
 
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
