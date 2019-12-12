@@ -7,11 +7,11 @@ $sell = SellData::getById($_GET["id"]);
     <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a href="ticket.php?id=<?php echo $_GET["id"];?>" class="fa fa-download"> &nbsp;&nbsp;&nbsp;Recibo</a></li>
-<li><a onclick="thePDF()" id="makepdf" class=""><i class="fa fa-download"></i> Garantia</a>
+    <li><a href="ticket.php?id=<?php echo $_GET["id"];?>" class="fa fa-download"> &nbsp;&nbsp;&nbsp;RECIBO</a></li>
+	 <li><a onclick="thePDF()" id="makepdf" class="fa fa-download"><i class=""></i> &nbsp;&nbsp;&nbsp;GARANTIA</a>
   </ul>
 </div>
-<h1>RESUMEN DE VENTA #<?php echo $sell->ref_id;?></h1>
+<h1>RESUMEN DE VENTA #<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?></h1>
 <?php if(isset($_GET["id"]) && $_GET["id"]!=""):?>
 <?php
 $operations = OperationData::getAllProductsBySellId($_GET["id"]);
@@ -234,7 +234,7 @@ $clients = FData::getAll();
   </div>
   </div>
 	
-	
+<?php if(isset($_SESSION["user_id"]) && Core::$user->kind==1):?>	
 	<div class="row">
 
 <div class="col-md-12">
@@ -244,8 +244,15 @@ $clients = FData::getAll();
     </div>
   </div>
 </div>
-
-
+<?php endif;?>
+<?php if(isset($_SESSION["user_id"]) && Core::$user->kind==3):?>	
+	<div class="col-md-12" hidden="true">
+    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCUENTO</label>
+    <div class="col-lg-12">
+      <input type="hidden" name="discount" value="<?php echo $sell->discount;?>" class="form-control" id="discount" placeholder="DESCUENTO">
+    </div>
+  </div>
+<?php endif;?>
 
 <div class="row">
 
@@ -335,8 +342,18 @@ $clients = FData::getAll();
 
 
 
-
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 <script type="text/javascript">
         function thePDF() {
 
@@ -396,7 +413,7 @@ var doc = new jsPDF('p', 'pt');
 img.src = "garantia.png";
 doc.addImage(img, 'PNG', 0, 0, 600, 850, 'monkey'); // Cache the image using the alias 'monkey'
         doc.setFontSize(26);
-        doc.text("#<?php echo $sell->ref_id; ?>", 285, 476);
+        doc.text("#<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?>", 249, 476);
         doc.setFontSize(9);
 			
 		<?php	

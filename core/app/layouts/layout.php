@@ -201,7 +201,8 @@ if( $q==0 ||  $q<=$product->inventary_min){
        
    <?php endif; ?>
 				  <li><a href="./?view=bycob">Consignaciones</a></li>
-				<li><a href="./?view=sellscredit">Creditos</a></li>			
+				<li><a href="./?view=sellscredit">Creditos</a></li>
+				  <li><a href="./?view=cotizations">Cotizaciones</a></li>	
 				 <li><a href="./?view=sellscancel">Canceladas</a></li>
                 
               </ul>

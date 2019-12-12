@@ -6,7 +6,6 @@ include "../core/app/model/SellData.php";
 include "../core/app/model/OperationData.php";
 include "../core/app/model/OperationTypeData.php";
 include "../core/app/model/ProductData.php";
-
 require_once '../core/controller/PhpWord/Autoloader.php';
 use PhpOffice\PhpWord\Autoloader;
 use PhpOffice\PhpWord\Settings;
