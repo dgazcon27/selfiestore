@@ -150,19 +150,19 @@ elseif($sell->f_id == 5)
         function thePDF() {
 var doc = new jsPDF('p', 'pt');
         doc.setFontSize(26);
-        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 40, 65);
+        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 230, 65);
         doc.setFontSize(18);
-        doc.text("VENTAS", 40, 80);
+        doc.text("VENTAS", 260, 80);
         doc.setFontSize(12);
-        doc.text("Usuario: <?php echo Core::$user->name." ".Core::$user->lastname; ?>  -  Fecha: <?php echo date("d-m-Y h:i:s");?> ", 40, 90);
+        doc.text("Usuario: <?php echo Core::$user->name." ".Core::$user->lastname; ?>  -  Fecha: <?php echo date("d-m-Y h:i:s");?> ", 140, 90);
 var columns = [
-        {title: "FACTURA Nº", dataKey: "id"}, 
-    {title: "VENDEDOR", dataKey: "client"}, 
-    {title: "CLIENTE", dataKey: "total"}, 
-    {title: "METODO DE PAGO", dataKey: "p"}, 
-    {title: "REFERENCIA", dataKey: "d"}, 
-    {title: "TOTAL", dataKey: "stock"}, 
-    {title: "FECHA", dataKey: "created_at"}, 
+        {title: "Factura Nº", dataKey: "id"}, 
+    {title: "Venderdor", dataKey: "client"}, 
+    {title: "Cliente", dataKey: "total"}, 
+    {title: "Metodo de pago", dataKey: "p"}, 
+    {title: "Referencia", dataKey: "d"}, 
+    {title: "Total", dataKey: "stock"}, 
+    {title: "Fecha", dataKey: "created_at"}, 
 ];
 var rows = [
   <?php foreach($products as $sell):
@@ -181,6 +181,7 @@ $total= $sell->total-$sell->discount;
       },
  <?php endforeach; ?>
 ];
+doc.setFontSize(14);
 doc.autoTable(columns, rows, {
     theme: 'grid',
     overflow:'linebreak',

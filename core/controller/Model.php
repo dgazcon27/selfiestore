@@ -41,7 +41,6 @@ class Model {
 		$cnt = 0;
 		$found = null;
 		$data = new $aclass;
-		
 		while($r = $query->fetch_array())
 		{
 			$cnt=1;

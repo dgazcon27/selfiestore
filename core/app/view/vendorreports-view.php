@@ -72,11 +72,11 @@ $users = UserData::getAll();
         function thePDF() {
 var doc = new jsPDF('p', 'pt');
         doc.setFontSize(26);
-        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 40, 65);
+        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 230, 65);
         doc.setFontSize(18);
-        doc.text("CLIENTES POPULARES", 40, 80);
+        doc.text("CLIENTES POPULARES", 190, 80);
         doc.setFontSize(12);
-        doc.text("Usuario: <?php echo Core::$user->name." ".Core::$user->lastname; ?>  -  Fecha: <?php echo date("d-m-Y h:i:s");?> ", 40, 90);
+        doc.text("Usuario: <?php echo Core::$user->name." ".Core::$user->lastname; ?>  -  Fecha: <?php echo date("d-m-Y h:i:s");?> ", 130, 90);
 var columns = [
     {title: "Id", dataKey: "id"}, 
     {title: "Total", dataKey: "total"}, 
