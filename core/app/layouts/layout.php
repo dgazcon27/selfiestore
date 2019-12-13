@@ -203,7 +203,8 @@ if( $q==0 ||  $q<=$product->inventary_min){
 				  <li><a href="./?view=bycob">Consignaciones</a></li>
 				<li><a href="./?view=sellscredit">Creditos</a></li>
 				  <li><a href="./?view=cotizations">Cotizaciones</a></li>	
-				 <li><a href="./?view=sellscancel">Canceladas</a></li>
+				 <li><a href="./?view=sellscancel">Ventas Canceladas</a></li>
+         <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
                 
               </ul>
             </li>
@@ -252,8 +253,8 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=re">Nueva *</a></li>
                 <li><a href="./?view=res">Compras</a></li>
                 <li><a href="./?view=byreceive">Por Recibir</a></li>
-          <li><a href="./?view=topay">por Pagar</a></li>
-          <li><a href="./?view=rescancel">Compras canceladas</a></li>
+                <li><a href="./?view=topay">por Pagar</a></li>
+                <li><a href="./?view=rescancel">Compras canceladas</a></li>
               </ul>
             </li>
             <?php if(Core::$user->kind==1):?>
