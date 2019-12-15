@@ -20,6 +20,7 @@
 			<?php
 			$products=null;
 			$total_total = 0;
+			$total_payments = 0;
 			if(Core::$user->kind==3){
 			$products = SellData::getCreditsByUserId(Core::$user->id);
 			}
@@ -65,7 +66,7 @@
 							<td>
 								<?php
 								$total= $sell->total-$sell->discount;
-
+								$total_payments = $total_payments + $sell->payments;
 								$total_total = $total_total + ($total-$sell->payments);
 								/*foreach($operations as $operation){
 									$product  = $operation->getProduct();
@@ -97,7 +98,10 @@
 			}
 			?>
 			<h1>
-				Pendiente por cobrar en facturas a crédito: <?php echo "$ ".number_format($total_total,2,".",",")?>
+				PENDIENTE POR COBRAR EN FACTURAS A CRÉDITO: <?php echo "$ ".number_format($total_total,2,".",",")?>
+			</h1>
+			<h2>
+				ABONADO EN FACTURAS INCOMPLETAS: <?php echo "$ ".number_format($total_payments,2,".",",")?>
 			</h1>
 			<br><br><br><br><br><br><br><br><br><br>
 		</div>
