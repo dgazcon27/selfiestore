@@ -62,6 +62,7 @@
               <a href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
                 <i class="glyphicon glyphicon-eye-open"></i>
               </a>
+               #<?php echo $sell->ref_id; ?>
             </td>
 
             <td style="text-align: center;"><?php echo strtoupper($sell->getP()->name); ?></td>
