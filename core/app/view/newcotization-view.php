@@ -7,8 +7,8 @@ $iva_val = ConfigurationData::getByPreffix("imp-val")->val;
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
-	<h1>Cotizacion</h1>
-	<p><b>Buscar producto por nombre o por codigo:</b></p>
+	<h1>COTIZAR PEDIDO</h1>
+	<p><b>BUSCAR PRODUCTO POR NOMBRE O POR CODIGO:</b></p>
 		<form id="searchp">
 		<div class="row">
 			<div class="col-md-6">
@@ -16,7 +16,7 @@ $iva_val = ConfigurationData::getByPreffix("imp-val")->val;
 				<input type="text" id="product_code" name="product" class="form-control">
 			</div>
 			<div class="col-md-3">
-			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> Buscar</button>
+			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> BUSCAR</button>
 			</div>
 		</div>
 		</form>
@@ -77,16 +77,16 @@ unset($_SESSION["errors"]);
 <?php if(isset($_SESSION["cotization"])):
 $total = 0;
 ?>
-<h2>Lista de venta</h2>
+<h2>LISTA DE PEDIDO</h2>
 <div class="box box-primary">
 <table class="table table-bordered table-hover">
 <thead>
-	<th style="width:30px;">Codigo</th>
-	<th style="width:30px;">Cantidad</th>
-	<th style="width:30px;">Unidad</th>
-	<th>Producto</th>
-	<th style="width:30px;">Precio Unitario</th>
-	<th style="width:30px;">Precio Total</th>
+	<th style="width:30px;">CODIGO</th>
+	<th style="width:30px;">IMAGEN</th>
+	<th>NOMBRE</th>
+	<th style="width:30px;">TIPO</th>
+	<th style="width:30px;">PRECIO UNITARIO</th>
+	<th style="width:30px;">PRECIO TOTAL</th>
 	<th ></th>
 </thead>
 <?php foreach($_SESSION["cotization"] as $p):
@@ -94,12 +94,24 @@ $product = ProductData::getById($p["product_id"]);
 ?>
 <tr >
 	<td><?php echo $product->id; ?></td>
-	<td ><?php echo $p["q"]; ?></td>
-	<td><?php echo $product->unit; ?></td>
+	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 	<td><?php echo $product->name; ?></td>
+	
+	<td>
+  <?php
+if($product->kind==1){
+  echo "<span class='label label-info'>Producto</span>";
+}else if($product->kind==2){
+  echo "<span class='label label-success'>Servicio</span>";
+
+}
+  ?>
+
+
+</td>
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
-	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
+	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> QUITAR</a></td>
 </tr>
 
 <?php endforeach; ?>

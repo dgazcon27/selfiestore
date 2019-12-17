@@ -3,16 +3,16 @@
 $products = ProductData::getLike($_GET["product"]);
 if(count($products)>0){
 	?>
-<h3>Resultados de la Busqueda</h3>
+<h3>RESULTADO DE LA BUSQUEDA</h3>
 <div class="box box-primary">
 <table class="table table-bordered table-hover">
 	<thead>
-		<th>Codigo</th>
-		<th>Nombre</th>
-		<th>Unidad</th>
-		<th>Precio unitario</th>
-		<th>En inventario</th>
-		<th>Cantidad</th>
+		<th>CODIGO</th>
+		<th>IMAGEN</th>
+		<th>NOMBRE</th>
+		<th>TIPO</th>
+		<th>PRECIO UNITARIO</th>
+		<th>CANTIDAD</th>
 	</thead>
 	<?php
 $products_in_cero=0;
@@ -24,8 +24,22 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
 		<td style="width:80px;"><?php echo $product->id; ?></td>
+		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
-		<td><?php echo $product->unit; ?></td>
+		
+		<td>
+  <?php
+if($product->kind==1){
+  echo "<span class='label label-info'>Producto</span>";
+}else if($product->kind==2){
+  echo "<span class='label label-success'>Servicio</span>";
+
+}
+  ?>
+
+
+</td>
+
 		<td><b>$<?php echo $product->price_out; ?></b></td>
 		<td>
 			<?php echo $q; ?>
