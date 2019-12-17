@@ -26,12 +26,12 @@ $word->addFontStyle('estilofecha', array('bold'=>true,'size'=>10));
 $word->addFontStyle('r2Style', array('bold'=>true,'size'=>15));
 $word->addFontStyle('estilofecha', array('bold'=>true,'size'=>10));
 $word->addParagraphStyle('p2Style', array('align'=>'center'));
-
+$date = isset($sells[0]->created_at) ? date("d/m/Y", strtotime($sells[0]->created_at)) : date("d/m/Y");
 // Adding text
 $nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
 $section1->addText($nombreDeSucursal,'r2Style','p2Style');
 $section1->addText("VENTAS POR COBRAR",'r2Style','p2Style');
-$section1->addText(date("d/m/Y", strtotime($sells[0]->created_at)),'estilofecha', 'p2Style');
+$section1->addText($date,'estilofecha', 'p2Style');
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
 $styleFirstRow = array('borderBottomColor' => '0000FF', 'bgColor' => 'AAAAAA');

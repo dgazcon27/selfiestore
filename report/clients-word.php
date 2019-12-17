@@ -30,7 +30,9 @@ $word->addFontStyle('estilocelda', array(
 $nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
 $section1->addText($nombreDeSucursal,'r2Style', 'p2Style');
 $section1->addText("CLIENTES",'r2Style', 'p2Style');
-$section1->addText(date("d/m/Y", strtotime($clients[0]->created_at)),'estilofecha', 'p2Style');
+$date = isset($clients[0]->created_at) ? date("d/m/Y", strtotime($clients[0]->created_at)) : date("d/m/Y");
+
+$section1->addText($date,'estilofecha', 'p2Style');
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
 $styleFirstRow = array('borderBottomColor' => '0000FF', 'bgColor' => 'AAAAAA');

@@ -25,10 +25,11 @@ $word->addFontStyle('r2Style', array('bold'=>true,'size'=>15));
 $word->addParagraphStyle('p2Style', array('align'=>'center'));
 $word->addFontStyle('estilofecha', array('bold'=>true,'size'=>10));
 $nombreDeSucursal = ConfigurationData::getByPreffix("company_name")->val;
+$date = isset($products[0]->created_at) ? date("d/m/Y", strtotime($products[0]->created_at)) : date("d/m/Y");
 
 $section1->addText($nombreDeSucursal,'r2Style', 'p2Style');
 $section1->addText("INVENTARIO", 'r2Style', 'p2Style');
-$section1->addText(date("d/m/Y", strtotime($products[0]->created_at)),'estilofecha', 'p2Style');
+$section1->addText($date,'estilofecha', 'p2Style');
 
 
 $styleTable = array('borderSize' => 6, 'borderColor' => '888888', 'cellMargin' => 40);
