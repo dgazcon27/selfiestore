@@ -176,6 +176,7 @@ $total_dual = 0;
 									$egl = 0;							
 									$adm = 0;							
 									$ofi = 0;							
+									$ven = 0;							
 								}
 								else
 								{
@@ -183,15 +184,16 @@ $total_dual = 0;
 									$ceo = ($superganancia-$superdescuento)*0.47;
 									$car = ($superganancia-$superdescuento)*0.16;	
 									$egl = ($superganancia-$superdescuento)*0.16;	
-									$adm = ($superganancia-$superdescuento)*0.06;		
+									$adm = ($superganancia-$superdescuento)*0.10;		
 									$mar = ($superganancia-$superdescuento)*0.10;		
+									$ven = ($superganancia-$superdescuento)*0.06;		
 									$ofi = ($superganancia-$superdescuento)*0.05;		
 								}
 								?>
 <h4>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL PUNTO DE VENTA: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|"; ?></h4>		
 <br><br>
 <h1>COMISIONES: $ <?php echo number_format($com,2,'.',','); ?></h1>
-<h4>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; CEO [47%] : $ <?php echo number_format($ceo,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; GERENTE [16%] : $ <?php echo number_format($car,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; EGLE [16%] : $ <?php echo number_format($egl,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; VENDEDORA [6%] : $ <?php echo number_format($mar,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;</br></br>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;OFFICE BOY [5%] : $ <?php echo number_format($ofi,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;ADMINISTRATIVO [10%] : $ <?php echo number_format($adm,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+<h4>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; CEO [47%] : $ <?php echo number_format($ceo,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; GERENTE [16%] : $ <?php echo number_format($car,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; EGLE [16%] : $ <?php echo number_format($egl,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; VENDEDORA [6%] : $ <?php echo number_format($ven,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;</br></br>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;OFFICE BOY [5%] : $ <?php echo number_format($ofi,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;ADMINISTRATIVO [10%] : $ <?php echo number_format($adm,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h4>
 
 <script type="text/javascript">
         function thePDF() {
