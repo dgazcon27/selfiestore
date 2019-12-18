@@ -6,13 +6,16 @@ if(isset($_GET["product_id"])){
 	}else{
 		$ncart = null;
 		$nx=0;
-		foreach($cart as $c){
-			if($c["product_id"]!=$_GET["product_id"]){
-				$ncart[$nx]= $c;
+		if (count($cart) > 0) {
+			foreach($cart as $c){
+				if($c["product_id"]!=$_GET["product_id"]){
+					$ncart[$nx]= $c;
+				}
+				$nx++;
 			}
-			$nx++;
 		}
 		$_SESSION["cart"] = $ncart;
+		unset($_SESSION["cotization"]);
 	}
 
 }else{
