@@ -205,6 +205,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
 				  <li><a href="./?view=cotizations">Cotizaciones</a></li>	
 				 <li><a href="./?view=sellscancel">Ventas Canceladas</a></li>
          <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
+         <li><a href="./?view=cotizationlist">Lista de cotizaciones</a></li>
                 
               </ul>
             </li>

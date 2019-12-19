@@ -27,14 +27,14 @@ class SellData {
 
 
 	public function add_cotization(){
-		$sql = "insert into ".self::$tablename." (is_draft,p_id,d_id,user_id,created_at) ";
-		$sql .= "value (1,2,2,$this->user_id,$this->created_at)";
+		$sql = "insert into ".self::$tablename." (is_draft,p_id,d_id,user_id,created_at, is_cotization) ";
+		$sql .= "value (1,2,2,$this->user_id,$this->created_at, $this->is_cotization)";
 		return Executor::doit($sql);
 	}
 
 	public function add_cotization_by_client(){
-		$sql = "insert into ".self::$tablename." (is_draft,p_id,d_id,person_id,created_at) ";
-		$sql .= "value (1,2,2,$this->person_id,$this->created_at)";
+		$sql = "insert into ".self::$tablename." (is_draft,p_id,d_id,person_id,created_at, is_cotization) ";
+		$sql .= "value (1,2,2,$this->person_id,$this->created_at, $this->is_cotization)";
 		return Executor::doit($sql);
 	}
 

@@ -13,6 +13,7 @@ if(isset($_SESSION["cotization"])){
 //////////////////////////////////
 		if($process==true){
 			$sell = new SellData();
+			$sell->is_cotization = 1;
 			if(isset($_SESSION["user_id"])){
 				$sell->user_id = $_SESSION["user_id"];
 				$s = $sell->add_cotization();
