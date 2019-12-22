@@ -11,6 +11,9 @@ class OperationData {
 		$this->operation_type_id = "";
 		$this->operation_from_id = "NULL";
 		$this->created_at = "NOW()";
+		$this->sell_id = "";
+		$this->q_approved = "";
+		$this->id = "";
 	}
 
 	public function add(){
@@ -58,6 +61,11 @@ class OperationData {
 
 	public function update_type(){
 		$sql = "update ".self::$tablename." set operation_type_id=\"$this->operation_type_id\" where id=$this->id";
+		Executor::doit($sql);
+	}
+
+	public function update_q_approved(){
+		$sql = "update ".self::$tablename." set operation_type_id=7, q_approved=\"$this->q_approved\" where id=\"$this->id\" ";
 		Executor::doit($sql);
 	}
 

@@ -19,6 +19,7 @@ foreach($operations as $operation){
 <form method="post" class="form-horizontal" id="processcotization" action="index.php?action=processcotization">
 <input type="hidden" name="cotization_id" value="<?php echo $_GET["id"]; ?>">
 <input type="hidden" name="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
+<input type="hidden" name="op-q" id="op-q">
 
 <div class="row">
 <div class="col-md-3">
@@ -103,9 +104,11 @@ $clients = DData::getAll();
 <br><table class="table table-bordered table-hover">
 	<thead>
 		<th>Codigo</th>
-		<th>Cantidad</th>
+		<th>Cantidad solicitada</th>
+        <th>Cantidad a despachar</th>
 		<th>Nombre del Producto</th>
-		<th>Precio Unitario</th>
+		<th>Precio</th>
+        <th>Precio Unitario</th>
 		<th>Total</th>
 
 	</thead>
@@ -115,10 +118,12 @@ $clients = DData::getAll();
 ?>
 <tr>
 	<td><?php echo $product->id ;?></td>
-	<td><?php echo $operation->q ;?></td>
+    <td><?php echo $operation->q ;?></td>
+	<td><input class="inputs-type" data-id="<?php echo $operation->id; ?>" data-q="<?php echo $operation->q; ?>" type="text" name="q_approved" value="<?php echo $operation->q ;?>"></td>
 	<td><?php echo $product->name ;?></td>
-	<td>$ <?php echo number_format($product->price_out,2,".",",") ;?></td>
-	<td><b>$ <?php echo number_format($operation->q*$product->price_out,2,".",",");
+	<td>$ <?php echo number_format($product->price_in,2,".",",") ;?></td>
+    <td> <div data-price="<? echo $product->price_out;?>" id="price_out_<? echo $operation->id;?>" > $ <?php echo number_format($product->price_out,2,".",",") ;?> </div> </td>
+	<td class="total_price_<?echo $operation->id;?> "><b>$ <?php echo number_format($operation->q*$product->price_out,2,".",",");
 	//$total+=$operation->q*$product->price_out;?></b></td>
 </tr>
 <?php
@@ -126,7 +131,7 @@ $clients = DData::getAll();
 	?>
 </table>
 </div>
-<br><br><h1>Total: $ <?php echo number_format($total,2,'.',','); ?></h1>
+<br><br><h1 id="total_price">Total: $ <?php echo number_format($total,2,'.',','); ?></h1>
 	<?php
 
 ?>	
@@ -135,9 +140,31 @@ $clients = DData::getAll();
 <?php endif; ?>
 </section>
 <script>
+    $(".inputs-type").bind('keypress',function (ev) {
+        let elm = ev.currentTarget;
+        let id = $(elm).data('id');
+        let q_approved = $(elm).data('q_approved');
+        let price = $('#price_out_'+id).data('price');
+        let price_tx = $('.total_price_'+id)[0];
+        
+    })
+
 	$("#processcotization").submit(function(e){
 		discount = $("#discount").val();
 		money = $("#money").val();
+        let inputs = $('.inputs-type');
+        obj = [];
+        for (var i = 0; i < inputs.length; i++) {
+            let elem = inputs[i];
+            obj.push({
+                id:$(elem).data('id'),
+                q_ap:$(elem).data('q'),
+
+            })
+        }
+        $('#op-q').val(JSON.stringify(obj));
+
+        console.log(obj);
 		if(money<(<?php echo $total;?>-discount)){
 			alert("Efectivo insificiente!");
 			e.preventDefault();

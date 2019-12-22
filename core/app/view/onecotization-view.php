@@ -57,12 +57,18 @@ $user = $sell->getUser();
 <?php endif; ?>
 </table>
 </div>
+<div style="margin-bottom: 20px">
+	<a href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
+									<i class="fa fa-check"></i> PROCESAR
+								</a>
+</div>
 <div class="box box-primary">
 <br><table class="table table-bordered table-hover">
 	<thead>
 		<th>Codigo</th>
 		<th>Cantidad</th>
 		<th>Nombre del Producto</th>
+		<th>Precio</th>
 		<th>Precio Unitario</th>
 		<th>Total</th>
 
@@ -75,6 +81,7 @@ $user = $sell->getUser();
 	<td><?php echo $product->id ;?></td>
 	<td><?php echo $operation->q ;?></td>
 	<td><?php echo $product->name ;?></td>
+	<td>$ <?php echo number_format($product->price_in,2,".",",") ;?></td>
 	<td>$ <?php echo number_format($product->price_out,2,".",",") ;?></td>
 	<td><b>$ <?php echo number_format($operation->q*$product->price_out,2,".",",");$total+=$operation->q*$product->price_out;?></b></td>
 </tr>
