@@ -9,9 +9,9 @@ if(!empty($_POST)){
 	$iva_val = ConfigurationData::getByPreffix("imp-val")->val;
 
 
-
 	$sell->p_id = $_POST["p_id"];
 	$sell->d_id = $_POST["d_id"];
+	$sell->person_id = $_POST["client_id"];
 	$sell->iva=  $iva_val;
 	$sell->total = $_POST["total"];
 	$sell->discount = $_POST["discount"];
@@ -33,7 +33,7 @@ if(!empty($_POST)){
 
 
 	Core::alert("Cotizacion Procesada Exitosamente!");
-	Core::redir("./?view=sells");
+	Core::redir("./?view=orders-approved");
 
 }
 

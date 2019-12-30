@@ -4,30 +4,24 @@
 			<a href="./?view=newcotization" class="btn btn-default pull-right">
 				<i class="fa fa-asterisk"></i> COTIZAR PEDIDO
 			</a>
-			<h1><i class='glyphicon glyphicon-shopping-cart'></i> COTIZACIONES</h1>
+			<h1><i class='glyphicon glyphicon-shopping-cart'></i> PEDIDOS APROBADOS</h1>
 			<div class="clearfix"></div>
 			<?php
 			$products=null;
-			if(isset($_SESSION["client_id"])){
-				$products = SellData::getCotizationsByClientId($_SESSION["client_id"]);
-			}else if(isset($_SESSION["user_id"])){
-				if (isset($_SESSION['is_admin'])) {
-					$products = SellData::getCotizations();
-				} else {
-					$products = SellData::getCotizatiosByUser($_SESSION["user_id"]);
-				}
-			}
+			$products = SellData::getOrdersApproved();
 			if(count($products)>0){
 			?>
 				<br>
 				<div class="box box-primary">
 					<div class="box-header">
-						<h3 class="box-title">COTIZACIONES</h3>
+						<h3 class="box-title">PEDIDOS APROBADOS</h3>
 					</div>
 					<table class="table table-bordered table-hover	">
 						<thead>
 							<th style="text-align: center;"></th>
 							<th style="text-align: center;">COTIZACION Nº</th>
+							<th style="text-align: center;">CLIENTE</th>
+							<th style="text-align: center;">TELEFONO</th>
 							<th style="text-align: center;">ESTADO</th>
 							<th style="text-align: center;">TOTAL DE PRODUCTOS</th>
 							<th style="text-align: center;">TOTAL</th>
@@ -48,6 +42,19 @@
 							</td>
 							
 							<td style="text-align: center;">#<?php echo $cotizationsCouner; ?></td>
+							<td style="text-align: center;">
+								<?php
+									$client = PersonData::getById($sell->person_id);
+									echo $client->name." ".$client->lastname;
+								?>
+							</td>
+							<td style="text-align: center;">
+								<?php
+									$client = PersonData::getById($sell->person_id);
+									echo $client->phone1;
+								?>
+							</td>
+
 							<td style="text-align: center;">
 
 							<?php
@@ -81,18 +88,6 @@
 							</td>
 							<td style="text-align: center;"><?php echo $sell->created_at; ?></td>
 							<td style="width:200px;text-align: center;">
-								<?php echo $sell->operation_type_id ?>
-							<?php if(isset($_SESSION["user_id"]) && isset($_SESSION['is_admin']) && $sell->operation_type_id == 8):?>
-								<a href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
-									<i class="fa fa-check"></i> PROCESAR
-								</a>
-							<?php endif;?>
-							<?php if ($sell->operation_type_id == 2): ?>
-								<a href="index.php?action=inprocesscotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('CONFIRMAS QUE QUIERES SOLICITAR ESTA COTIZACION');">
-									<i class="fa fa-check"></i> CONFIRMAR
-								</a>	
-							<?php endif ?>
-
 								<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
 									CANCELAR
 								</a>

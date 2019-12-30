@@ -57,11 +57,7 @@ $user = $sell->getUser();
 <?php endif; ?>
 </table>
 </div>
-<div style="margin-bottom: 20px">
-	<a href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
-									<i class="fa fa-check"></i> PROCESAR
-								</a>
-</div>
+
 <div class="box box-primary">
 <br><table class="table table-bordered table-hover">
 	<thead>

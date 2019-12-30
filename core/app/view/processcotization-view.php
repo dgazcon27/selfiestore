@@ -144,8 +144,8 @@ $clients = DData::getAll();
         let elm = ev.currentTarget;
         let id = $(elm).data('id');
         let q_approved = $(elm).data('q_approved');
-        let price = $('#price_out_'+id).data('price');
         let price_tx = $('.total_price_'+id)[0];
+        let price = $('#price_out_'+id).data('price');
         
     })
 

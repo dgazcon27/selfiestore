@@ -1,8 +1,8 @@
 <?php
 if(isset($_GET["product_id"])){
-	$cart=$_SESSION["cart"];
+	$cart=$_SESSION["cotization"];
 	if(count($cart)==1){
-	 unset($_SESSION["cart"]);
+		unset($_SESSION["cotization"]);
 	}else{
 		$ncart = null;
 		$nx=0;
@@ -14,14 +14,13 @@ if(isset($_GET["product_id"])){
 				$nx++;
 			}
 		}
-		$_SESSION["cart"] = $ncart;
-		unset($_SESSION["cotization"]);
+		$_SESSION["cotization"] = $ncart;
 	}
 
 }else{
- unset($_SESSION["cart"]);
+ unset($_SESSION["cotization"]);
 }
 
-print "<script>window.location='index.php?view=sell';</script>";
+print "<script>window.location='index.php?view=newcotization';</script>";
 
 ?>

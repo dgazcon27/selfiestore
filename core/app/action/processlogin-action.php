@@ -14,15 +14,19 @@ $sql = "select * from user where (email= \"".$user."\" or username= \"".$user."\
 $query = $con->query($sql);
 $found = false;
 $userid = null;
+$kind = null;
 while($r = $query->fetch_array()){
 	$found = true ;
 	$userid = $r['id'];
+	$kind = $r['kind'];
 }
-
 if($found==true) {
 //	session_start();
 //	print $userid;
 	$_SESSION['user_id']=$userid ;
+	if ($kind == 1) {
+		$_SESSION['is_admin'] = true;
+	}
 //	setcookie('userid',$userid);
 //	print $_SESSION['userid'];
 	print "Cargando ... $user";

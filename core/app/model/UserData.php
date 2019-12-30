@@ -61,7 +61,6 @@ class UserData {
 		return Model::many($query[0],new UserData());
 	}
 
-
 }
 
 ?>
