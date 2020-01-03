@@ -77,14 +77,12 @@ unset($_SESSION["errors"]);
 <?php if(isset($_SESSION["cotization"])):
 $total = 0;
 ?>
-<h2>LISTA DE PEDIDO</h2>
+<h2>LISTA DE PRODUCTOS A COTIZAR </h2>
 <div class="box box-primary">
 <table class="table table-bordered table-hover">
 <thead>
-	<th style="width:30px;">CODIGO</th>
 	<th style="width:30px;">IMAGEN</th>
 	<th>NOMBRE</th>
-	<th style="width:30px;">TIPO</th>
 	<th style="width:30px;">PRECIO UNITARIO</th>
 	<th style="width:30px;">PRECIO TOTAL</th>
 	<th ></th>
@@ -93,22 +91,8 @@ $total = 0;
 $product = ProductData::getById($p["product_id"]);
 ?>
 <tr >
-	<td><?php echo $product->id; ?></td>
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 	<td><?php echo $product->name; ?></td>
-	
-	<td>
-  <?php
-if($product->kind==1){
-  echo "<span class='label label-info'>Producto</span>";
-}else if($product->kind==2){
-  echo "<span class='label label-success'>Servicio</span>";
-
-}
-  ?>
-
-
-</td>
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
 	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> QUITAR</a></td>

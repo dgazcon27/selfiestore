@@ -202,10 +202,16 @@ if( $q==0 ||  $q<=$product->inventary_min){
    <?php endif; ?>
 				  <li><a href="./?view=bycob">Consignaciones</a></li>
 				<li><a href="./?view=sellscredit">Creditos</a></li>
-				  <li><a href="./?view=cotizations">Cotizaciones</a></li>	
 				 <li><a href="./?view=sellscancel">Ventas Canceladas</a></li>
          <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
                 
+              </ul>
+            </li>
+      <li class="treeview">
+              <a href="#"><i class='fa fa-shopping-cart'></i> <span>COTIZACIONES Y PEDIDOS</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li><a href="./?view=cotizations">Cotizaciones</a></li> 
+                <li><a href="./?view=orders-approved">Pedidos</a></li>
               </ul>
             </li>
             <?php if(Core::$user->kind==3):?>
@@ -287,13 +293,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=box">Caja</a></li>
               </ul>
             </li>
-            <li class="treeview">
-              <a href="#"><i class='fa fa-briefcase'></i> <span>PEDIDOS</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="./?view=newcotization">Nueva Cotizacion</a></li>
-                <li><a href="./?view=orders-approved">Pedidos aprobados</a></li>
-              </ul>
-            </li>
+            
           <?php endif; ?>
             <li class="treeview">
               <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>

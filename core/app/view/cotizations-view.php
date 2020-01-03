@@ -29,7 +29,6 @@
 							<th style="text-align: center;"></th>
 							<th style="text-align: center;">COTIZACION Nº</th>
 							<th style="text-align: center;">ESTADO</th>
-							<th style="text-align: center;">TOTAL DE PRODUCTOS</th>
 							<th style="text-align: center;">TOTAL</th>
 							<th style="text-align: center;">FECHA</th>
 							<th style="width:100px; text-align: center;"></th>
@@ -68,11 +67,6 @@
 								}
 							?>
 							<td style="text-align: center;">
-							<?php
-								echo $totalProducts;
-							?>
-							</td>
-							<td style="text-align: center;">
 							<?php			
 									echo "<b>$ ".number_format($total,2,".",",")."</b>";
 
@@ -81,13 +75,12 @@
 							</td>
 							<td style="text-align: center;"><?php echo $sell->created_at; ?></td>
 							<td style="width:200px;text-align: center;">
-								<?php echo $sell->operation_type_id ?>
-							<?php if(isset($_SESSION["user_id"]) && isset($_SESSION['is_admin']) && $sell->operation_type_id == 8):?>
+							<?php if(isset($_SESSION["user_id"]) && isset($_SESSION['is_admin']) && $sell->d_id == 4):?>
 								<a href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
 									<i class="fa fa-check"></i> PROCESAR
 								</a>
 							<?php endif;?>
-							<?php if ($sell->operation_type_id == 2): ?>
+							<?php if ($sell->d_id == 2): ?>
 								<a href="index.php?action=inprocesscotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('CONFIRMAS QUE QUIERES SOLICITAR ESTA COTIZACION');">
 									<i class="fa fa-check"></i> CONFIRMAR
 								</a>	

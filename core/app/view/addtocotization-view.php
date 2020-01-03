@@ -16,16 +16,16 @@ if(!isset($_SESSION["cotization"])){
 		foreach($cart as $c){
 
 			///
-			$q = OperationData::getQByStock($c["product_id"],StockData::getPrincipal()->id);
+			// $q = OperationData::getQByStock($c["product_id"],StockData::getPrincipal()->id);
 //			echo ">>".$q;
-			if($c["q"]<=$q){
+			// if($c["q"]<=$q){
 				$num_succ++;
 
 
-			}else{
-				$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
-				$errors[count($errors)] = $error;
-			}
+			// }else{
+				// $error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
+				// $errors[count($errors)] = $error;
+			// }
 
 		}
 ///////////////////////////////////////////////////////////////////
@@ -34,54 +34,49 @@ if(!isset($_SESSION["cotization"])){
 if($num_succ==count($cart)){
 	$process = true;
 }
-if($process==false){
-	unset($_SESSION["cotization"]);
-$_SESSION["errors"] = $errors;
+// if($process==false){
+// 	unset($_SESSION["cotization"]);
+// $_SESSION["errors"] = $errors;
 	?>	
-<script>
+<!-- <script>
 	window.location="index.php?view=sell";
-</script>
+</script> -->
 <?php
-}
-
-
-
-
+// }
 }else {
 
 $found = false;
-$cart = $_SESSION["cotization"];
-$index=0;
+// $cart = $_SESSION["cotization"];
+// $index=0;
 
-			$q = OperationData::getQByStock($_POST["product_id"],StockData::getPrincipal()->id);
+// $q = OperationData::getQByStock($_POST["product_id"],StockData::getPrincipal()->id);
 
 
 
 
 
 $can = true;
-if($_POST["q"]<=$q){
-}else{
-	$error = array("product_id"=>$_POST["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
-	$errors[count($errors)] = $error;
-	$can=false;
-}
+// if($_POST["q"]<=$q){
+// }else{
+// 	$error = array("product_id"=>$_POST["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
+// 	$errors[count($errors)] = $error;
+// 	$can=false;
+// }
 
-if($can==false){
-$_SESSION["errors"] = $errors;
+// if($can==false){
+// $_SESSION["errors"] = $errors;
 	?>	
-<script>
+<!-- <script>
 	window.location="index.php?view=sell";
-</script>
+</script> -->
 <?php
-}
+// }
 ?>
 
 <?php
 if($can==true){
 foreach($cart as $c){
 	if($c["product_id"]==$_POST["product_id"]){
-		echo "found";
 		$found=true;
 		break;
 	}

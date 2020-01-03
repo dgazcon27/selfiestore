@@ -7,12 +7,9 @@ if(count($products)>0){
 <div class="box box-primary">
 <table class="table table-bordered table-hover">
 	<thead>
-		<th>CODIGO</th>
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
-		<th>TIPO</th>
 		<th>PRECIO UNITARIO</th>
-		<th>CANTIDAD</th>
 	</thead>
 	<?php
 $products_in_cero=0;
@@ -23,27 +20,9 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 	if($q>0):?>
 		
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
-		<td style="width:80px;"><?php echo $product->id; ?></td>
 		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
-		
-		<td>
-  <?php
-if($product->kind==1){
-  echo "<span class='label label-info'>Producto</span>";
-}else if($product->kind==2){
-  echo "<span class='label label-success'>Servicio</span>";
-
-}
-  ?>
-
-
-</td>
-
 		<td><b>$<?php echo $product->price_out; ?></b></td>
-		<td>
-			<?php echo $q; ?>
-		</td>
 		<td style="width:250px;"><form method="post" action="index.php?view=addtocotization">
 		<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 

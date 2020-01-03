@@ -74,7 +74,7 @@ public function add_with_client(){
 	}
 
 	public function process_cotization(){
-		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,p_id=$this->p_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,discount=$this->discount,cash=$this->cash,is_draft=0,is_cotization=0,operation_type_id=7,person_id=$this->person_id where id=$this->id";
+		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,p_id=$this->p_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,discount=$this->discount,cash=$this->cash,is_draft=0,is_cotization=0,person_id=$this->person_id where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -122,24 +122,35 @@ public function add_with_client(){
 
 
 	public static function getCotizations(){
-		$sql = "select * from ".self::$tablename." where (operation_type_id=2 or operation_type_id=8) and p_id=2 and d_id=2 and is_draft=1 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and (d_id=2 or d_id=4) and is_draft=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public function inProcessCotization($id){
-		$sql = "update ".self::$tablename." set operation_type_id=8 where id=$id";
+		$sql = "update ".self::$tablename." set d_id=4 where id=$id";
+		Executor::doit($sql);
+	}
+
+	public function updateOrderToSell($id){
+		$sql = "update ".self::$tablename." set d_id=7 where id=$id";
 		Executor::doit($sql);
 	}
 
 	public static function getOrdersApproved(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=7 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public static function getOrdersApprovedByUser($id){
+		$sql = "select * from ".self::$tablename." where user_id=$id and (d_id=5 or d_id=7) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public static function getCotizatiosByUser($id){
-		$sql = "select * from ".self::$tablename." where (operation_type_id=2 or operation_type_id=8) and p_id=2 and d_id=2 and is_draft=1 and user_id=$id order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and d_id=2 and is_draft=1 and user_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}

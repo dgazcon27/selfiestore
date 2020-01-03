@@ -1,14 +1,15 @@
 <section class="content"> 
 	<div class="row">
 		<div class="col-md-12">
-			<a href="./?view=newcotization" class="btn btn-default pull-right">
-				<i class="fa fa-asterisk"></i> COTIZAR PEDIDO
-			</a>
 			<h1><i class='glyphicon glyphicon-shopping-cart'></i> PEDIDOS APROBADOS</h1>
 			<div class="clearfix"></div>
 			<?php
 			$products=null;
-			$products = SellData::getOrdersApproved();
+			if (isset($_SESSION['is_admin'])) {
+				$products = SellData::getOrdersApproved();
+			} else {
+				$products = SellData::getOrdersApprovedByUser($_SESSION['user_id']);
+			}
 			if(count($products)>0){
 			?>
 				<br>
@@ -88,9 +89,16 @@
 							</td>
 							<td style="text-align: center;"><?php echo $sell->created_at; ?></td>
 							<td style="width:200px;text-align: center;">
-								<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
-									CANCELAR
-								</a>
+								<?php if ($sell->d_id == 5): ?>
+									<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
+									CONVERTIR EN VENTA
+									</a>
+								<?php endif ?>
+								<?php if ($sell->d_id != 7): ?>
+									<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
+										CANCELAR
+									</a>
+								<?php endif ?>
 								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 									<i class="fa fa-trash"></i>
 								</a>
@@ -110,8 +118,8 @@
 			}else{
 				?>
 				<div class="jumbotron">
-					<h2>NO HAY COTIZACIONES</h2>
-					<p>NO SE HA REALIZADO NINGUNA COTIZACION.</p>
+					<h2>NO HAY PEDIDOS</h2>
+					<p>NO SE HA REALIZADO NINGUN PEDIDO.</p>
 				</div>
 				<?php
 			}
