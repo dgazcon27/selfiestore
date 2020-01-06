@@ -15,22 +15,27 @@ $query = $con->query($sql);
 $found = false;
 $userid = null;
 $kind = null;
-while($r = $query->fetch_array()){
-	$found = true ;
+if ($query->num_rows > 0) {
+	$r = $query->fetch_array();
+	$found = true;
 	$userid = $r['id'];
 	$kind = $r['kind'];
-}
+} 
+
 if($found==true) {
-//	session_start();
-//	print $userid;
-	$_SESSION['user_id']=$userid ;
+	print "Cargando ... $user";
 	if ($kind == 1) {
 		$_SESSION['is_admin'] = true;
+		$_SESSION['user_id']=$userid;
+		print "<script>window.location='index.php?view=home';</script>";
+	} elseif ($kind == 4) {
+		# code...
+		$_SESSION['is_client'] = true;
+		$_SESSION['user_id'] = $userid;
+		$user_data = PersonData::getByUserId($userid);
+		$_SESSION['client_id'] = $user_data->id;
+		print "<script>window.location='index.php?view=clienthome';</script>";
 	}
-//	setcookie('userid',$userid);
-//	print $_SESSION['userid'];
-	print "Cargando ... $user";
-	print "<script>window.location='index.php?view=home';</script>";
 }else {
 	print "<script>window.location='index.php?view=login';</script>";
 }

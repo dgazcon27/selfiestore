@@ -33,16 +33,26 @@ foreach($operations as $operation){
 <div class="col-md-3">
     <label class="control-label">Cliente</label>
     <div class="col-lg-12">
-    <?php 
-$clients = PersonData::getClients();
+    <?php
+        $clients = [];
+        if (isset($sell->person_id)) {
+            $person = PersonData::getById($sell->person_id);
+            echo '<input type="hidden" name="client_id" value="'.$sell->person_id.'">';
+            echo '<h4>'.$person->name." ".$person->lastname.'</h4>';
+        } else {
+            $clients = PersonData::getClients();
+        } 
     ?>
-    <select id="client_id" name="client_id" class="form-control">
-    <option value="">-- NINGUNO --</option>
-    <?php foreach($clients as $client):?>
-        <option value="<?php echo $client->id;?>"><?php echo $client->name." ".$client->lastname;?></option>
-    <?php endforeach;?>
-        </select>
+    <?php if (count($clients) > 0): ?>
+        <select id="client_id" name="client_id" class="form-control">
+        <option value="">-- NINGUNO --</option>
+        <?php foreach($clients as $client):?>
+            <option value="<?php echo $client->id;?>"><?php echo $client->name." ".$client->lastname;?></option>
+        <?php endforeach;?>
+            </select>
+    <?php endif ?>
     </div>
+
   </div>
 <div class="col-md-4">
     <label class="control-label">&nbsp;</label>
@@ -81,6 +91,9 @@ $clients = PData::getAll();
 
 </div>
 <input hidden type="text" name="d_id" value="5">
+<?php if (isset($_SESSION['is_admin'])): ?>
+    <input hidden type="text" name="cotization_admin" value="true">
+<?php endif ?>
 </form>
 <br>
 

@@ -11,6 +11,7 @@ if(!empty($_POST)){
 
 	$sell->p_id = $_POST["p_id"];
 	$sell->d_id = $_POST["d_id"];
+	$sell->f_id = 1;
 	$sell->person_id = $_POST["client_id"];
 	$sell->iva=  $iva_val;
 	$sell->total = $_POST["total"];

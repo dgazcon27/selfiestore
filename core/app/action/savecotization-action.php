@@ -14,12 +14,13 @@ if(isset($_SESSION["cotization"])){
 		if($process==true){
 			$sell = new SellData();
 			$sell->is_cotization = 1;
-			if(isset($_SESSION["user_id"])){
+			if(isset($_SESSION["client_id"])){
+				$sell->person_id = $_SESSION["client_id"];
+				$sell->user_id = $_SESSION["user_id"];
+				$s = $sell->add_cotization_by_client();
+			}else if(isset($_SESSION["user_id"])){
 				$sell->user_id = $_SESSION["user_id"];
 				$s = $sell->add_cotization();
-			}else if(isset($_SESSION["client_id"])){
-				$sell->person_id = $_SESSION["client_id"];
-				$s = $sell->add_cotization_by_client();
 			}
 
 

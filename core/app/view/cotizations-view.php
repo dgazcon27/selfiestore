@@ -28,6 +28,11 @@
 						<thead>
 							<th style="text-align: center;"></th>
 							<th style="text-align: center;">COTIZACION Nº</th>
+							<?php if (isset($_SESSION['is_admin'])): ?>
+							<th style="text-align: center;">CLIENTE</th>
+							<th style="text-align: center;">TELEFONO</th>
+								
+							<?php endif ?>
 							<th style="text-align: center;">ESTADO</th>
 							<th style="text-align: center;">TOTAL</th>
 							<th style="text-align: center;">FECHA</th>
@@ -47,6 +52,18 @@
 							</td>
 							
 							<td style="text-align: center;">#<?php echo $cotizationsCouner; ?></td>
+							<?php if (isset($_SESSION['is_admin'])) {
+								if (isset($sell->person_id)) {
+									# code...
+									$user_data = PersonData::getById($sell->person_id);
+									echo "<td style='text-align: center;'>".$user_data->name." ".$user_data->lastname ."</td>";
+									echo "<td style='text-align: center;'>".$user_data->phone1."</td>";
+								} else {
+									echo "<td>Sin cliente asignado</td>";
+									echo "<td>Sin telefono asignado</td>";
+								}
+							}
+							?>
 							<td style="text-align: center;">
 
 							<?php
@@ -80,7 +97,7 @@
 									<i class="fa fa-check"></i> PROCESAR
 								</a>
 							<?php endif;?>
-							<?php if ($sell->d_id == 2): ?>
+							<?php if ($sell->d_id == 2 && $_SESSION['user_id'] == $sell->user_id): ?>
 								<a href="index.php?action=inprocesscotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('CONFIRMAS QUE QUIERES SOLICITAR ESTA COTIZACION');">
 									<i class="fa fa-check"></i> CONFIRMAR
 								</a>	

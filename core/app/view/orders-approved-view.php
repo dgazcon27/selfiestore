@@ -60,9 +60,7 @@
 
 							<?php
 							$operations = OperationData::getAllProductsBySellId($sell->id);
-							if($sell->status==1){
 								echo $sell->getD()->name;
-							}
 							?>
 							</td>
 							<?php
@@ -89,7 +87,7 @@
 							</td>
 							<td style="text-align: center;"><?php echo $sell->created_at; ?></td>
 							<td style="width:200px;text-align: center;">
-								<?php if ($sell->d_id == 5): ?>
+								<?php if ($sell->d_id == 5 && isset($_SESSION['is_admin'])): ?>
 									<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
 									CONVERTIR EN VENTA
 									</a>

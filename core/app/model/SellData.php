@@ -33,8 +33,8 @@ class SellData {
 	}
 
 	public function add_cotization_by_client(){
-		$sql = "insert into ".self::$tablename." (is_draft,p_id,d_id,person_id,created_at, is_cotization) ";
-		$sql .= "value (1,2,2,$this->person_id,$this->created_at, $this->is_cotization)";
+		$sql = "insert into ".self::$tablename." (is_draft,p_id,d_id,person_id,created_at, is_cotization, user_id) ";
+		$sql .= "value (1,2,2,$this->person_id,$this->created_at, $this->is_cotization, $this->user_id)";
 		return Executor::doit($sql);
 	}
 
@@ -74,7 +74,7 @@ public function add_with_client(){
 	}
 
 	public function process_cotization(){
-		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,p_id=$this->p_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,discount=$this->discount,cash=$this->cash,is_draft=0,is_cotization=0,person_id=$this->person_id where id=$this->id";
+		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,p_id=$this->p_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,discount=$this->discount,cash=$this->cash,is_draft=0,is_cotization=0,person_id=$this->person_id, f_id=$this->f_id where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -133,7 +133,7 @@ public function add_with_client(){
 	}
 
 	public function updateOrderToSell($id){
-		$sql = "update ".self::$tablename." set d_id=7 where id=$id";
+		$sql = "update ".self::$tablename." set d_id=1 where id=$id";
 		Executor::doit($sql);
 	}
 
@@ -144,7 +144,11 @@ public function add_with_client(){
 	}
 
 	public static function getOrdersApprovedByUser($id){
-		$sql = "select * from ".self::$tablename." where user_id=$id and (d_id=5 or d_id=7) order by created_at desc";
+		$data_person = $id;
+		if (isset(PersonData::getByUserId($id)->id)) {
+			$data_person = PersonData::getByUserId($id)->id;
+		}
+		$sql = "select * from ".self::$tablename." where (user_id=$id or person_id=$data_person) and (d_id=5 or d_id=7) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -156,7 +160,7 @@ public function add_with_client(){
 	}
 
 	public static function getCotizationsByClientId($id){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and d_id=2 and is_draft=1 and person_id=$id order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and (d_id=2 || d_id=4) and is_draft=1 and (person_id=$id or user_id=$id) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}

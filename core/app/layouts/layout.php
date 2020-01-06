@@ -190,7 +190,8 @@ if( $q==0 ||  $q<=$product->inventary_min){
                         <li><a href="./index.php?view=notifs"><i class='fa fa-flash'></i> <span>NOTIFICACIONES</span></a></li>
 <?php endif; ?>
 <?php endif; ?>
-            <li><a href="./?view=sell"><i class='fa fa-usd'></i> <span>VENDER</span></a></li>
+           <?php if (!isset($_SESSION['client_id'])): ?>
+              <li><a href="./?view=sell"><i class='fa fa-usd'></i> <span>VENDER</span></a></li>
 <!--            <li><a href="./?view=reandsell"><i class='fa fa-usd'></i> <span>Vender en CERO</span></a></li> -->
 
             <li class="treeview <?php if(isset($_GET["view"]) && ($_GET["view"]=="sells"||$_GET["view"]=="bydeliver" ||$_GET["view"]=="bycob")){ echo "active"; }?>"   >
@@ -207,11 +208,19 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 
               </ul>
             </li>
+           <?php endif ?>
+
       <li class="treeview">
               <a href="#"><i class='fa fa-shopping-cart'></i> <span>COTIZACIONES Y PEDIDOS</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
                 <li><a href="./?view=cotizations">Cotizaciones</a></li> 
                 <li><a href="./?view=orders-approved">Pedidos</a></li>
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="#"><i class='fa fa-cog'></i> <span>DATOS PERSONALES</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li><a href="./?view=profile">Configuracion</a></li>
               </ul>
             </li>
             <?php if(Core::$user->kind==3):?>
@@ -346,9 +355,8 @@ if( $q==0 ||  $q<=$product->inventary_min){
             <li class="treeview <?php if(isset($_GET["view"]) && ($_GET["view"]=="sells"||$_GET["view"]=="bydeliver" ||$_GET["view"]=="bycob")){ echo "active"; }?>"   >
               <a href="#"><i class='fa fa-shopping-cart'></i> <span>Mis Compras</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="./?view=sells">Todas</a></li>
-                <li><a href="./?view=bydeliver">Por Recibir</a></li>
-                <li><a href="./?view=bycob">Por Pagar</a></li>
+                <li><a href="./?view=cotizations">Cotizaciones</a></li> 
+                <li><a href="./?view=orders-approved">Pedidos</a></li>
               </ul>
             </li>
           <?php endif;?>
