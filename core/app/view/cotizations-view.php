@@ -102,13 +102,15 @@
 									<i class="fa fa-check"></i> CONFIRMAR
 								</a>	
 							<?php endif ?>
-
+							<?php if (isset($_SESSION['is_admin'])): ?>
 								<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
 									CANCELAR
 								</a>
 								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 									<i class="fa fa-trash"></i>
 								</a>
+
+							<?php endif ?>
 							</td>
 						</tr>
 

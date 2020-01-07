@@ -1,79 +1,52 @@
 <?php
 
 if(!isset($_SESSION["cotization"])){
-
-
 	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
 	$_SESSION["cotization"] = array($product);
-
-
 	$cart = $_SESSION["cotization"];
 
-///////////////////////////////////////////////////////////////////
-		$num_succ = 0;
-		$process=false;
-		$errors = array();
-		foreach($cart as $c){
+	$num_succ = 0;
+	$process=false;
+	$errors = array();
 
-			///
-			// $q = OperationData::getQByStock($c["product_id"],StockData::getPrincipal()->id);
-//			echo ">>".$q;
-			// if($c["q"]<=$q){
-				$num_succ++;
-
-
-			// }else{
-				// $error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
-				// $errors[count($errors)] = $error;
-			// }
-
+	foreach($cart as $c){
+		$q = OperationData::getQByStock($c["product_id"],StockData::getPrincipal()->id);
+		if($c["q"]<=$q){
+			$num_succ++;
+		}else{
+			$error = array("product_id"=>$c["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
+			$errors[count($errors)] = $error;
 		}
-///////////////////////////////////////////////////////////////////
 
-//echo $num_succ;
-if($num_succ==count($cart)){
-	$process = true;
-}
-// if($process==false){
-// 	unset($_SESSION["cotization"]);
-// $_SESSION["errors"] = $errors;
-	?>	
-<!-- <script>
-	window.location="index.php?view=sell";
-</script> -->
-<?php
-// }
+	}
+///////////////////////////////////////////////////////////////////
+	if($num_succ==count($cart)){
+		$process = true;
+	}
+
+	if($process==false){
+		unset($_SESSION["cotization"]);
+		$_SESSION["errors"] = $errors;
+	}
 }else {
 
 $found = false;
-// $cart = $_SESSION["cotization"];
-// $index=0;
+$errors = [];
+$cart = $_SESSION["cotization"];
+$index=0;
 
-// $q = OperationData::getQByStock($_POST["product_id"],StockData::getPrincipal()->id);
-
-
-
-
-
+$q = OperationData::getQByStock($_POST["product_id"],StockData::getPrincipal()->id);
 $can = true;
-// if($_POST["q"]<=$q){
-// }else{
-// 	$error = array("product_id"=>$_POST["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
-// 	$errors[count($errors)] = $error;
-// 	$can=false;
-// }
+if($_POST["q"] > $q){
+	$error = array("product_id"=>$_POST["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");
+	$errors[count($errors)] = $error;
+	$can=false;
+}
 
-// if($can==false){
-// $_SESSION["errors"] = $errors;
-	?>	
-<!-- <script>
-	window.location="index.php?view=sell";
-</script> -->
-<?php
-// }
-?>
+if($can==false){
+	$_SESSION["errors"] = $errors;
+}
 
-<?php
 if($can==true){
 foreach($cart as $c){
 	if($c["product_id"]==$_POST["product_id"]){

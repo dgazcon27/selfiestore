@@ -92,14 +92,17 @@
 									CONVERTIR EN VENTA
 									</a>
 								<?php endif ?>
-								<?php if ($sell->d_id != 7): ?>
-									<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
-										CANCELAR
+								<?php if (isset($_SESSION['is_admin'])): ?>
+									<?php if ($sell->d_id != 7): ?>
+										<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
+											CANCELAR
+										</a>
+									<?php endif ?>
+									<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
+										<i class="fa fa-trash"></i>
 									</a>
+									
 								<?php endif ?>
-								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
-									<i class="fa fa-trash"></i>
-								</a>
 							</td>
 						</tr>
 
