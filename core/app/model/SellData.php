@@ -38,6 +38,12 @@ class SellData {
 		return Executor::doit($sql);
 	}
 
+	public function update_cotization($id)	{
+		$sql = "update ".self::$tablename." set total=$this->total, cash=$this->cash
+		where id=$id";
+		Executor::doit($sql);
+	}
+
 	public function add_de(){
 		$sql = "insert into ".self::$tablename." (status,stock_to_id,sell_from_id,user_id,operation_type_id,created_at) ";
 		$sql .= "value (0,$this->stock_to_id,$this->sell_from_id,$this->user_id,5,$this->created_at)";

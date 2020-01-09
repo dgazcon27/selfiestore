@@ -42,6 +42,11 @@ class OperationData {
 		Executor::doit($sql);
 	}
 
+	public function delete_by_sell_id($id){
+		$sql = "delete from ".self::$tablename." WHERE sell_id=$id";
+		Executor::doit($sql);
+	}
+
 // partiendo de que ya tenemos creado un objecto OperationData previamente utilizamos el contexto
 	public function update(){
 		$sql = "update ".self::$tablename." set product_id=\"$this->product_id\",q=\"$this->q\" where id=$this->id";

@@ -100,6 +100,9 @@
 							<?php if ($sell->d_id == 2 && $_SESSION['user_id'] == $sell->user_id): ?>
 								<a href="index.php?action=inprocesscotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('CONFIRMAS QUE QUIERES SOLICITAR ESTA COTIZACION');">
 									<i class="fa fa-check"></i> CONFIRMAR
+								</a>
+								<a href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
+									<i class="fa fa-pencil"></i> EDITAR
 								</a>	
 							<?php endif ?>
 							<?php if (isset($_SESSION['is_admin'])): ?>
