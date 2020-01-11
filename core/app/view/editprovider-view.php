@@ -4,6 +4,7 @@
 	<div class="col-md-12">
 	<h1>EDITAR PROVEEDOR</h1>
 	<br>
+  <p class="alert alert-info">* CAMPOS OBLIGATORIOS</p>
 		<form class="form-horizontal" method="post" id="addproduct" action="index.php?view=updateprovider" role="form">
 
   <div class="form-group">
@@ -33,8 +34,16 @@
     </div>
   </div>
 
+  <div class="form-group">
+      <label for="specialties" class="col-lg-2 control-label">ESPECIALIDADES*</label>
+      <div class="col-md-6">
+        <textarea maxlength="255" name="specialties" id="specialties" cols="64" rows="10">
+          <?php echo $user->specialties ?>
+        </textarea>
+      </div>
+    </div>
 
-  <p class="alert alert-info">* CAMPOS OBLIGATORIOS</p>
+
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">

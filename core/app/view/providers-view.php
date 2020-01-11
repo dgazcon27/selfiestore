@@ -25,10 +25,11 @@
 <div class="box-body">
 			<table class="table table-bordered datatable table-hover">
 			<thead>
-			<th>RFC/RUT</th>
+			<th>RIF/RUT</th>
 			<th>NOMBRE COMPLETO</th>
 			<th>DIRECCION</th>
 			<th>TELEFONO</th>
+			<th>ESPECIALIDADES</th>
 			<th></th>
 			</thead>
 			<?php
@@ -39,6 +40,7 @@
 				<td><?php echo $user->name." ".$user->lastname; ?></td>
 				<td><?php echo $user->address1; ?></td>
 				<td><?php echo $user->phone1; ?></td>
+				<td><?php echo $user->specialties; ?></td>
 				<td style="width:130px;">
 				<a href="index.php?view=editprovider&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">EDITAR</a>
 				<a href="index.php?view=delprovider&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE PROVEEDOR');">ELIMINAR</a>

@@ -10,6 +10,7 @@ if(count($products)>0){
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
 		<th>PRECIO UNITARIO</th>
+		<th>DISPONIBLE</th>
 	</thead>
 	<?php
 $products_in_cero=0;
@@ -23,18 +24,18 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
 		<td><b>$<?php echo $product->price_out; ?></b></td>
-		<td style="width:250px;"><form method="post" action="index.php?view=addtocotization">
-		<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
-
-<div class="input-group">
-		<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
-      <span class="input-group-btn">
-		<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Agregar</button>
-      </span>
-    </div>
-
-
-		</form></td>
+		<td><b><?php echo $q; ?></b></td>
+		<td style="width:250px;">
+			<form method="post" action="index.php?view=addtocotization">
+				<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+				<div class="input-group">
+					<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
+			      	<span class="input-group-btn">
+					<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus-sign"></i> Agregar</button>
+			      </span>
+			    </div>
+			</form>
+		</td>
 	</tr>
 	
 <?php else:$products_in_cero++;

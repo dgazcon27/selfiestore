@@ -139,7 +139,9 @@ public function add_with_client(){
 	}
 
 	public function updateOrderToSell($id){
-		$sql = "update ".self::$tablename." set d_id=1 where id=$id";
+		$x = new XXData();
+		$xx = $x->add();
+		$sql = "update ".self::$tablename." set d_id=1, ref_id=".$xx[1]." where id=$id";
 		Executor::doit($sql);
 	}
 

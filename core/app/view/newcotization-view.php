@@ -3,7 +3,13 @@
 $iva_name = ConfigurationData::getByPreffix("imp-name")->val;
 $iva_val = ConfigurationData::getByPreffix("imp-val")->val;
 
+if (isset($_SESSION['is_admin'])) {
+	echo '<input type="hidden" id="is_admin" value="1">';
+} else {
+	echo '<input type="hidden" id="is_admin" value="0">';
+}
 ?>
+
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
@@ -84,23 +90,28 @@ $total = 0;
 	<th style="width:30px;">IMAGEN</th>
 	<th>NOMBRE</th>
 	<th style="width:30px;">PRECIO UNITARIO</th>
+	<th style="width:30px;">CANTIDAD</th>
 	<th style="width:30px;">PRECIO TOTAL</th>
 	<th ></th>
 </thead>
-<?php foreach($_SESSION["cotization"] as $p):
+<?php 
+$total_products= 0;
+foreach($_SESSION["cotization"] as $p):
 $product = ProductData::getById($p["product_id"]);
+$total_products += $p['q'];
 ?>
 <tr >
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 	<td><?php echo $product->name; ?></td>
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
+	<td><? echo $p["q"];?></td>
 	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
 	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> QUITAR</a></td>
 </tr>
-
 <?php endforeach; ?>
 </table>
 </div>
+<input type="text" name="total_products" id="total_products" value="<?echo $total_products;?>">
 <form method="post" class="form-horizontal" id="processsell" action="index.php?action=savecotization">
 <h2>Resumen</h2>
 
@@ -153,3 +164,15 @@ $product = ProductData::getById($p["product_id"]);
 
 </div>
 </section>
+
+<script>
+	let is_admin = $("#is_admin").val();
+	$("#processsell").submit(function (e) {
+		let total = $("#total_products").val();
+		if (is_admin == "0" && parseInt(total) > 100) {
+			alert("NO ES POSIBLE COTIZAR MAS DE 100 PRODUCTOS")
+			e.preventDefault();
+		}
+
+	})
+</script>

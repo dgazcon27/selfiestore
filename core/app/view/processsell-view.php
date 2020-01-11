@@ -125,36 +125,6 @@ $clients = PData::getAll();
         
     })
 
-    $("#processcotization").submit(function(e){
-        discount = $("#discount").val();
-        money = $("#money").val();
-        client_id = $("#client_id").val();
-        let inputs = $('.inputs-type');
-        obj = [];
-        for (var i = 0; i < inputs.length; i++) {
-            let elem = inputs[i];
-            obj.push({
-                id:$(elem).data('id'),
-                q_ap:$(elem).data('q'),
-
-            })
-        }
-        $('#op-q').val(JSON.stringify(obj));
-
-        if(money<(<?php echo $total;?>-discount)){
-            alert("Efectivo insificiente!");
-            e.preventDefault();
-        }else if (client_id == "") {
-            alert("Debe seleccionar un cliente");
-            e.preventDefault();
-        }else{
-            if(discount==""){ discount=0;}
-            go = confirm("Cambio: $"+(money-(<?php echo $total;?>-discount ) ) );
-            if(go){}
-                else{e.preventDefault();}
-        }
-    });
-
     $("#process_sell").click(function () {
     	let procss = confirm("¿DESEA CONVERTIR EN UNA VENTA?");
     	if (procss) {
@@ -163,8 +133,6 @@ $clients = PData::getAll();
     				window.location='index.php?view=orders-approved';
     			}
     		});
-    	} else {
-    		// statement
     	}
     })
 </script>

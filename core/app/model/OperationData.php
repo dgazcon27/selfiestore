@@ -165,8 +165,12 @@ public static function getPPByDateOfficial($start,$end){
 				if($operation->operation_type_id==$input_id){ $q+=$operation->q; }
 				else if($operation->operation_type_id==$output_id){  $q+=(-$operation->q); }
 		}
-		// print_r($data);
 		return $q;
+	}
+
+	public function updateOrderToSell($id){		
+		$sql = "update ".self::$tablename." set operation_type_id=2 where sell_id=$id";
+		Executor::doit($sql);
 	}
 
 	public static function getRByStock($product_id,$stock_id){

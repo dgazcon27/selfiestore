@@ -19,8 +19,8 @@ class PersonData {
 	}
 
 	public function add_provider(){
-		$sql = "insert into person (no,name,address1,phone1,kind,created_at) ";
-		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->address1\",\"$this->phone1\",2,$this->created_at)";
+		$sql = "insert into person (no,name,address1,phone1,kind,created_at, specialties) ";
+		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->address1\",\"$this->phone1\",7,$this->created_at, \"$this->specialties\")";
 		Executor::doit($sql);
 	}
 
@@ -52,7 +52,7 @@ class PersonData {
 	}
 
 	public function update_provider(){
-		$sql = "update ".self::$tablename." set no=\"$this->no\",name=\"$this->name\",address1=\"$this->address1\",phone1=\"$this->phone1\" where id=$this->id";
+		$sql = "update ".self::$tablename." set no=\"$this->no\",name=\"$this->name\",address1=\"$this->address1\",phone1=\"$this->phone1\", specialties=".$this->specialties." where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -106,7 +106,7 @@ class PersonData {
 	}
 
 	public static function getProviders(){
-		$sql = "select * from ".self::$tablename." where kind=2 order by name,lastname";
+		$sql = "select * from ".self::$tablename." where kind=7 order by name,lastname";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new PersonData());
 
