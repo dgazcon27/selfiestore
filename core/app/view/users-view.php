@@ -51,14 +51,8 @@
 				</td>
 				<td>
 				<?php
-switch ($user->kind) {
-	case '1': echo "Administrador"; break;
-	case '2': echo "Almacenista"; break;
-	case '3': echo "Vendedor"; break;
-	default:
-		# code...
-		break;
-}
+					$role = RolesData::getById($user->kind);
+					echo $role->name;
 				?>
 				</td>
 				<td style="width:70px;"><a href="index.php?view=edituser&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
