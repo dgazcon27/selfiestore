@@ -86,11 +86,9 @@ $pass = "";
 
 if($sell->person_id == TRUE)
 {
-	$con = mysql_connect("localhost","root",""); 
-	mysql_select_db($con,"inventiomax"); 
-	$result = mysql_query($con,"SELECT * FROM person WHERE ID=$sell->person_id");
-
-	$row = mysql_fetch_array($result);
+	$con = Database::getCon();
+	$c = $con->query("SELECT * FROM person WHERE ID=$sell->person_id");
+	$row = $c->fetch_array();
 	$id = $row["id"];
 	$nombre = $row["name"];
 	$lastname = $row["lastname"];
