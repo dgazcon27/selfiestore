@@ -98,9 +98,9 @@
 								</a>
 							<?php endif;?>
 							<?php if ($sell->d_id == 2 && $_SESSION['user_id'] == $sell->user_id): ?>
-								<a href="index.php?action=inprocesscotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('CONFIRMAS QUE QUIERES SOLICITAR ESTA COTIZACION');">
+								<p data-id="<?php echo $sell->id; ?>" class="confirm_button btn btn-xs btn-success">
 									<i class="fa fa-check"></i> CONFIRMAR
-								</a>
+								</p>
 								<a href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
 									<i class="fa fa-pencil"></i> EDITAR
 								</a>	
@@ -140,3 +140,17 @@
 		</div>
 	</div>
 </section>
+<script>
+	$(".confirm_button").click(function (e) {
+		id = e.currentTarget.dataset.id;
+		let go = confirm("¿DESEA CONFIRMAR ESTA COTIZACION?")
+		if (go) {
+			$.get("./?action=inprocesscotization&id="+id,function(data){
+				alert("SU COTIZACION ESTA EN PROCESO, NUESTROS VENDEDORES SE COMUNICARAN CON USTED PARA VERIFICAR EL PEDIDO")
+				setTimeout(function (argument) {
+					window.location.href = "http://localhost/sistemaselfie/?view=cotizations";
+				}, 1000)
+			});
+		}
+	})
+</script>

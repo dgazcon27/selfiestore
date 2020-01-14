@@ -100,6 +100,17 @@ $products = ProductData::getAll();
       <input type="number" name="q" class="form-control" id="inputEmail1" placeholder="INGRESAR EL INVENTARIO INICIAL" required>
     </div>
   </div>
+  <div class="form-group">
+    <label for="inputEmail1" class="col-lg-3 control-label"></label>
+    <div class="col-md-3">
+    <label class="control-label">FECHA DE VENCIMIENTO:</label>
+      <input type="date" name="expired_at" class="form-control" id="expired_at" placeholder="FECHA DE VENCIMIENTO">
+    </div>
+    <div class="col-md-3">
+    <label class="control-label">ALERTA DE VENCIMIENTO</label>
+      <input type="date" name="expired_alert" class="form-control" id="expired_alert" placeholder="ALERTA DE VENCIMIENTO" required>
+    </div>
+  </div>
 
 			
 			

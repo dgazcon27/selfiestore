@@ -67,9 +67,11 @@ if(count($products)>0){
 foreach($products as $product):
 //  $q=OperationData::getQ($product->id);
   $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
-
+  $date = new DateTime();
+  $date2 = new DateTime($product->expire_at);
+  $date3 = new DateTime($product->expired_alert);   
   ?>
-  <?php if( $q==0 ||  $q<=$product->inventary_min):?>
+  <?php if( $q==0 ||  $q<=$product->inventary_min || $date > $date2 || ($date < $date2 && $date > $date3)):?>
   <tr class="<?php if($q==0){ echo "danger"; }else if($q<=$product->inventary_min/2){ echo "danger"; } else if($q<=$product->inventary_min){ echo "warning"; } ?>">
     <td><?php echo $product->id; ?></td>
     <td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
@@ -78,7 +80,27 @@ foreach($products as $product):
     <td>$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
     <td><?php echo $q; ?></td>
     <td>
-    <?php if($q==0){ echo "<span class='label label-danger'>No hay existencias.</span>";}else if($q<=$product->inventary_min/2){ echo "<span class='label label-danger'>Quedan muy pocas existencias.</span>";} else if($q<=$product->inventary_min){ echo "<span class='label label-warning'>Quedan pocas existencias.</span>";} ?>
+    <?php if($q==0){ 
+        echo "<span class='label label-danger'>No hay existencias.</span>";
+      }else if($q<=$product->inventary_min/2){ 
+        echo "<span class='label label-danger'>Quedan muy pocas existencias.</span>";
+      } else if($q<=$product->inventary_min){ 
+        echo "<span class='label label-warning'>Quedan pocas existencias.</span>";
+      }
+
+      if ($product->expire_at != null) {
+        $date = new DateTime();
+        $date2 = new DateTime($product->expire_at);
+        if ($date2 < $date) {
+          echo "<br><span class='label label-danger'>El producto se encuentra vencido.</span>";
+        } else {
+          $date3 = new DateTime($product->expired_alert);
+          if ($date > $date3 && $date < $date2) {
+            echo "<br><span class='label label-warning'>El producto se encuentra a punto de vencer.</span>";
+          }
+        }
+      }
+    ?>
     </td>
   </tr>
 <?php endif;?>

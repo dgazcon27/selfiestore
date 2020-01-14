@@ -9,6 +9,8 @@ if(count($_POST)>0){
   $product->unit = $_POST["unit"];
   $product->price_in = $_POST["price_in"];
   $product->price_out = $_POST["price_out"];
+  $product->expire_at = $_POST["expired_at"];
+  $product->expired_alert = $_POST["expired_alert"];
 	
 
   $product->brand_id=$_POST["brand_id"]!=""?$_POST["brand_id"]:"NULL";

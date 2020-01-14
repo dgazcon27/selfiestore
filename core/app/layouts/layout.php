@@ -64,12 +64,23 @@ $msgs = MessageData::getUnreadedByUserId($_SESSION["user_id"]);
 $cnt_tot = 0;
 $found=false;
 $products = ProductData::getAll();
-//print_r($products);
 foreach($products as $product){
   $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 if( $q==0 ||  $q<=$product->inventary_min){
   $cnt_tot++;
  
+  }
+  if ($product->expire_at != null) {
+    $date = new DateTime();
+    $date2 = new DateTime($product->expire_at);
+    if ($date2 < $date) {
+      $cnt_tot++;
+    } else {
+      $date3 = new DateTime($product->expired_alert);
+      if ($date > $date3 && $date < $date2) {
+        $cnt_tot++;
+      }
+    }
   }
 }
 ?>

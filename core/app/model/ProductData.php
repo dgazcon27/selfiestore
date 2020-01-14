@@ -18,8 +18,8 @@ class ProductData {
 	
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (image,kind,code,brand_id,barcode,name,price_in,price_out,user_id,unit,category_id,inventary_min,created_at) ";
-		$sql .= "value (\"$this->image\",\"$this->kind\",\"$this->code\",$this->brand_id,\"$this->barcode\",\"$this->name\",\"$this->price_in\",\"$this->price_out\",$this->user_id,\"$this->unit\",$this->category_id,$this->inventary_min,NOW())";
+		$sql = "insert into ".self::$tablename." (image,kind,code,brand_id,barcode,name,price_in,price_out,user_id,unit,category_id,inventary_min,created_at, expired_alert, expire_at) ";
+		$sql .= "value (\"$this->image\",\"$this->kind\",\"$this->code\",$this->brand_id,\"$this->barcode\",\"$this->name\",\"$this->price_in\",\"$this->price_out\",$this->user_id,\"$this->unit\",$this->category_id,$this->inventary_min,NOW(), \"$this->expired_alert\", \"$this->expire_at\")";
 		return Executor::doit($sql);
 	}
 
