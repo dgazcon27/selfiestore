@@ -111,7 +111,7 @@ $total_products += $p['q'];
 <?php endforeach; ?>
 </table>
 </div>
-<input type="text" name="total_products" id="total_products" value="<?echo $total_products;?>">
+<input type="hidden" name="total_products" id="total_products" value="<?echo $total_products;?>">
 <form method="post" class="form-horizontal" id="processsell" action="index.php?action=savecotization">
 <h2>Resumen</h2>
 

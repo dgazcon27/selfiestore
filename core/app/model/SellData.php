@@ -156,7 +156,7 @@ public function add_with_client(){
 		if (isset(PersonData::getByUserId($id)->id)) {
 			$data_person = PersonData::getByUserId($id)->id;
 		}
-		$sql = "select * from ".self::$tablename." where (user_id=$id or person_id=$data_person) and (d_id=5 or d_id=7) order by created_at desc";
+		$sql = "select * from ".self::$tablename." where (user_id=$id or person_id=$data_person) and (d_id=5 or d_id=7 or d_id=1) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
