@@ -84,15 +84,17 @@ if( $q==0 ||  $q<=$product->inventary_min){
   }
 }
 ?>
-<li>
-            <a href="./?view=alerts">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-danger"><?php echo $cnt_tot;?></span>
-            </a>
-  
-</li>
+      <?php if (!isset($_SESSION['is_client'])): ?>
+        
+      <li>
+                  <a href="./?view=alerts">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="label label-danger"><?php echo $cnt_tot;?></span>
+                  </a>
+        
+      </li>
 
-<li class="dropdown messages-menu">
+      <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-envelope-o"></i>
               <span class="label label-success"><?php echo count($msgs);?></span>
@@ -124,6 +126,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
               <li class="footer"><a href="./?view=messages&opt=all">TODOS LOS MENSAJES</a></li>
             </ul>
           </li>
+      <?php endif ?>
 <?php endif;?>
 
               <!-- User Account Menu -->

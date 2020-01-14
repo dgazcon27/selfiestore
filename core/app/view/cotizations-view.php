@@ -148,7 +148,7 @@
 			$.get("./?action=inprocesscotization&id="+id,function(data){
 				alert("SU COTIZACION ESTA EN PROCESO, NUESTROS VENDEDORES SE COMUNICARAN CON USTED PARA VERIFICAR EL PEDIDO")
 				setTimeout(function (argument) {
-					window.location.href = "http://localhost/sistemaselfie/?view=cotizations";
+					window.location.href = window.location.href;
 				}, 1000)
 			});
 		}
