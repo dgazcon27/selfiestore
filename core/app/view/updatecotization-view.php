@@ -38,7 +38,7 @@ $(document).ready(function(){
 	$("#searchp").on("submit",function(e){
 		e.preventDefault();
 		
-		$.get("./?action=updatecotizationsearch&id=<?echo $_GET['id'];?>",$("#searchp").serialize(),function(data){
+		$.get("./?action=updatecotizationsearch&id=<?php echo $_GET['id'];?>",$("#searchp").serialize(),function(data){
 			$("#show_search_results").html(data);
 		});
 		$("#product_code").val("");
@@ -93,7 +93,7 @@ $total = 0;
 	<th style="width:30px;">IMAGEN</th>
 	<th>NOMBRE</th>
 	<th style="width:30px;">PRECIO UNITARIO</th>
-	<th style="width:30px;">CANTIDAD</th>
+	<th style="width:30px;">CANTIDAD APROXIMADA/ESTIMADO DISPONIBLE EN STOCK</th>
 	<th style="width:30px;">PRECIO TOTAL</th>
 	<th ></th>
 </thead>
@@ -104,9 +104,9 @@ $product = ProductData::getById($p["product_id"]);
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 	<td><?php echo $product->name; ?></td>
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
-	<td><b><?php echo $p["q"]; ?></b></td>
+	<td style="text-align: center;"><b><?php echo $p["q"]; ?></b></td>
 	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
-	<td style="width:30px;"><a href="index.php?view=clearcart_update_cotization&product_id=<?php echo $product->id; ?>&id=<?echo $_GET['id']?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> QUITAR</a></td>
+	<td style="width:30px;"><a href="index.php?view=clearcart_update_cotization&product_id=<?php echo $product->id; ?>&id=<?php echo $_GET['id']?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> QUITAR</a></td>
 </tr>
 
 <?php endforeach; ?>

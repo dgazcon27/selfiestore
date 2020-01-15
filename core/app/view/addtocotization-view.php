@@ -48,16 +48,14 @@ if($can==false){
 }
 
 if($can==true){
+
 foreach($cart as $c){
 	if($c["product_id"]==$_POST["product_id"]){
 		$found=true;
 		break;
 	}
 	$index++;
-//	print_r($c);
-//	print "<br>";
 }
-
 if($found==true){
 	$q1 = $cart[$index]["q"];
 	$q2 = $_POST["q"];
@@ -66,16 +64,15 @@ if($found==true){
 }
 
 if($found==false){
+
     $nc = count($cart);
 	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
-	$cart[$nc] = $product;
-//	print_r($cart);
+	array_push($cart, $product);
 	$_SESSION["cotization"] = $cart;
 }
 
 }
 }
  print "<script>window.location='index.php?view=newcotization';</script>";
-// unset($_SESSION["cotization"]);
 
 ?>

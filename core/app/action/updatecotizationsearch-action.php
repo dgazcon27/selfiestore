@@ -24,7 +24,7 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
 		<td><b>$<?php echo $product->price_out; ?></b></td>
-		<td style="width:250px;"><form method="post" action="index.php?view=updateproductcotization&id=<?echo $_GET['id']; ?>">
+		<td style="width:250px;"><form method="post" action="index.php?view=updateproductcotization&id=<?php echo $_GET['id']; ?>">
 		<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 
 <div class="input-group">
