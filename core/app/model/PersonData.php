@@ -13,8 +13,8 @@ class PersonData {
 	}
 
 	public function add_client(){
-		$sql = "insert into person (no,name,lastname,address1,phone1,is_active_access,password,kind,credit_limit,has_credit,created_at, user_id) ";
-		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->lastname\",\"$this->address1\",\"$this->phone1\",\"$this->is_active_access\",\"$this->password\",$this->kind,\"$this->credit_limit\",$this->has_credit,$this->created_at, $this->user_id)";
+		$sql = "insert into person (no,ci,name,lastname,email1,address2,phone1,phone2,company,rif,is_active_access,kind,credit_limit,has_credit,created_at, user_id)";
+		$sql .= "value (\"$this->no\",\"$this->ci\",\"$this->name\",\"$this->lastname\",\"$this->email1\",\"$this->address2\",\"$this->phone1\",\"$this->phone2\",\"$this->company\",\"$this->rif\", \"$this->is_active_access\",$this->kind,\"$this->credit_limit\",$this->has_credit,$this->created_at, $this->user_id)";
 		Executor::doit($sql);
 	}
 
