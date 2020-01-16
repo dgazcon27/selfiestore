@@ -128,7 +128,7 @@ $clients = PData::getAll();
     $("#process_sell").click(function () {
     	let procss = confirm("¿DESEA CONVERTIR EN UNA VENTA?");
     	if (procss) {
-    		$.get("./?action=ordertosell&id=<?echo $_GET['id']?>",function(data){
+    		$.get("./?action=ordertosell&id=<?php echo $_GET['id']?>",function(data){
     			if (data == "success") {
     				window.location='index.php?view=orders-approved';
     			}

@@ -10,7 +10,7 @@ if(count($products)>0){
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
 		<th>PRECIO UNITARIO</th>
-		<th>DISPONIBLE</th>
+		<th>CANTIDAD APROXIMADA/ESTIMADO DISPONIBLE EN STOCK</th>
 	</thead>
 	<?php
 $products_in_cero=0;
