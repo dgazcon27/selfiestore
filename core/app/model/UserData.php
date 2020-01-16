@@ -63,6 +63,12 @@ class UserData {
 		return Model::many($query[0],new UserData());
 	}
 
+	public function checkUsername($username){
+		$sql = "select id from ".self::$tablename." where username='$username'";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new UserData());
+	}
+
 }
 
 ?>
