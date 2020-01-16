@@ -11,6 +11,7 @@ if(count($products)>0){
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
 		<th>PRECIO UNITARIO</th>
+		<th>CANTIDAD APROXIMADA/ESTIMADO DISPONIBLE EN STOCK</th>
 	</thead>
 	<?php
 $products_in_cero=0;
@@ -24,6 +25,7 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
 		<td><b>$<?php echo $product->price_out; ?></b></td>
+		<td><b><?php echo $q; ?></b></td>
 		<td style="width:250px;"><form method="post" action="index.php?view=updateproductcotization&id=<?php echo $_GET['id']; ?>">
 		<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 

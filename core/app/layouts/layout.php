@@ -39,7 +39,14 @@
       <?php if(isset($_SESSION["user_id"]) || isset($_SESSION["client_id"])):?>
       <header class="main-header">
         <!-- Logo -->
-        <a href="./" class="logo">
+        <?php
+          if (isset($_SESSION['is_client'])) {
+            echo '<a href="./index.php?view=clienthome" class="logo">'; 
+           } else {
+            echo '<a href="./" class="logo">';
+           } 
+        ?>
+        
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b></b></span>
           <!-- logo for regular state and mobile devices -->

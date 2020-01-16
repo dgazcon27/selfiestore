@@ -89,7 +89,7 @@ $total = 0;
 	<th style="width:30px;">IMAGEN</th>
 	<th>NOMBRE</th>
 	<th style="width:30px;">PRECIO UNITARIO</th>
-	<th style="width:30px;">CANTIDAD APROXIMADA/ESTIMADO DISPONIBLE EN STOCK</th>
+	<th style="width:30px;">CANTIDAD</th>
 	<th style="width:30px;">PRECIO TOTAL</th>
 	<th ></th>
 </thead>
