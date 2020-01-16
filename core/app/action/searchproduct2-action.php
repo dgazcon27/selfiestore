@@ -94,9 +94,10 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 </div>
 
 <div class="small-responsive">
-
-	
-	<?php foreach($products as $product):
+	<?php
+		$products_resp = ProductData::getLikeResponsive($_GET["product"]);
+	?>
+	<?php foreach($products_resp as $product):
 		$q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		if($q > 0):
 	?>

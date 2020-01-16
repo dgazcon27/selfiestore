@@ -100,6 +100,12 @@ class ProductData {
 		return Model::many($query[0],new ProductData());
 	}
 
+	public static function getLikeResponsive($p){
+		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT 10";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
 
 	public static function getLike2($p){
 		$sql = "select * from ".self::$tablename." where (code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%') and kind=1";
