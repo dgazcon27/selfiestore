@@ -8,7 +8,18 @@ if (isset($_SESSION['is_admin'])) {
 	echo '<input type="hidden" id="is_admin" value="0">';
 }
 ?>
+<style type="text/css">
+	@media (max-width: 1000px){
+		.input-search {
+			display: inline-block;
+	    	width: 58%;
+		}
 
+		.button-search {
+			display: inline-block;
+		}
+	}
+</style>
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
@@ -16,11 +27,11 @@ if (isset($_SESSION['is_admin'])) {
 	<p><b>BUSCAR PRODUCTO POR NOMBRE O POR CODIGO:</b></p>
 		<form id="searchp">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 input-search">
 				<input type="hidden" name="view" value="newcotization">
 				<input type="text" id="product_code" name="product" class="form-control">
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-3 button-search">
 			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> BUSCAR</button>
 			</div>
 		</div>

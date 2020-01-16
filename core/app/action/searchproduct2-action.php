@@ -11,12 +11,14 @@
 		}
 
 		.row-product-small {
-			height: 110px;
+			height: 140px;
 		}
 
 		.image-small{
 			width: 30%;
     		display: inline-block;
+    		position: relative;
+		 	top: -20px;
 		}
 
 		.info-product {
@@ -30,6 +32,16 @@
 
 		.value-product b{
 			font-size: 17px;
+		}
+	}
+	
+	@media (min-width: 729px){
+		.table-desktop {
+			display: inline;
+		}
+
+		.small-responsive{
+			display: none;
 		}
 	}
 </style>
