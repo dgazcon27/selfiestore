@@ -1,0 +1,93 @@
+@media (max-width: 1000px){
+	.input-search {
+		display: inline-block;
+    	width: 58%;
+	}
+
+	.button-search {
+		display: inline-block;
+	}
+}
+
+/*Responsive new cotization view*/
+@media (max-width: 728px){
+	.table-desktop {
+		display: none;
+	}
+
+	.desktop-table-responsive {
+		display: none;
+	}
+
+	.small-responsive{
+		display: inline;
+	}
+
+	.row-product-small {
+		height: 140px;
+	}
+
+	.image-small{
+		width: 30%;
+		display: inline-block;
+		position: relative;
+	 	top: -20px;
+	}
+
+	.info-product {
+		display: inline-block;
+	    width: 65%;
+	}
+
+	.title-product {
+		font-size: 18px;
+	}
+
+	.value-product b{
+		font-size: 17px;
+		font-weight: 400;
+	}
+
+	.value-product span {
+		font-size: 17px;
+	}
+
+	div.box.box-primary {
+		font-size: 12px;
+	}
+
+	div.remove-item {
+		display: inline-block !important;
+	}
+
+	div.remove-item a {
+		width: 160px
+	}
+}
+
+
+@media (min-width: 728px){
+	.table-desktop {
+		display: inline;
+	}
+
+	.small-responsive{
+		display: none;
+	}
+
+	.movil-added-products {
+		display: none;
+	}
+}
+@media (max-width: 500px) {
+	#paginator {
+	    width: 90%;
+	}
+}
+
+@media (min-width: 500px) {
+	#paginator {
+	    width: 65%;
+	}
+}
+

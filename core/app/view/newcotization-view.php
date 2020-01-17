@@ -8,18 +8,7 @@ if (isset($_SESSION['is_admin'])) {
 	echo '<input type="hidden" id="is_admin" value="0">';
 }
 ?>
-<style type="text/css">
-	@media (max-width: 1000px){
-		.input-search {
-			display: inline-block;
-	    	width: 58%;
-		}
 
-		.button-search {
-			display: inline-block;
-		}
-	}
-</style>
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
@@ -93,15 +82,16 @@ unset($_SESSION["errors"]);
 <?php if(isset($_SESSION["cotization"])):
 $total = 0;
 ?>
-<h2>LISTA DE PRODUCTOS A COTIZAR </h2>
-<div class="box box-primary">
+<h2 style="margin-bottom: 20px">LISTA DE PRODUCTOS A COTIZAR </h2>
+<!-- BEGIN DESKTOP TABLE OF PRODUCTS  -->
+<div class="box box-primary desktop-table-responsive">
 <table class="table table-bordered table-hover">
 <thead>
 	<th style="width:30px;">IMAGEN</th>
 	<th>NOMBRE</th>
-	<th style="width:30px;">PRECIO UNITARIO</th>
-	<th style="width:30px;">CANTIDAD</th>
-	<th style="width:30px;">PRECIO TOTAL</th>
+	<th style="width:30px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
+	<th style="width:30px;"><span class="hidden-xs">CANTIDAD</span><span class="visible-xs">C.</span></th>
+	<th style="width:30px;"><span class="hidden-xs">PRECIO</span> TOTAL</th>
 	<th ></th>
 </thead>
 <?php 
@@ -113,14 +103,46 @@ $total_products += $p['q'];
 <tr >
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 	<td><?php echo $product->name; ?></td>
-	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
+	<td><b>$<?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td style="text-align: center;"><?php echo $p["q"];?></td>
-	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
-	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> QUITAR</a></td>
+	<td><b>$<?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
+	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span class="hidden-xs">QUITAR</span></a></td>
 </tr>
 <?php endforeach; ?>
 </table>
 </div>
+<!-- END DESKTOP TABLE OF PRODUCTS -->
+<!-- BEGIN MOVIL RESPONSIVE -->
+<div class="movil-added-products">
+	<?php
+		foreach ($_SESSION["cotization"] as $p): 
+		$product = ProductData::getById($p["product_id"]);
+	?>
+		<div class="row-product-small">
+			<div class="image-small">
+				<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
+			</div>
+			<div class="info-product">
+				<div>
+					<b class="title-product"><?php echo $product->name; ?></b>
+
+				</div>
+				<div class="value-product">
+					<span>Stock</span>:<b>
+					<?php echo $p['q'];?></b> |
+					<span>Precio</span>:<b>
+					$<?php echo $product->price_out; ?></b>
+				</div>
+				<div class="remove-item">
+						<a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span>QUITAR</span></a>
+					<!--  -->
+				</div>
+				
+			</div>
+		</div>
+	<?php endforeach ?>
+</div>
+<!-- END MOVIL RESPONSIVE -->
 <input type="hidden" name="total_products" id="total_products" value="<?echo $total_products;?>">
 <form method="post" class="form-horizontal" id="processsell" action="index.php?action=savecotization">
 <h2>Resumen</h2>

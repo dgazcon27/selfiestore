@@ -1,60 +1,7 @@
 <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
 <style type="text/css">
-	@media (max-width: 728px){
-		.table-desktop {
-			display: none;
-		}
-
-		.small-responsive{
-			display: inline;
-		}
-
-		.row-product-small {
-			height: 140px;
-		}
-
-		.image-small{
-			width: 30%;
-    		display: inline-block;
-    		position: relative;
-		 	top: -20px;
-		}
-
-		.info-product {
-			display: inline-block;
-		    width: 65%;
-		}
-
-		.title-product {
-			font-size: 23px;
-		}
-
-		.value-product b{
-			font-size: 17px;
-		}
-	}
 	
-	@media (min-width: 729px){
-		.table-desktop {
-			display: inline;
-		}
-
-		.small-responsive{
-			display: none;
-		}
-	}
-	@media (max-width: 500px) {
-		#paginator {
-		    width: 90%;
-		}
-	}
-
-	@media (min-width: 500px) {
-		#paginator {
-		    width: 65%;
-		}
-	}
 </style>
 
 <?php if(isset($_GET["product"]) && $_GET["product"]!=""):?>
@@ -62,7 +9,7 @@
 $products = ProductData::getLike($_GET["product"]);
 if(count($products)>0){
 	?>
-<h3>RESULTADO DE LA BUSQUEDA</h3>
+<h3 style="margin-bottom: 25px;">RESULTADO DE LA BUSQUEDA</h3>
 <div class="box box-primary table-desktop">
 <table class="table table-bordered table-hover">
 	<thead>
@@ -179,7 +126,6 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 	echo "<br><p class='alert alert-danger'>No se encontro el producto</p>";
 }
 ?>
-<hr><br>
 <?php else:
 ?>
 <?php endif; ?>

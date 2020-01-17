@@ -20,11 +20,11 @@ if (isset($_GET['id'])) {
 	<p><b>BUSCAR PRODUCTO POR NOMBRE O POR CODIGO:</b></p>
 		<form id="searchp">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6 input-search">
 				<input type="hidden" name="view" value="newcotization">
 				<input type="text" id="product_code" name="product" class="form-control">
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-3 button-search">
 			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> BUSCAR</button>
 			</div>
 		</div>
@@ -87,14 +87,14 @@ unset($_SESSION["errors"]);
 $total = 0;
 ?>
 <h2>LISTA DE PRODUCTOS A COTIZAR </h2>
-<div class="box box-primary">
+<div class="box box-primary desktop-table-responsive">
 <table class="table table-bordered table-hover">
 <thead>
 	<th style="width:30px;">IMAGEN</th>
 	<th>NOMBRE</th>
-	<th style="width:30px;">PRECIO UNITARIO</th>
+	<th style="width:30px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
 	<th style="width:30px;">CANTIDAD</th>
-	<th style="width:30px;">PRECIO TOTAL</th>
+	<th style="width:30px;">PRECIO <span class="hidden-xs">TOTAL</span></th>
 	<th ></th>
 </thead>
 <?php foreach($_SESSION["cotization"] as $p):
@@ -106,12 +106,43 @@ $product = ProductData::getById($p["product_id"]);
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td style="text-align: center;"><b><?php echo $p["q"]; ?></b></td>
 	<td><b>$ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
-	<td style="width:30px;"><a href="index.php?view=clearcart_update_cotization&product_id=<?php echo $product->id; ?>&id=<?php echo $_GET['id']?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> QUITAR</a></td>
+	<td style="width:30px;"><a href="index.php?view=clearcart_update_cotization&product_id=<?php echo $product->id; ?>&id=<?php echo $_GET['id']?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span class="hidden-xs">QUITAR</span></a></td>
 </tr>
 
 <?php endforeach; ?>
 </table>
 </div>
+<div class="movil-added-products">
+	<?php
+		foreach ($_SESSION["cotization"] as $p): 
+		$product = ProductData::getById($p["product_id"]);
+	?>
+		<div class="row-product-small">
+			<div class="image-small">
+				<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
+			</div>
+			<div class="info-product">
+				<div>
+					<b class="title-product"><?php echo $product->name; ?></b>
+
+				</div>
+				<div class="value-product">
+					<span>Stock</span>:<b>
+					<?php echo $p['q'];?></b> |
+					<span>Precio</span>:<b>
+					$<?php echo $product->price_out; ?></b>
+				</div>
+				<div class="remove-item">
+						<a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span>QUITAR</span></a>
+					<!--  -->
+				</div>
+				
+			</div>
+		</div>
+	<?php endforeach ?>
+</div>
+
+
 <form method="post" class="form-horizontal" id="processsell" action="index.php?action=updatecotization">
 <h2>Resumen</h2>
 
