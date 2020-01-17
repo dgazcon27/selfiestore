@@ -1,3 +1,10 @@
+<style type="text/css">
+	@media (max-width: 528px) {
+		.box {
+			font-size: 13px;
+		}
+	}
+</style>
 <section class="content">
 <div class="btn-group pull-right">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -61,11 +68,15 @@ $user = $sell->getUser();
 <div class="box box-primary">
 <br><table class="table table-bordered table-hover">
 	<thead>
-		<th>Codigo</th>
-		<th>Cantidad</th>
-		<th>Nombre del Producto</th>
+		<th class="hidden-xs">Codigo</th>
+		<th class="visible-xs">#</th>
+		<th class="hidden-xs">Cantidad</th>
+		<th class="visible-xs">N°</th>
+		<th><span class="hidden-xs">Nombre del</span> Producto</th>
+		<?php if (isset($_SESSION['is_admin'])): ?>
 		<th>Precio</th>
-		<th>Precio Unitario</th>
+		<?php endif ?>
+		<th><span class="hidden-xs">Precio </span>Unitario</th>
 		<th>Total</th>
 
 	</thead>
@@ -77,7 +88,9 @@ $user = $sell->getUser();
 	<td><?php echo $product->id ;?></td>
 	<td><?php echo $operation->q ;?></td>
 	<td><?php echo $product->name ;?></td>
+	<?php if (isset($_SESSION['is_admin'])): ?>
 	<td>$ <?php echo number_format($product->price_in,2,".",",") ;?></td>
+	<?php endif ?>
 	<td>$ <?php echo number_format($product->price_out,2,".",",") ;?></td>
 	<td><b>$ <?php echo number_format($operation->q*$product->price_out,2,".",",");$total+=$operation->q*$product->price_out;?></b></td>
 </tr>

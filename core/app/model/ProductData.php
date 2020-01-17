@@ -101,10 +101,26 @@ class ProductData {
 	}
 
 	public static function getLikeResponsive($p){
-		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT 10";
+		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT 0,10";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
+
+	public static function getTotalSearchResponsive($p) {
+		$sql = "select id from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%'";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
+	public static function getLikeResponsivePaginate($p, $page){
+		$min = $page*10;
+		$max = $min+10;
+		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT $min,$max";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
+
 
 
 	public static function getLike2($p){

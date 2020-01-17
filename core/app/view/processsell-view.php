@@ -38,7 +38,7 @@ foreach($operations as $operation){
 <div class="col-md-4">
     <label class="control-label">&nbsp;</label>
 <div class="col-lg-12">
-    <button class="btn btn-primary btn-block" id="process_sell"><i class="glyphicon glyphicon-usd"></i><i class="glyphicon glyphicon-usd"></i> Convertir en venta</button>
+    <button class="btn btn-primary btn-block" id="process_sell"><i class="glyphicon glyphicon-usd"></i> Convertir en venta</button>
 </div>
 </div>
 <div class="col-md-3 hidden">
