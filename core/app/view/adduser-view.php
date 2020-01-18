@@ -19,10 +19,10 @@ if(count($_POST)>0){
 		}
 	}
 
-	$user->name = $_POST["name"];
-	$user->lastname = $_POST["lastname"];
-	$user->username = $_POST["username"];
-	$user->email = $_POST["email"];
+	$user->name = isset($_POST["name"]) ? $_POST["name"] : "";
+	$user->lastname = isset($_POST["lastname"]) ? $_POST["lastname"] : "";
+	$user->username = isset($_POST["username"]) ? $_POST["username"] : "";
+	$user->email = isset($_POST["email"]) ? $_POST["email"] : "";
 	$user->is_admin=$is_admin;
 	$user->password = sha1(md5($_POST["password"]));
 	$u = $user->add();
@@ -31,17 +31,17 @@ if(count($_POST)>0){
 	$person->no = "";
 
 	// CLIENTE DATA
-	$person->ci = $_POST['ci'];
-	$person->name = $_POST['name'];
-	$person->lastname = $_POST['lastname'];
-	$person->phone1 = $_POST["phone1"];
-	$person->email1 = isset($_POST["email"]) ? $_POST["email"]: "NULL";
+	$person->ci = isset($_POST['ci']) ? $_POST['ci']: "";
+	$person->name = isset($_POST['name']) ? $_POST['name'] : "";
+	$person->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : "";
+	$person->phone1 = isset($_POST["phone1"]) ? $_POST["phone1"] : "";
+	$person->email1 = isset($_POST["email"]) ? $_POST["email"]: "";
 
 	// COMPANY DATA
-	$person->rif = isset($_POST['rif']) ? $_POST['rif'] : "NULL";
-	$person->company = isset($_POST['company_name']) ? $_POST['company_name'] : "NULL";
-	$person->phone2 = isset($_POST['company_phone']) ? $_POST['company_phone'] : "NULL";
-	$person->address2 = isset($_POST['company_address']) ? $_POST['company_address'] : "NULL";
+	$person->rif = isset($_POST['rif']) ? $_POST['rif'] : "";
+	$person->company = isset($_POST['company_name']) ? $_POST['company_name'] : "";
+	$person->phone2 = isset($_POST['company_phone']) ? $_POST['company_phone'] : "";
+	$person->address2 = isset($_POST['company_address']) ? $_POST['company_address'] : "";
 
 	$person->is_active_access = 0;
 	$person->kind = $user->kind;

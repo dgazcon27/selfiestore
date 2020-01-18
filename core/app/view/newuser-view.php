@@ -26,45 +26,46 @@
         role="form">
         <input type="hidden" name="kind" value="<?php echo $_GET["kind"];?>">
         <!--  BEGIN SECTION CLIENTS DATA -->
-        <div class="col-lg-12">
-          <p class="alert alert-info">* Campos obligatorios</p>
+        <?php if (isset($_GET['kind']) && $_GET['kind'] == 4): ?>
           <div class="col-lg-12">
-            <h3>
-              Datos del Cliente
-            </h3>
+            <p class="alert alert-info">* Campos obligatorios</p>
+            <div class="col-lg-12">
+              <h3>
+                Datos del Cliente
+              </h3>
+            </div>
+              <div class="form-group">
+                <label for="ci" class="col-lg-2 control-label">Identificacion*</label>
+                <div class="col-md-6">
+                  <input type="text" name="ci" required class="form-control" id="ci" placeholder="Identificacion">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="name" class="col-lg-2 control-label">Nombre*</label>
+                <div class="col-md-6">
+                  <input type="text" name="name" required class="form-control" id="name" placeholder="Nombre">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="lastname" class="col-lg-2 control-label">Apellido*</label>
+                <div class="col-md-6">
+                  <input type="text" name="lastname" required class="form-control" id="lastname" placeholder="Apellido">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="phone1" class="col-lg-2 control-label">Teléfono*</label>
+                <div class="col-md-6">
+                  <input type="text" name="phone1" required class="form-control" id="phone1" placeholder="Teléfono">
+                </div>
+              </div>  
+              <div class="form-group">
+                <label for="email" class="col-lg-2 control-label">Email</label>
+                <div class="col-md-6">
+                  <input type="text" name="email" class="form-control" id="email" placeholder="Email" >
+                </div>
+              </div>
           </div>
-            <div class="form-group">
-              <label for="ci" class="col-lg-2 control-label">Identificacion*</label>
-              <div class="col-md-6">
-                <input type="text" name="ci" required class="form-control" id="ci" placeholder="Identificacion">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="name" class="col-lg-2 control-label">Nombre*</label>
-              <div class="col-md-6">
-                <input type="text" name="name" required class="form-control" id="name" placeholder="Nombre">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="lastname" class="col-lg-2 control-label">Apellido*</label>
-              <div class="col-md-6">
-                <input type="text" name="lastname" required class="form-control" id="lastname" placeholder="Apellido">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="phone1" class="col-lg-2 control-label">Teléfono*</label>
-              <div class="col-md-6">
-                <input type="text" name="phone1" required class="form-control" id="phone1" placeholder="Teléfono">
-              </div>
-            </div>  
-            <div class="form-group">
-              <label for="email" class="col-lg-2 control-label">Email</label>
-              <div class="col-md-6">
-                <input type="text" name="email" class="form-control" id="email" placeholder="Email" >
-              </div>
-            </div>
-            
-        </div>
+        <?php endif ?>
         <!-- END SECTION CLIENTS DATA -->
         <!-- BEGIN SECTION USER DATA -->
         <div class="col-lg-12">
@@ -125,37 +126,39 @@
         </div>
         <!-- END SECTION USER DATA -->
         <!-- BEGIN SECTION COMPANY DATA -->
-        <div class="col-lg-12">
+        <?php if (isset($_GET['kind']) && $_GET['kind'] == 4): ?>
           <div class="col-lg-12">
-            <h3>
-              Datos de la empresa
-            </h3>
-          </div>
-          <div class="form-group">
-            <label for="rif" class="col-lg-2 control-label">RIF</label>
-            <div class="col-md-6">
-              <input type="text" name="rif" class="form-control" id="rif" placeholder="RIF">
+            <div class="col-lg-12">
+              <h3>
+                Datos de la empresa
+              </h3>
+            </div>
+            <div class="form-group">
+              <label for="rif" class="col-lg-2 control-label">RIF</label>
+              <div class="col-md-6">
+                <input type="text" name="rif" class="form-control" id="rif" placeholder="RIF">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="company_name" class="col-lg-2 control-label">Nombre de la empresa</label>
+              <div class="col-md-6">
+                <input type="text" name="company_name" class="form-control" id="company_name" placeholder="Nombre de la empresa">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="company_phone" class="col-lg-2 control-label">Telefono de la empresa</label>
+              <div class="col-md-6">
+                <input type="text" name="company_phone" class="form-control" id="company_phone" placeholder="Telefono de la empresa">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="company_address" class="col-lg-2 control-label">Direccion de la empresa</label>
+              <div class="col-md-6">
+                <input type="text" name="company_address" class="form-control" id="company_address" placeholder="Direccion de la empresa">
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label for="company_name" class="col-lg-2 control-label">Nombre de la empresa</label>
-            <div class="col-md-6">
-              <input type="text" name="company_name" class="form-control" id="company_name" placeholder="Nombre de la empresa">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="company_phone" class="col-lg-2 control-label">Telefono de la empresa</label>
-            <div class="col-md-6">
-              <input type="text" name="company_phone" class="form-control" id="company_phone" placeholder="Telefono de la empresa">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="company_address" class="col-lg-2 control-label">Direccion de la empresa</label>
-            <div class="col-md-6">
-              <input type="text" name="company_address" class="form-control" id="company_address" placeholder="Direccion de la empresa">
-            </div>
-          </div>
-        </div>
+        <?php endif ?>
         <!-- BEGIN SECTION COMPANY DATA -->
         <div class="form-group">
           <div class="col-lg-offset-2 col-lg-10 button-submit">

@@ -30,7 +30,10 @@ for($i=$sd;$i<=$ed;$i+=(60*60*24)){
 
 <br>
 <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <?php
+          $class = isset($_SESSION['is_admin']) ? "col-md-3" : "col-md-4"; 
+        ?>
+        <div class="<?php echo $class;?> col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-aqua"><i class="fa fa-glass"></i></span>
 
@@ -43,7 +46,7 @@ for($i=$sd;$i<=$ed;$i+=(60*60*24)){
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="<?php echo $class;?> col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-red"><i class="fa fa-male"></i></span>
 
@@ -60,7 +63,7 @@ for($i=$sd;$i<=$ed;$i+=(60*60*24)){
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="<?php echo $class;?> col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-green"><i class="fa fa-shopping-cart"></i></span>
 
@@ -73,18 +76,20 @@ for($i=$sd;$i<=$ed;$i+=(60*60*24)){
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="fa fa-area-chart"></i></span>
+        <?php if (isset($_SESSION['is_admin'])): ?>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-yellow"><i class="fa fa-area-chart"></i></span>
 
-            <div class="info-box-content">
-              <span class="info-box-text">Ingresos del Mes</span>
-              <span class="info-box-number">$ <?php echo number_format($ntot,2,".",",");?></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Ingresos del Mes</span>
+                <span class="info-box-number">$ <?php echo number_format($ntot,2,".",",");?></span>
+              </div>
+              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.info-box -->
           </div>
-          <!-- /.info-box -->
-        </div>
+        <?php endif ?>
         <!-- /.col -->
       </div>
       <!-- /.row -->
