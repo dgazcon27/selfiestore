@@ -9,6 +9,7 @@ class SellData {
 
 	public function getPerson(){ return PersonData::getById($this->person_id);}
 	public function getUser(){ return UserData::getById($this->user_id);}
+	public function getSellUser($id){ return UserData::getById($id);}
 	public function getP(){ return PData::getById($this->p_id);}
 	public function getD(){ return DData::getById($this->d_id);}
 	public function getStockFrom(){ return StockData::getById($this->stock_from_id);}
@@ -80,7 +81,7 @@ public function add_with_client(){
 	}
 
 	public function process_cotization(){
-		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,p_id=$this->p_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,discount=$this->discount,cash=$this->cash,is_draft=0,is_cotization=0,person_id=$this->person_id, f_id=$this->f_id where id=$this->id";
+		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,p_id=$this->p_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,discount=$this->discount,cash=$this->cash,is_draft=0,is_cotization=0,person_id=$this->person_id, f_id=$this->f_id, receive_by=$this->receive_by where id=$this->id";
 		Executor::doit($sql);
 	}
 

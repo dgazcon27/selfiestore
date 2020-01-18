@@ -58,8 +58,13 @@ $client = $sell->getPerson();
 $user = $sell->getUser();
 ?>
 <tr>
-	<td>Atendido por</td>
-	<td><?php echo $user->name." ".$user->lastname;?></td>
+	<?php if (isset($sell->receive_by)): ?>
+		<?php  
+			$receive_by = $sell->getSellUser($sell->receive_by);
+		?>
+		<td>Atendido por</td>
+		<td><?php echo $receive_by->name." ".$receive_by->lastname;?></td>
+	<?php endif ?>
 </tr>
 <?php endif; ?>
 </table>

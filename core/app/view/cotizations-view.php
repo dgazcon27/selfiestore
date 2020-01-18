@@ -18,7 +18,7 @@
 			if(isset($_SESSION["client_id"])){
 				$products = SellData::getCotizationsByClientId($_SESSION["client_id"]);
 			}else if(isset($_SESSION["user_id"])){
-				if (isset($_SESSION['is_admin'])) {
+				if (isset($_SESSION['is_admin']) || Core::$user->kind == 4) {
 					$products = SellData::getCotizations();
 				} else {
 					$products = SellData::getCotizatiosByUser($_SESSION["user_id"]);
@@ -31,7 +31,7 @@
 					<table class="table table-bordered table-hover	">
 						<thead>
 							<th style="text-align: center;"></th>
-							<th style="text-align: center;"><span class="hidden-xs">COTIZACION</span> Nº</th>
+							<th class="hidden-xs" style="text-align: center;"><span >COTIZACION</span> Nº</th>
 							<?php if (isset($_SESSION['is_admin'])): ?>
 							<th style="text-align: center;">CLIENTE</th>
 							<th style="text-align: center;">TELEFONO</th>
@@ -55,7 +55,7 @@
 								</a>
 							</td>
 							
-							<td style="text-align: center;">#<?php echo $cotizationsCouner; ?></td>
+							<td class="hidden-xs" style="text-align: center;">#<?php echo $cotizationsCouner; ?></td>
 							<?php if (isset($_SESSION['is_admin'])) {
 								if (isset($sell->person_id)) {
 									# code...
@@ -97,23 +97,24 @@
 							<td class="hidden-xs" style="text-align: center;"><?php echo $sell->created_at; ?></td>
 							<td style="width:200px;text-align: center;">
 							<?php if(isset($_SESSION["user_id"]) && isset($_SESSION['is_admin']) && $sell->d_id == 4):?>
-								<a href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
+								<a style="margin-bottom: 2px;" href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
 									<i class="fa fa-check"></i> <span class="hidden-xs" >PROCESAR</span>
 								</a>
+
 							<?php endif;?>
 							<?php if ($sell->d_id == 2 && $_SESSION['user_id'] == $sell->user_id): ?>
-								<p data-id="<?php echo $sell->id; ?>" class="confirm_button btn btn-xs btn-success">
+								<p style="margin-bottom: 2px;" data-id="<?php echo $sell->id; ?>" class="confirm_button btn btn-xs btn-success">
 									<i class="fa fa-check"></i> <span class="hidden-xs">CONFIRMAR</span>
 								</p>
-								<a href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
+								<a style="margin-bottom: 2px;" href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
 									<i class="fa fa-pencil"></i> <span class="hidden-xs">EDITAR</span>
 								</a>	
 							<?php endif ?>
 							<?php if (isset($_SESSION['is_admin'])): ?>
-								<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
+								<a style="margin-bottom: 2px;" href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
 									<i class="fa fa-ban"></i> <span class="hidden-xs">CANCELAR</span>
 								</a>
-								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
+								<a style="margin-bottom: 2px;" href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 									<i class="fa fa-trash"></i>
 								</a>
 

@@ -18,7 +18,7 @@ if(!empty($_POST)){
 	$sell->discount = $_POST["discount"];
 	$sell->cash = $_POST["money"];
 	$sell->stock_to_id = StockData::getPrincipal()->id;
-
+	$sell->receive_by = $_SESSION['user_id'];
 	$sell->process_cotization();
 	$a = json_decode($_POST['op-q']);
 	foreach ($a as $key) {
