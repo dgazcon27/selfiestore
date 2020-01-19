@@ -62,7 +62,12 @@ $products_in_cero=0;
 		<?php
 			$products_resp = ProductData::getLikeResponsive($_GET["product"]);
 	 		foreach($products_resp as $product):
-			$q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
+				$stock = StockData::getPrincipal()->id;
+				$q = OperationData::getQByStock($product->id, $stock);
+				if ($q <= 0 && Core::$user->kind == 8) {
+					$stock = Core::$user->stock_id;
+					$q = OperationData::getQByStock($product->id,$stock);
+				}
 			if($q > 0):
 		?>
 			<div class="row-product-small">
@@ -82,6 +87,7 @@ $products_in_cero=0;
 					<div>
 						<form method="post" action="index.php?view=addtocotization">
 							<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+							<input type="hidden" name="stock_id" value="<?php echo $stock; ?>">
 							<div class="input-group">
 								<input class="form-control" required name="q" placeholder="Cantidad ...">
 						      	<span class="input-group-btn">

@@ -33,7 +33,7 @@ $errors = [];
 $cart = $_SESSION["cotization"];
 $index=0;
 
-$q = OperationData::getQByStock($_POST["product_id"],StockData::getPrincipal()->id);
+$q = OperationData::getQByStock($_POST["product_id"],$_POST['stock_id']);
 $can = true;
 if($_POST["q"] > $q){
 	$error = array("product_id"=>$_POST["product_id"],"message"=>"No hay suficiente cantidad de producto en inventario.");

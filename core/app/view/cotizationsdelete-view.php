@@ -52,7 +52,8 @@
 							$quantity = 0;
 							$stock_id = 0;
 							foreach($operations as $operation){
-								$totalPrice+= $operation->price_out;
+								$product  = $operation->getProduct();
+								$totalPrice+= $operation->q*$product->price_out;
 								$quantity += $operation->q;
 								$stock_id = $operation->stock_id;
 							}
