@@ -7,6 +7,12 @@ if (isset($_SESSION['is_admin'])) {
 } else {
 	echo '<input type="hidden" id="is_admin" value="0">';
 }
+
+if (isset($_SESSION['is_client'])) {
+	echo '<input type="hidden" id="is_client" value="1">';
+} else {
+	echo '<input type="hidden" id="is_client" value="0">';
+}
 ?>
 
 <section class="content">
@@ -40,7 +46,13 @@ $(document).ready(function(){
 		$("#product_code").val("");
 
 	});
-	});
+
+	if ($("#is_client").val() == "1") {
+		$.get("./?action=searchproductmovil",$("#searchp").serialize(),function(data){
+			$("#show_search_results").html(data);
+		});
+	}
+});
 
 $(document).ready(function(){
     $("#product_code").keydown(function(e){

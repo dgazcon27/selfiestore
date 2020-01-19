@@ -81,7 +81,7 @@ if($product->kind==1){
 	<?php endforeach;?>
 </table>
 </div>
-<?php if($products_in_cero>0){ 
+<?php if($products_in_cero>0 && isset($_SESSION['is_admin'])){ 
 if(Core::$user->kind==1){
 	echo "<p class='alert alert-warning'>SE OMITIERON <b>$products_in_cero PRODUCTOS</b> QUE NO TIENEN EXISTENCIAS EN EL INVENTARIO. <a href='index.php?view=inventary&stock=".StockData::getPrincipal()->id."'>IR AL INVENTARIO</a></p>"; }
 }

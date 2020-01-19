@@ -21,7 +21,7 @@ $gasto = 0;
 ?>
 <?php
 //if($product->kind==1){
-if(isset($_COOKIE["selled"])){
+if(isset($_COOKIE["selled"]) && isset($_SESSION['is_admin'])){
   foreach ($operations as $operation) {
 //    print_r($operation);
     $qx = OperationData::getQByStock($operation->product_id,StockData::getPrincipal()->id);
@@ -72,10 +72,12 @@ $user = $sell->getUser();
 <div class="box box-primary">
 <table class="table table-bordered table-hover">
   <thead>
-    <th>CODIGO</th>
+    <th class="hidden-xs">CODIGO</th>
+    <th class="visible-xs">#</th>
 	<th>IMAGEN</th>
 	<th>NOMBRE DEL PRODUCTO</th>
-    <th>CANTIDAD</th>
+    <th class="hidden-xs">CANTIDAD</th>
+    <th class="visible-xs">C.</th>
     <th>PRECIO UNITARIO</th>
     <th>TOTAL</th>
 

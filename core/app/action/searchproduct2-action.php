@@ -131,7 +131,12 @@ $products_in_cero=0;
 </div>
 
 
-<?php if($products_in_cero>0){ echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary&stock=".StockData::getPrincipal()->id."'>Ir al Inventario</a></p>"; }?>
+<?php
+
+	if($products_in_cero > 0 && isset($_SESSION['is_admin'])){ 
+		echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary&stock=".StockData::getPrincipal()->id."'>Ir al Inventario</a></p>";
+	}
+?>
 
 	<?php
 }else{

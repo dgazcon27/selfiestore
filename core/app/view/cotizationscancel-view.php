@@ -37,14 +37,21 @@
 					<table class="table table-bordered table-hover table-responsive datatable">
 						<thead>
 							<th></th>
-							<th style="text-align: center;">Venta</th>	
-							<th style="text-align: center;">Cantidad</th>
+							<th class="hidden-xs" style="text-align: center;">Venta</th>	
+							<th style="text-align: center;">
+								<span class="hidden-xs">Cantidad</span>
+								<span class="visible-xs">C.</span>
+							</th>
 							<th style="text-align: center;">Total</th>
-							<th style="text-align: center;">Cliente</th>
 							<th style="text-align: center;">Vendedor</th>
-							<th style="text-align: center;">Almacen</th>
-							<th style="text-align: center;">Fecha</th>
-							<th style="text-align: center;">Opciones</th>
+							<?php if (isset($_SESSION['is_admin'])): ?>
+								<th style="text-align: center;">Cliente</th>
+								<th style="text-align: center;">Almacen</th>
+							<?php endif ?>
+							<th class="hidden-xs" style="text-align: center;">Fecha</th>
+							<th style="text-align: center;">
+								<span class="hidden-xs">Opciones</span>
+							</th>
 						</thead>
 						<?php 
 						foreach($products as $sell):
@@ -60,26 +67,25 @@
 							}
 						?>
 						<tr>
-							<td style="width:30px;">
+							<td class="hidden-xs" style="width:30px;">
 								<a href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
 									<i class="glyphicon glyphicon-eye-open"></i>
 								</a>
 							</td>
-							<td style="text-align: center;">#<?php echo $sell->id; ?></td>
+							<td style="text-align: center;">
+								<a class="visible-xs" href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
+									#<?php echo $sell->id; ?>
+								</a>
+								<span class="hidden-xs">#<?php echo $sell->id; ?></span>
+							</td>
+
 							<td style="text-align: center;"><?php echo 	$quantity; ?></td>
 							<td style="text-align: center;">
 								<?php
 								echo "<b>$ ".number_format($totalPrice,2,".",",")."</b>";
 								?>			
 							</td>
-							<td style="text-align: center;">
-								<?php 
-								if($sell->person_id!=null){
-									$c= $sell->getPerson();
-									echo $c->name." ".$c->lastname;
-								} 
-								?>
-							</td>
+							
 							<td style="text-align: center;">
 								<?php
 								if($sell->user_id!=null)
@@ -88,15 +94,25 @@
 								} 
 								?>
 							</td>
-							<td style="text-align: center;">
-								<?php 
-									//Mejorar - Esto debe ser dinámico
-									if($stock_id==1){
-										echo "Principal"; 
-									}
-								?>					
-							</td>
-							<td style="text-align: center;">
+							<?php if (isset($_SESSION['is_admin'])): ?>
+								<td style="text-align: center;">
+									<?php 
+									if($sell->person_id!=null){
+										$c= $sell->getPerson();
+										echo $c->name." ".$c->lastname;
+									} 
+									?>
+								</td>
+								<td style="text-align: center;">
+									<?php 
+										//Mejorar - Esto debe ser dinámico
+										if($stock_id==1){
+											echo "Principal"; 
+										}
+									?>					
+								</td>
+							<?php endif ?>
+							<td class="hidden-xs" style="text-align: center;">
 								<?php 
 									if(isset($sell->created_at)){
 										echo $sell->created_at; 
@@ -107,7 +123,7 @@
 								
 								<?php if(isset($_SESSION["user_id"])):?>
 								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
-									ELIMINAR
+									<i class="fa fa-trash"></i> <span class="hidden-xs">ELIMINAR</span>
 								</a>
 								<?php endif;?>
 							</td>

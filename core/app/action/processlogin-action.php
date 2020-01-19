@@ -34,7 +34,7 @@ if($found==true) {
 		$_SESSION['user_id'] = $userid;
 		$user_data = PersonData::getByUserId($userid);
 		$_SESSION['client_id'] = $user_data->id;
-		print "<script>window.location='index.php?view=clienthome';</script>";
+		print "<script>window.location='index.php?view=cotizations';</script>";
 	} else {
 		$_SESSION['user_id'] = $userid;
 		print "<script>window.location='index.php?view=home';</script>";

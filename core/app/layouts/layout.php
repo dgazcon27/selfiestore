@@ -406,7 +406,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
         <div class="pull-right hidden-xs">
           <b>Version</b> 1
         </div>
-        <strong>COPYRIGHT &copy; 2019 <?php echo ConfigurationData::getByPreffix("company_name")->val;?></strong>
+        <strong>COPYRIGHT &copy; 2020 <?php echo ConfigurationData::getByPreffix("company_name")->val;?></strong>
       </footer>
       <?php else:?>
         <?php if(isset($_GET["view"]) && $_GET["view"]=="clientaccess"):?>
