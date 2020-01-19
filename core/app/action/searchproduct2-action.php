@@ -21,7 +21,12 @@ if(count($products)>0){
 	<?php
 $products_in_cero=0;
 	 foreach($products as $product):
-$q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
+	 	$stock = StockData::getPrincipal()->id;
+		$q = OperationData::getQByStock($product->id, $stock);
+		if ($q <= 0 && Core::$user->kind == 8) {
+			$stock = Core::$user->stock_id;
+			$q = OperationData::getQByStock($product->id,$stock);
+		}
 	?>
 	<?php 
 	if($q>0):?>
@@ -34,6 +39,7 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 		<td style="width:250px;">
 			<form method="post" action="index.php?view=addtocotization">
 				<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+				<input type="hidden" name="stock_id" value="<?php echo $stock; ?>">
 				<div class="input-group">
 					<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
 			      	<span class="input-group-btn">

@@ -3,11 +3,11 @@
 		<div class="col-md-12">
 			<?php 
 			if(isset($_SESSION["client_id"])):?>
-			<h1><i class='glyphicon glyphicon-shopping-cart'></i> Mis Compras</h1>
+			<h1><i class='glyphicon glyphicon-shopping-cart'></i> Cotizaciones Canceladas</h1>
 			<?php 
 			else:
 			?>
-			<div class="btn-group pull-right">
+			<!-- <div class="btn-group pull-right">
   				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
     				<i class="fa fa-download"></i> descargar <span class="caret"></span>
   				</button>
@@ -16,7 +16,7 @@
 				    <li><a href="report/sells-xlsx.php">Excel 2007 (.xlsx)</a></li>
 					<li><a onclick="thePDF()" id="makepdf" class="">PDF (.pdf)</a></li>
   				</ul>
-			</div>
+			</div> -->
 			<h1><i class='glyphicon glyphicon-shopping-cart'></i> Cotizaciones Canceladas</h1>
 			<?php
 			endif;
@@ -24,28 +24,17 @@
 			<div class="clearfix"></div>
 			<?php
 			$products = null;
-			if(isset($_SESSION["user_id"])){
-				if(Core::$user->kind==3){
-					$products = SellData::getAllBySQL(" where user_id=".Core::$user->id." and operation_type_id=2 and p_id=3 and d_id=3 and is_draft=1 and is_cotization=1 order by created_at desc");
-				}
-				else if(Core::$user->kind==2){
-					$products = SellData::getAllBySQL(" where operation_type_id=2 and p_id=3 and d_id=3 and is_draft=1 and is_cotization=1 and stock_to_id=".Core::$user->stock_id." order by created_at desc");
-				}
-				else{
-					$products = SellData::getAllBySQL(" where operation_type_id and p_id=3 and d_id=3 and is_cotization=1");
-				}
-			}else if(isset($_SESSION["client_id"])){
-				$products = SellData::getAllBySQL(" where person_id=$_SESSION[client_id] and operation_type_id=2 and p_id=3 and d_id=3 and is_draft=1 and is_cotization=1 order by created_at desc");	
+			if (isset($_SESSION['is_admin'])) {
+				$products = SellData::getCancelsCotizacion();
+			} else {
+				$products = SellData::getCancelsCotizacionByUser(Core::$user->id);
 			}
 			if(count($products)>0){
 			?>
 			<br>
 			<div class="box box-primary">
-				<div class="box-header">
-					<h3 class="box-title">Ventas</h3>
-				</div>
 				<div class="box-body">
-					<table class="table table-bordered table-hover table-responsive datatable	">
+					<table class="table table-bordered table-hover table-responsive datatable">
 						<thead>
 							<th></th>
 							<th style="text-align: center;">Venta</th>	
@@ -116,7 +105,7 @@
 							<td style="width:130px;text-align: center;">
 								
 								<?php if(isset($_SESSION["user_id"])):?>
-								<a href="index.php?action=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
+								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 									ELIMINAR
 								</a>
 								<?php endif;?>
@@ -135,8 +124,7 @@
 			{
 			?>
 			<div class="jumbotron">
-				<h2>No hay ventas</h2>
-				<p>No se ha realizado ninguna venta.</p>
+				<p>No se ha cancelado ninguna cotizacion.</p>
 			</div>
 			<?php
 			}

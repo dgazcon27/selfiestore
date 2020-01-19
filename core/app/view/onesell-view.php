@@ -40,7 +40,13 @@ if(isset($_COOKIE["selled"])){
 
 ?>
 <div class="row">
-<div class="col-md-8">
+  <?php
+    $class = "col-md-8";
+    if ($sell->d_id == 3 || $sell->d_id == 8) {
+      $class = "col-md-12";
+     } 
+  ?>
+<div class="<?php echo $class;?>">
 <div class="box box-primary">
 <table class="table table-bordered">
 <?php if($sell->person_id!=""):
@@ -135,207 +141,209 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 
 
 </div>
-<div class="col-md-4">
-<form method="post" class="form-horizontal" action="./?action=updatesell" id="processsell" enctype="multipart/form-data">
-<div class="row">
-<div class="col-md-12">
-<div>
+<?php if ((int)$sell->d_id != 3 && (int)$sell->d_id != 8): ?>
+  <div class="col-md-4">
+    <form method="post" class="form-horizontal" action="./?action=updatesell" id="processsell" enctype="multipart/form-data">
+    <div class="row">
+    <div class="col-md-12">
+    <div>
 
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Principal</a></li>
-    <li role="presentation"><a href="#extra"  aria-controls="extra" role="tab" data-toggle="tab">Extra</a></li>
-  </ul>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Principal</a></li>
+        <li role="presentation"><a href="#extra"  aria-controls="extra" role="tab" data-toggle="tab">Extra</a></li>
+      </ul>
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="main">
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="main">
 
-<div class="row">
+    <div class="row">
 
-<div class="col-md-6">
-    <label class="control-label">ALMACEN</label>
-    <div class="col-lg-12">
-    <h4 class=""><?php 
-    echo StockData::getPrincipal()->name;
-    ?></h4>
-    </div>
-  </div>
+    <div class="col-md-6">
+        <label class="control-label">ALMACEN</label>
+        <div class="col-lg-12">
+        <h4 class=""><?php 
+        echo StockData::getPrincipal()->name;
+        ?></h4>
+        </div>
+      </div>
 
-<div class="col-md-6">
-    <label class="control-label">CLIENTE</label>
-    <div class="col-lg-12">
-    <?php 
-$clients = PersonData::getClients();
-    ?>
-    <select name="client_id" id="client_id" class="form-control">
-    <option value="">NINGUNO</option>
-    <?php foreach($clients as $client):?>
-      <option value="<?php echo $client->id;?>" <?php if($client->id==$sell->person_id){ echo "selected"; }?>><?php echo strtoupper($client->name." ".$client->lastname);?></option>
-    <?php endforeach;?>
-      </select>
-    </div>
-  </div>
-  </div>
+    <div class="col-md-6">
+        <label class="control-label">CLIENTE</label>
+        <div class="col-lg-12">
+        <?php 
+    $clients = PersonData::getClients();
+        ?>
+        <select name="client_id" id="client_id" class="form-control">
+        <option value="">NINGUNO</option>
+        <?php foreach($clients as $client):?>
+          <option value="<?php echo $client->id;?>" <?php if($client->id==$sell->person_id){ echo "selected"; }?>><?php echo strtoupper($client->name." ".$client->lastname);?></option>
+        <?php endforeach;?>
+          </select>
+        </div>
+      </div>
+      </div>
 
-<div class="row">
+    <div class="row">
 
-<div class="col-md-12">
-    <label class="control-label">FORMA DE PAGO</label>
-    <div class="col-lg-12">
-    <?php 
-$clients = FData::getAll();
-    ?>
-    <select name="f_id" id="p_id" class="form-control">
-    <?php foreach(FData::getAll() as $client):?>
-      <option value="<?php echo $client->id;?>" <?php if($client->id==$sell->f_id){ echo "selected"; }?>><?php echo strtoupper($client->name);?></option>
-    <?php endforeach;?>
-      </select>
-    </div>
-  </div>
-	
-	
-	<div class="row">
+    <div class="col-md-12">
+        <label class="control-label">FORMA DE PAGO</label>
+        <div class="col-lg-12">
+        <?php 
+    $clients = FData::getAll();
+        ?>
+        <select name="f_id" id="p_id" class="form-control">
+        <?php foreach(FData::getAll() as $client):?>
+          <option value="<?php echo $client->id;?>" <?php if($client->id==$sell->f_id){ echo "selected"; }?>><?php echo strtoupper($client->name);?></option>
+        <?php endforeach;?>
+          </select>
+        </div>
+      </div>
+      
+      
+      <div class="row">
 
-<div class="col-md-12">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFERENCIA</label>
-    <div class="col-lg-12">
-      <input type="text" name="refe" value="<?php echo $sell->refe;?>" class="form-control" id="refe" placeholder="NUMERO DE REFERENCIA DE TRANSFERENCIA">
-    </div>
-  </div>
-</div>
-	
-	
-<div class="row">
-
-<div class="col-md-6">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL EFECTIVO</label>
-    <div class="col-lg-12">
-      <input type="text" name="efe" class="form-control" value="<?php echo $sell->efe;?>" id="efe" placeholder="EFECTIVO">
-    </div>
-  </div>
-<div class="col-md-6">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL PUNTO DE VENTA</label>
-    <div class="col-lg-12">
-      <input type="text" name="pun" class="form-control" value="<?php echo $sell->pun;?>" id="pun" placeholder="PUNTO DE VENTA">
-    </div>
-  </div>
- <div class="col-md-6">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL TRANSFERENCIA</label>
-    <div class="col-lg-12">
-      <input type="text" name="tra" value="<?php echo $sell->tra;?>" class="form-control" id="tra" placeholder="TRANSFERENCIA">
-    </div>
-  </div>
-<div class="col-md-6">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL ZELLE</label>
-    <div class="col-lg-12">
-      <input type="text" name="zel" class="form-control" value="<?php echo $sell->zel;?>" id="zel" placeholder="ZELLE">
-    </div>
-  </div>
-  </div>
-	
-<?php if(isset($_SESSION["user_id"]) && Core::$user->kind==1):?>	
-	<div class="row">
-
-<div class="col-md-12">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCUENTO</label>
-    <div class="col-lg-12">
-      <input type="text" name="discount" value="<?php echo $sell->discount;?>" class="form-control" id="discount" placeholder="DESCUENTO">
-    </div>
-  </div>
-</div>
-<?php endif;?>
-<?php if(isset($_SESSION["user_id"]) && Core::$user->kind==3):?>	
-	<div class="col-md-12" hidden="true">
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCUENTO</label>
-    <div class="col-lg-12">
-      <input type="hidden" name="discount" value="<?php echo $sell->discount;?>" class="form-control" id="discount" placeholder="DESCUENTO">
-    </div>
-  </div>
-<?php endif;?>
-
-<div class="row">
-
-<div class="col-md-6" hidden=¨true¨>
-    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ACTUALIZAR VENTA</label>
-    <div class="col-lg-12">
-      <input type="text" name="total" value="<?php echo $total; ?>" class="form-control" id="total" placeholder="ACTUALIZAR VENTA">
-    </div>
-  </div>
-</div>
-		
-		<div class="row" >
-
-<div class="col-md-6">
-
-    <div class="col-lg-12">
-      <input type="hidden" name="invoice_code" value="<?php echo $costo; ?>" class="form-control" id="invoice_code" placeholder="ACTUALIZAR VENTA">
-    </div>
-  </div>
-</div>
-
-
-
-
-
-	
-
-</div>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="extra">
-
-<div class="row">
-
-<div class="col-md-12">
-    <label class="control-label">ARCHIVO FACTURA</label>
-    <div class="col-lg-12">
-    <?php if($sell->invoice_file!=""):?>
-      <a href="./storage/invoice_files/<?php echo $sell->invoice_file;?>" target="_blank" class="btn btn-default"><i class="fa fa-file"></i> ARCHIVO FACTURA (<?php echo $sell->invoice_file; ?>)</a>
-      <br><br>
-    <?php endif; ?>
-      <input type="file" name="invoice_file"  placeholder="Archivo Factura">
-    </div>
-  </div>
-  </div>
-
-<div class="row">
-
-<div class="col-md-12">
-    <div class="">
-    <label class="control-label">INFORMACIÓN EXTRA</label>
-      <textarea name="comment"  placeholder="INGRESAR IMEI" class="form-control" rows="10"><?php echo $sell->comment;?></textarea>
-    </div>
-  </div>
-  </div>
-		
-		
-		
-
-    </div>
-  </div>
-
-</div>
-</div>
-</div>
-
-
-
-
-<input type="hidden" name="id" value="<?php echo $sell->id; ?>">
-  <div class="row">
-<div class="col-md-12">
-
-<div class="form-group">
-    <div class="col-lg-offset-2 col-lg-10">
-      <div class="checkbox">
-        <label>
-        <button class="btn btn-success" style="position: relative; left: 60px; top: 20px;"> ACTUALIZAR VENTA</button>
-        </label>
+    <div class="col-md-12">
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REFERENCIA</label>
+        <div class="col-lg-12">
+          <input type="text" name="refe" value="<?php echo $sell->refe;?>" class="form-control" id="refe" placeholder="NUMERO DE REFERENCIA DE TRANSFERENCIA">
+        </div>
       </div>
     </div>
-  </div>
-</form>
-</div>
+      
+      
+    <div class="row">
+
+    <div class="col-md-6">
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL EFECTIVO</label>
+        <div class="col-lg-12">
+          <input type="text" name="efe" class="form-control" value="<?php echo $sell->efe;?>" id="efe" placeholder="EFECTIVO">
+        </div>
+      </div>
+    <div class="col-md-6">
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL PUNTO DE VENTA</label>
+        <div class="col-lg-12">
+          <input type="text" name="pun" class="form-control" value="<?php echo $sell->pun;?>" id="pun" placeholder="PUNTO DE VENTA">
+        </div>
+      </div>
+     <div class="col-md-6">
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL TRANSFERENCIA</label>
+        <div class="col-lg-12">
+          <input type="text" name="tra" value="<?php echo $sell->tra;?>" class="form-control" id="tra" placeholder="TRANSFERENCIA">
+        </div>
+      </div>
+    <div class="col-md-6">
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL ZELLE</label>
+        <div class="col-lg-12">
+          <input type="text" name="zel" class="form-control" value="<?php echo $sell->zel;?>" id="zel" placeholder="ZELLE">
+        </div>
+      </div>
+      </div>
+      
+    <?php if(isset($_SESSION["user_id"]) && Core::$user->kind==1):?>  
+      <div class="row">
+
+    <div class="col-md-12">
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCUENTO</label>
+        <div class="col-lg-12">
+          <input type="text" name="discount" value="<?php echo $sell->discount;?>" class="form-control" id="discount" placeholder="DESCUENTO">
+        </div>
+      </div>
+    </div>
+    <?php endif;?>
+    <?php if(isset($_SESSION["user_id"]) && Core::$user->kind==3):?>  
+      <div class="col-md-12" hidden="true">
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DESCUENTO</label>
+        <div class="col-lg-12">
+          <input type="hidden" name="discount" value="<?php echo $sell->discount;?>" class="form-control" id="discount" placeholder="DESCUENTO">
+        </div>
+      </div>
+    <?php endif;?>
+
+    <div class="row">
+
+    <div class="col-md-6" hidden=¨true¨>
+        <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ACTUALIZAR VENTA</label>
+        <div class="col-lg-12">
+          <input type="text" name="total" value="<?php echo $total; ?>" class="form-control" id="total" placeholder="ACTUALIZAR VENTA">
+        </div>
+      </div>
+    </div>
+        
+        <div class="row" >
+
+    <div class="col-md-6">
+
+        <div class="col-lg-12">
+          <input type="hidden" name="invoice_code" value="<?php echo $costo; ?>" class="form-control" id="invoice_code" placeholder="ACTUALIZAR VENTA">
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+      
+
+    </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="extra">
+
+    <div class="row">
+
+    <div class="col-md-12">
+        <label class="control-label">ARCHIVO FACTURA</label>
+        <div class="col-lg-12">
+        <?php if($sell->invoice_file!=""):?>
+          <a href="./storage/invoice_files/<?php echo $sell->invoice_file;?>" target="_blank" class="btn btn-default"><i class="fa fa-file"></i> ARCHIVO FACTURA (<?php echo $sell->invoice_file; ?>)</a>
+          <br><br>
+        <?php endif; ?>
+          <input type="file" name="invoice_file"  placeholder="Archivo Factura">
+        </div>
+      </div>
+      </div>
+
+    <div class="row">
+
+    <div class="col-md-12">
+        <div class="">
+        <label class="control-label">INFORMACIÓN EXTRA</label>
+          <textarea name="comment"  placeholder="INGRESAR IMEI" class="form-control" rows="10"><?php echo $sell->comment;?></textarea>
+        </div>
+      </div>
+      </div>
+        
+        
+        
+
+        </div>
+      </div>
+
+    </div>
+    </div>
+    </div>
+
+
+
+
+    <input type="hidden" name="id" value="<?php echo $sell->id; ?>">
+      <div class="row">
+    <div class="col-md-12">
+
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+          <div class="checkbox">
+            <label>
+            <button class="btn btn-success" style="position: relative; left: 60px; top: 20px;"> ACTUALIZAR VENTA</button>
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+<?php endif ?>
 
 </div>
 

@@ -26,7 +26,7 @@
         role="form">
         <input type="hidden" name="kind" value="<?php echo $_GET["kind"];?>">
         <!--  BEGIN SECTION CLIENTS DATA -->
-        <?php if (isset($_GET['kind']) && $_GET['kind'] == 4): ?>
+        <?php if (isset($_GET['kind']) && ($_GET['kind'] == 4 || $_GET['kind'] == 8)): ?>
           <div class="col-lg-12">
             <p class="alert alert-info">* Campos obligatorios</p>
             <div class="col-lg-12">
@@ -107,7 +107,7 @@
               </div>
             </div>
           <?php endif; ?>
-          <?php if(isset($_GET["kind"]) &&$_GET["kind"]=="2" || $_GET["kind"]=="3"):?>
+          <?php if(isset($_GET["kind"]) &&$_GET["kind"]=="2" || $_GET["kind"]=="3" || $_GET["kind"]=="8"):?>
             <div class="form-group">
               <label for="stock" class="col-lg-2 control-label">Almacen</label>
               <div class="col-md-6">
@@ -126,7 +126,7 @@
         </div>
         <!-- END SECTION USER DATA -->
         <!-- BEGIN SECTION COMPANY DATA -->
-        <?php if (isset($_GET['kind']) && $_GET['kind'] == 4): ?>
+        <?php if (isset($_GET['kind']) && ($_GET['kind'] == 4 || $_GET['kind'] == 8)): ?>
           <div class="col-lg-12">
             <div class="col-lg-12">
               <h3>

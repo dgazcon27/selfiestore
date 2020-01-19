@@ -76,7 +76,7 @@ public function add_with_client(){
 	}
 
 	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
+		$sql = "update ".self::$tablename." set d_id=8 where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -127,6 +127,30 @@ public function add_with_client(){
 		Executor::doit($sql);
 	}
 
+	public function getCancelsCotizacion(){
+		$sql = "select * from ".self::$tablename." where d_id=3 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public function getCancelsCotizacionByUser($id){
+		$sql = "select * from ".self::$tablename." where d_id=3 and user_id=$id order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public function getDeleteCotizacion(){
+		$sql = "select * from ".self::$tablename." where d_id=8 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public function getDeleteCotizacionByUser($id){
+		$sql = "select * from ".self::$tablename." where d_id=8 and user_id=$id order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
 
 	public static function getCotizations(){
 		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and (d_id=2 or d_id=4) and is_draft=1 order by created_at desc";
@@ -143,6 +167,13 @@ public function add_with_client(){
 		$x = new XXData();
 		$xx = $x->add();
 		$sql = "update ".self::$tablename." set d_id=1, ref_id=".$xx[1]." where id=$id";
+		Executor::doit($sql);
+	}
+
+	public function updateOrderToSellToSucursal($id){
+		$x = new XXData();
+		$xx = $x->add();
+		$sql = "update ".self::$tablename." set d_id=1, ref_id=".$xx[1].", total=0,cash=0 where id=$id";
 		Executor::doit($sql);
 	}
 

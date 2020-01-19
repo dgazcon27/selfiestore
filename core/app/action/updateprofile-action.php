@@ -12,10 +12,10 @@ if(count($_POST)>0){
       }
     }
   }
-	$user->name = $_POST["name"];
-	$user->lastname = $_POST["lastname"];
-	$user->username = $_POST["username"];
-	$user->email = $_POST["email"];
+	$user->name = isset($_POST["name"]) ? $_POST["name"] : "";
+	$user->lastname = isset($_POST["lastname"]) ? $_POST["lastname"] : "";
+	$user->username = isset($_POST["username"]) ? $_POST["username"] : "";
+	$user->email = isset($_POST["email"]) ? $_POST["email"] : "";
 	$user->status = isset($_POST["status"])?1:0;
 	$user->update();
 

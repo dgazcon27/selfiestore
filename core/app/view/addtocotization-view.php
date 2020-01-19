@@ -1,16 +1,14 @@
 <?php
-
 if(!isset($_SESSION["cotization"])){
-	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
+	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"], "stock_id"=>$_POST["stock_id"]);
 	$_SESSION["cotization"] = array($product);
 	$cart = $_SESSION["cotization"];
 
 	$num_succ = 0;
 	$process=false;
 	$errors = array();
-
 	foreach($cart as $c){
-		$q = OperationData::getQByStock($c["product_id"],StockData::getPrincipal()->id);
+		$q = OperationData::getQByStock($c["product_id"],$_POST['stock_id']);
 		if($c["q"]<=$q){
 			$num_succ++;
 		}else{
@@ -66,7 +64,7 @@ if($found==true){
 if($found==false){
 
     $nc = count($cart);
-	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"]);
+	$product = array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"], "stock_id"=>$_POST["stock_id"]);
 	array_push($cart, $product);
 	$_SESSION["cotization"] = $cart;
 }

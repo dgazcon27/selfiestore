@@ -173,6 +173,11 @@ public static function getPPByDateOfficial($start,$end){
 		Executor::doit($sql);
 	}
 
+	public function updateOrderToSellToSucursal($id){		
+		$sql = "update ".self::$tablename." set operation_type_id=2, price_in=0,price_out=0 where sell_id=$id";
+		Executor::doit($sql);
+	}
+
 	public static function getRByStock($product_id,$stock_id){
 		$q=0;
 		$operations = self::getAllByProductIdAndStock($product_id,$stock_id);

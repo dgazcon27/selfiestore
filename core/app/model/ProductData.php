@@ -81,7 +81,7 @@ class ProductData {
 		return Model::many($query[0],new ProductData());
 	}
 	
-		public static function getAllByBrandId($id){
+	public static function getAllByBrandId($id){
 		$sql = "select * from ".self::$tablename." where brand_id=$id";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());

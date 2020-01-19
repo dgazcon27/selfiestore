@@ -28,7 +28,7 @@ if($found==true) {
 		$_SESSION['is_admin'] = true;
 		$_SESSION['user_id']=$userid;
 		print "<script>window.location='index.php?view=home';</script>";
-	} elseif ($kind == 4) {
+	} elseif ($kind == 4 || $kind == 8) {
 		# code...
 		$_SESSION['is_client'] = true;
 		$_SESSION['user_id'] = $userid;
