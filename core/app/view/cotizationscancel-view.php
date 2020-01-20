@@ -37,23 +37,18 @@
 					<table class="table table-bordered table-hover table-responsive datatable">
 						<thead>
 							<th></th>
-							<th class="hidden-xs" style="text-align: center;">Venta</th>	
-							<th style="text-align: center;">
-								<span class="hidden-xs">Cantidad</span>
-								<span class="visible-xs">C.</span>
-							</th>
-							<th style="text-align: center;">Total</th>
-							<th style="text-align: center;">Vendedor</th>
+							<th class="hidden-xs" style="text-align: center;">N° COTIZACION</th>
 							<?php if (isset($_SESSION['is_admin'])): ?>
-								<th style="text-align: center;">Cliente</th>
-								<th style="text-align: center;">Almacen</th>
+								<th style="text-align: center;">CLIENTE</th>
 							<?php endif ?>
-							<th class="hidden-xs" style="text-align: center;">Fecha</th>
-							<th style="text-align: center;">
-								<span class="hidden-xs">Opciones</span>
-							</th>
+							<th class="hidden-xs" style="text-align: center;">TELEFONO</th>
+							<th style="text-align: center;width: 130px;">TOTAL</th>
+							<th style="text-align: center;width: 100px !important;">ESTADO</th>
+							<th style="text-align: center;width: 130px;">FECHA</th>
+							<th></th>
 						</thead>
-						<?php 
+						<?php
+						$ii = 1;
 						foreach($products as $sell):
 							$operations = OperationData::getAllProductsBySellId($sell->id);
 							$totalPrice = 0;
@@ -67,51 +62,47 @@
 							}
 						?>
 						<tr>
-							<td class="hidden-xs" style="width:30px;">
+							<td style="width:30px;">
 								<a href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
 									<i class="glyphicon glyphicon-eye-open"></i>
 								</a>
 							</td>
 							<td style="text-align: center;">
-								<a class="visible-xs" href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
-									#<?php echo $sell->id; ?>
-								</a>
-								<span class="hidden-xs">#<?php echo $sell->id; ?></span>
-							</td>
-
-							<td style="text-align: center;"><?php echo 	$quantity; ?></td>
-							<td style="text-align: center;">
-								<?php
-								echo "<b>$ ".number_format($totalPrice,2,".",",")."</b>";
-								?>			
-							</td>
-							
-							<td style="text-align: center;">
-								<?php
-								if($sell->user_id!=null)
-								{
-									$c= $sell->getUser();echo $c->name." ".$c->lastname;
-								} 
-								?>
+								<?php echo $ii; ?>
 							</td>
 							<?php if (isset($_SESSION['is_admin'])): ?>
 								<td style="text-align: center;">
-									<?php 
-									if($sell->person_id!=null){
-										$c= $sell->getPerson();
-										echo $c->name." ".$c->lastname;
+									<?php
+									if($sell->user_id!=null)
+									{
+										$c= $sell->getUser();echo $c->name." ".$c->lastname;
 									} 
 									?>
 								</td>
 								<td style="text-align: center;">
-									<?php 
-										//Mejorar - Esto debe ser dinámico
-										if($stock_id==1){
-											echo "Principal"; 
+									<?php
+									if($sell->user_id != null ){
+										$c = PersonData::getByUserId($sell->user_id);
+										if (isset($c->phone1)) {
+											echo $c->phone1;
+										} else {
+											echo "";
 										}
-									?>					
+									} 
+									?>
+								</td>
+								<td style="text-align: center;">
+									<?php
+									echo "<b>$ ".number_format($totalPrice,2,".",",")."</b>";
+									?>			
 								</td>
 							<?php endif ?>
+							<td style="text-align: center;">
+								<?php
+								$operations = OperationData::getAllProductsBySellId($sell->id);
+								echo $sell->getD()->name;
+								?>
+							</td>
 							<td class="hidden-xs" style="text-align: center;">
 								<?php 
 									if(isset($sell->created_at)){
@@ -129,6 +120,7 @@
 							</td>
 						</tr>
 						<?php
+						$ii++;
 						endforeach;
 						?>
 					</table>

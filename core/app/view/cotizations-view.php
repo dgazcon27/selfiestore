@@ -38,7 +38,7 @@
 								
 							<?php endif ?>
 							<th style="text-align: center;width: 200px;">ESTADO</th>
-							<th style="text-align: center;width: 200px;">TOTAL</th>
+							<th style="text-align: center;width: 130px;">TOTAL</th>
 							<th class="hidden-xs" style="width: 135px;text-align: center;">FECHA</th>
 							<th style="width:280px; text-align: center;"></th>
 						</thead>

@@ -49,8 +49,8 @@ if(isset($_COOKIE["selled"]) && isset($_SESSION['is_admin'])){
 <div class="<?php echo $class;?>">
 <div class="box box-primary">
 <table class="table table-bordered">
-<?php if($sell->person_id!=""):
-$client = $sell->getPerson();
+<?php if($sell->user_id!=""):
+$client = UserData::getById($sell->user_id);
 ?>
 <tr>
   <td style="width:150px;">CLIENTE</td>
@@ -58,13 +58,18 @@ $client = $sell->getPerson();
 </tr>
 
 <?php endif; ?>
-<?php if($sell->user_id!=""):
-$user = $sell->getUser();
+<?php if($sell->receive_by!=""):
+$seller = UserData::getById($sell->receive_by);
 ?>
-<tr>
-  <td>ATENDIDO POR</td>
-  <td><?php echo strtoupper($user->name." ".$user->lastname);?></td>
-</tr>
+<?php if (isset($_SESSION['is_admin']) && $sell->is_cotization == 0): ?>
+  <tr>
+    <td>ATENDIDO POR</td>
+    <td>
+      <?php echo strtoupper($seller->name." ".$seller->lastname);?>
+    </td>
+  </tr>
+  
+<?php endif ?>
 <?php endif; ?>
 </table>
 </div>
@@ -72,7 +77,6 @@ $user = $sell->getUser();
 <div class="box box-primary">
 <table class="table table-bordered table-hover">
   <thead>
-    <th class="hidden-xs">CODIGO</th>
     <th class="visible-xs">#</th>
 	<th>IMAGEN</th>
 	<th>NOMBRE DEL PRODUCTO</th>
@@ -87,7 +91,6 @@ $user = $sell->getUser();
     $product  = $operation->getProduct();
 ?>
 <tr>
-  <td><?php echo $product->id ;?></td>
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:40px;"></td>
 	<td><?php echo $product->name ;?></td>
   <td><?php echo $operation->q ;?></td>
