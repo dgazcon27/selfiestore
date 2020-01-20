@@ -6,14 +6,16 @@
 	}
 </style>
 <section class="content">
-<div class="btn-group pull-right">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    <i class="fa fa-download"></i> Descargar <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <li><a href="report/cotization-word.php?id=<?php echo $_GET["id"];?>">Word 2007 (.docx)</a></li>
-  </ul>
-</div>
+<?php if (isset($_SESSION['is_admin'])): ?>
+	<div class="btn-group pull-right">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	    <i class="fa fa-download"></i> Descargar <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu" role="menu">
+	    <li><a href="report/cotization-word.php?id=<?php echo $_GET["id"];?>">Word 2007 (.docx)</a></li>
+	  </ul>
+	</div>
+<?php endif ?>
 <h1>Cotizacion</h1>
 <?php if(isset($_GET["id"]) && $_GET["id"]!=""):?>
 <?php
@@ -47,7 +49,7 @@ if(isset($_COOKIE["selled"])){
 $client = $sell->getPerson();
 ?>
 <tr>
-	<td style="width:150px;">Proveedor</td>
+	<td style="width:150px;">Cliente</td>
 	<td><?php echo $client->name." ".$client->lastname;?></td>
 </tr>
 
@@ -73,7 +75,7 @@ $user = $sell->getUser();
 <div class="box box-primary">
 <br><table class="table table-bordered table-hover">
 	<thead>
-		<th class="hidden-xs">Codigo</th>
+		<th class="hidden-xs">Imagen</th>
 		<th class="visible-xs">#</th>
 		<th class="hidden-xs">Cantidad</th>
 		<th class="visible-xs">N°</th>
@@ -90,7 +92,7 @@ $user = $sell->getUser();
 		$product  = $operation->getProduct();
 ?>
 <tr>
-	<td><?php echo $product->id ;?></td>
+	<td style="text-align: center;"><img src="storage/products/<?php echo $product->image;?>" style="width:50px;"></td>
 	<td><?php echo $operation->q ;?></td>
 	<td><?php echo $product->name ;?></td>
 	<?php if (isset($_SESSION['is_admin'])): ?>

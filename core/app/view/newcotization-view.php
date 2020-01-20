@@ -100,17 +100,15 @@ $total = 0;
 <table class="table table-bordered table-hover">
 <thead>
 	<th style="width:30px;">IMAGEN</th>
-	<th>NOMBRE</th>
-	<th style="width:30px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
+	<th style="width:270px;">NOMBRE</th>
+	<th style="width:110px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
 	<th style="width:30px;"><span class="hidden-xs">CANTIDAD</span><span class="visible-xs">C.</span></th>
-	<th style="width:30px;"><span class="hidden-xs">PRECIO</span> TOTAL</th>
+	<th style="width:100px;"><span class="hidden-xs">PRECIO</span> TOTAL</th>
 	<th ></th>
 </thead>
 <?php 
-$total_products= 0;
 foreach($_SESSION["cotization"] as $p):
 $product = ProductData::getById($p["product_id"]);
-$total_products += $p['q'];
 ?>
 <tr >
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
@@ -118,7 +116,7 @@ $total_products += $p['q'];
 	<td><b>$<?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td style="text-align: center;"><?php echo $p["q"];?></td>
 	<td><b>$<?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
-	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span class="hidden-xs">QUITAR</span></a></td>
+	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span class="hidden-xs">Quitar</span></a></td>
 </tr>
 <?php endforeach; ?>
 </table>
@@ -146,7 +144,7 @@ $total_products += $p['q'];
 					$<?php echo $product->price_out; ?></b>
 				</div>
 				<div class="remove-item">
-						<a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span>QUITAR</span></a>
+						<a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> <span>Quitar</span></a>
 					<!--  -->
 				</div>
 				
@@ -155,9 +153,9 @@ $total_products += $p['q'];
 	<?php endforeach ?>
 </div>
 <!-- END MOVIL RESPONSIVE -->
-<input type="hidden" name="total_products" id="total_products" value="<?echo $total_products;?>">
 <form method="post" class="form-horizontal" id="processsell" action="index.php?action=savecotization">
-<h2>Resumen</h2>
+<h2>RESUMEN</h2>
+
 
       <input type="hidden" name="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
       <div class="clearfix"></div>
@@ -170,7 +168,7 @@ $total_products += $p['q'];
 	<td><p>Subtotal</p></td>
 	<td><p><b>$ <?php echo number_format($total*(1 - ($iva_val/100) ),2,'.',','); ?></b></p></td>
 </tr>
-<tr>
+<tr class="hidden">
 	<td><p><?php echo $iva_name." (".$iva_val."%) ";?></p></td>
 	<td><p><b>$ <?php echo number_format($total*($iva_val/100),2,'.',','); ?></b></p></td>
 </tr>
@@ -178,6 +176,7 @@ $total_products += $p['q'];
 	<td><p>Total</p></td>
 	<td><p><b>$ <?php echo number_format($total,2,'.',','); ?></b></p></td>
 </tr>
+
 
 </table>
 </div>
@@ -208,15 +207,3 @@ $total_products += $p['q'];
 
 </div>
 </section>
-
-<script>
-	let is_admin = $("#is_admin").val();
-	$("#processsell").submit(function (e) {
-		let total = $("#total_products").val();
-		if (is_admin == "0" && parseInt(total) > 100) {
-			alert("NO ES POSIBLE COTIZAR MAS DE 100 PRODUCTOS")
-			e.preventDefault();
-		}
-
-	})
-</script>

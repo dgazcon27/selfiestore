@@ -12,8 +12,8 @@
 	<thead>
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
-		<th>PRECIO UNITARIO</th>
-		<th>CANTIDAD APROXIMADA/ESTIMADO DISPONIBLE EN STOCK</th>
+		<th style="width: 150px;">PRECIO UNITARIO</th>
+		<th style="width: 100px;text-align: center;">STOCK</th>
 	</thead>
 	<?php
 $products_in_cero=0;
@@ -31,8 +31,8 @@ $products_in_cero=0;
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
 		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
-		<td><b>$<?php echo $product->price_out; ?></b></td>
-		<td><b><?php echo $q; ?></b></td>
+		<td style="text-align: center;"><b>$<?php echo $product->price_out; ?></b></td>
+		<td style="text-align: center;"><b><?php echo $q; ?></b></td>
 		<td style="width:250px;">
 			<form method="post" action="index.php?view=addtocotization">
 				<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
@@ -107,7 +107,7 @@ $products_in_cero=0;
 	  		$ii=0; 
 	  		if ($total_pages > 1): 
   		?>
-	    	<li class="page-item" id="previous-p" data-page="0"><a class="page-link">Previous</a></li>
+	    	<li class="page-item" id="previous-p" data-page="0"><a class="page-link">Anterior</a></li>
 	  	<?php endif ?>
 		<?php
 			if ($total_pages > 1) {
@@ -119,7 +119,7 @@ $products_in_cero=0;
 			 } 
 		?>
 		<?php if ($total_pages > 1): ?>
-	    	<li class="page-item" id="next-p" data-page="1"><a class="page-link">Next</a></li>
+	    	<li class="page-item" id="next-p" data-page="1"><a class="page-link">Siguiente</a></li>
 		<?php endif ?>
 	  </ul>
 	  <input type="hidden" name="total_pages" id="total_pages" value="<?php echo $ii;?>">

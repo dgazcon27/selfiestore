@@ -10,13 +10,18 @@ if(count($products)>0){
 	<thead>
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
-		<th>PRECIO UNITARIO</th>
-		<th>CANTIDAD APROXIMADA/ESTIMADO DISPONIBLE EN STOCK</th>
+		<th style="width: 150px;">PRECIO UNITARIO</th>
+		<th style="width: 100px;text-align: center;">STOCK</th>
 	</thead>
 	<?php
 $products_in_cero=0;
 	 foreach($products as $product):
-$q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
+		$stock = StockData::getPrincipal()->id;
+		$q = OperationData::getQByStock($product->id, $stock);
+		if ($q <= 0 && Core::$user->kind == 8) {
+			$stock = Core::$user->stock_id;
+			$q = OperationData::getQByStock($product->id,$stock);
+		}
 	?>
 	<?php 
 	if($q>0):?>
@@ -24,10 +29,13 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
 		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
-		<td><b>$<?php echo $product->price_out; ?></b></td>
-		<td><b><?php echo $q; ?></b></td>
-		<td style="width:250px;"><form method="post" action="index.php?view=updateproductcotization&id=<?php echo $_GET['id']; ?>">
-		<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+		<td style="text-align: center;"><b>$<?php echo $product->price_out; ?></b></td>
+		<td style="text-align: center;"><b><?php echo $q; ?></b></td>
+		<td style="width:250px;">
+		<form method="post" action="index.php?view=updateproductcotization&id=<?php echo $_GET['id']; ?>">
+			<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+			<input type="hidden" name="stock_id" value="<?php echo $stock; ?>">
+
 
 <div class="input-group">
 		<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
@@ -114,12 +122,12 @@ $q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
 	</nav>
 </div>
 
-<?php if($products_in_cero>0){ echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary&stock=".StockData::getPrincipal()->id."'>Ir al Inventario</a></p>"; }?>
-
-	<?php
-}else{
-	echo "<br><p class='alert alert-danger'>No se encontro el producto</p>";
-}
+<?php 
+	if($products_in_cero > 0 && isset($_SESSION['is_admin'])){ 
+		echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary&stock=".StockData::getPrincipal()->id."'>Ir al Inventario</a></p>"; }
+	}else{
+		echo "<br><p class='alert alert-danger'>No se encontro el producto</p>";
+	}
 ?>
 <?php else:
 ?>

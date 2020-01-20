@@ -4,7 +4,12 @@
 		if (count($products) > 0) {
 			$rows = "";
 			foreach ($products as $product) {
-				$q= OperationData::getQByStock($product->id,StockData::getPrincipal()->id);
+				$stock = StockData::getPrincipal()->id;
+				$q = OperationData::getQByStock($product->id, $stock);
+				if ($q <= 0 && Core::$user->kind == 8) {
+					$stock = Core::$user->stock_id;
+					$q = OperationData::getQByStock($product->id,$stock);
+				}
 				if($q > 0) {
 					$rows .= '<div class="row-product-small">
 								<div class="image-small">
@@ -20,6 +25,8 @@
 								</div>
 								<div style="width: 69%;float: right;">
 									<form method="post" action="index.php?view=addtocotization">
+										
+										<input type="hidden" name="stock_id" value="'.$stock.'">
 										<input type="hidden" name="product_id" value="'.$product->id.'">
 										<div class="input-group">
 											<input class="form-control" required name="q" placeholder="Cantidad ...">

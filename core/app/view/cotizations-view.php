@@ -31,16 +31,16 @@
 					<table class="table table-bordered table-hover	">
 						<thead>
 							<th style="text-align: center;"></th>
-							<th class="hidden-xs" style="text-align: center;"><span >COTIZACION</span> Nº</th>
+							<th class="hidden-xs" style="width: 110px;text-align: center;"><span >COTIZACION</span> Nº</th>
 							<?php if (isset($_SESSION['is_admin'])): ?>
 							<th style="text-align: center;">CLIENTE</th>
 							<th style="text-align: center;">TELEFONO</th>
 								
 							<?php endif ?>
-							<th style="text-align: center;">ESTADO</th>
-							<th style="text-align: center;">TOTAL</th>
-							<th class="hidden-xs" style="text-align: center;">FECHA</th>
-							<th style="width:100px; text-align: center;"></th>
+							<th style="text-align: center;width: 200px;">ESTADO</th>
+							<th style="text-align: center;width: 200px;">TOTAL</th>
+							<th class="hidden-xs" style="width: 135px;text-align: center;">FECHA</th>
+							<th style="width:280px; text-align: center;"></th>
 						</thead>
 						
 						<?php 
@@ -110,10 +110,10 @@
 									<i class="fa fa-pencil"></i> <span class="hidden-xs">EDITAR</span>
 								</a>	
 							<?php endif ?>
-							<?php if (isset($_SESSION['is_admin'])): ?>
 								<a style="margin-bottom: 2px;" href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
 									<i class="fa fa-ban"></i> <span class="hidden-xs">CANCELAR</span>
 								</a>
+							<?php if (isset($_SESSION['is_admin'])): ?>
 								<a style="margin-bottom: 2px;" href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 									<i class="fa fa-trash"></i>
 								</a>

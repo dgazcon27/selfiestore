@@ -77,13 +77,13 @@
 }
 @media (max-width: 500px) {
 	#paginator {
-	    width: 90%;
+	    width:50%;
 	}
 }
 
 @media (min-width: 500px) {
 	#paginator {
-	    width: 65%;
+	    width: 32%;
 	}
 }
 

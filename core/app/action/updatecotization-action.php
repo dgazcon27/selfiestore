@@ -1,5 +1,6 @@
 <?php
-
+// var_dump($_SESSION["cotization"]);
+// die;
 if(isset($_SESSION["cotization"])){
 	$cart = $_SESSION["cotization"];
 	if(count($cart)>0){

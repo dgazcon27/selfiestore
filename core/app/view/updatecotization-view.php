@@ -7,7 +7,7 @@ if (isset($_GET['id'])) {
 		$products = OperationData::getAllProductsBySellId($_GET['id']);
 		$items = [];
 		foreach ($products as $value) {
-			array_push($items, array('product_id' => $value->product_id, 'q' => $value->q));
+			array_push($items, array('product_id' => $value->product_id, 'q' => $value->q, 'stock_id' => $value->stock_id));
 		}
 		$_SESSION['cotization'] = $items;
 	}
@@ -91,10 +91,10 @@ $total = 0;
 <table class="table table-bordered table-hover">
 <thead>
 	<th style="width:30px;">IMAGEN</th>
-	<th>NOMBRE</th>
-	<th style="width:30px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
-	<th style="width:30px;">CANTIDAD</th>
-	<th style="width:30px;">PRECIO <span class="hidden-xs">TOTAL</span></th>
+	<th style="width:270px;">NOMBRE</th>
+	<th style="width:110px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
+	<th style="width:30px;"><span class="hidden-xs">CANTIDAD</span><span class="visible-xs">C.</span></th>
+	<th style="width:100px;">PRECIO <span class="hidden-xs">TOTAL</span></th>
 	<th ></th>
 </thead>
 <?php foreach($_SESSION["cotization"] as $p):
@@ -144,7 +144,7 @@ $product = ProductData::getById($p["product_id"]);
 
 
 <form method="post" class="form-horizontal" id="processsell" action="index.php?action=updatecotization">
-<h2>Resumen</h2>
+<h2>RESUMEN</h2>
 
       <input type="hidden" name="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
       <div class="clearfix"></div>
@@ -157,7 +157,7 @@ $product = ProductData::getById($p["product_id"]);
 	<td><p>Subtotal</p></td>
 	<td><p><b>$ <?php echo number_format($total*(1 - ($iva_val/100) ),2,'.',','); ?></b></p></td>
 </tr>
-<tr>
+<tr  class="hidden">
 	<td><p><?php echo $iva_name." (".$iva_val."%) ";?></p></td>
 	<td><p><b>$ <?php echo number_format($total*($iva_val/100),2,'.',','); ?></b></p></td>
 </tr>
@@ -173,7 +173,7 @@ $product = ProductData::getById($p["product_id"]);
       <div class="checkbox">
         <label>
           <input name="is_oficial" type="hidden" value="1">
-          <input name="id_sell" type="hidden" value="<?echo $_GET['id'];?>">
+          <input name="id_sell" type="hidden" value="<?php echo $_GET['id'];?>">
         </label>
       </div>
     </div>
