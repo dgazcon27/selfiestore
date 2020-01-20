@@ -101,7 +101,7 @@
 								<?php endif ?>
 								<?php if (isset($_SESSION['is_admin'])): ?>
 									<?php if ($sell->d_id != 7): ?>
-										<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
+										<a href="index.php?action=cancelcotization&from=orders&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
 											<i class="fa fa-ban"></i><span class="hidden-xs hidden-sm"> CANCELAR</span>
 										</a>
 									<?php endif ?>

@@ -8,6 +8,11 @@ foreach ($operations as $op) {
 }
 
 $sell->cancel();
-Core::redir("./index.php?view=cotizations");
+if (isset($_GET['from']) && $_GET['from'] == 'orders') {
+	Core::redir("./index.php?view=orders-approved");
+} else {
+	Core::redir("./index.php?view=cotizations");
+
+}
 
 ?>

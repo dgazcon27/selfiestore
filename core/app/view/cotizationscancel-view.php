@@ -3,7 +3,11 @@
 		<div class="col-md-12">
 			<?php 
 			if(isset($_SESSION["client_id"])):?>
-			<h1><i class='glyphicon glyphicon-shopping-cart'></i> Cotizaciones Canceladas</h1>
+				<?php if (isset($_SESSION['is_admin'])): ?>
+					<h1><i class='glyphicon glyphicon-shopping-cart'></i> Cotizaciones Canceladas</h1>
+				<?php else: ?>
+					<h1><i class='glyphicon glyphicon-shopping-cart'></i> Cotizaciones y Pedidos Cancelados</h1>
+				<?php endif ?>
 			<?php 
 			else:
 			?>
@@ -40,8 +44,8 @@
 							<th class="hidden-xs" style="text-align: center;">N° COTIZACION</th>
 							<?php if (isset($_SESSION['is_admin'])): ?>
 								<th style="text-align: center;">CLIENTE</th>
+								<th class="hidden-xs" style="text-align: center;">TELEFONO</th>
 							<?php endif ?>
-							<th class="hidden-xs" style="text-align: center;">TELEFONO</th>
 							<th style="text-align: center;width: 130px;">TOTAL</th>
 							<th style="text-align: center;width: 100px !important;">ESTADO</th>
 							<th style="text-align: center;width: 130px;">FECHA</th>
@@ -91,12 +95,12 @@
 									} 
 									?>
 								</td>
-								<td style="text-align: center;">
-									<?php
-									echo "<b>$ ".number_format($totalPrice,2,".",",")."</b>";
-									?>			
-								</td>
 							<?php endif ?>
+							<td style="text-align: center;">
+								<?php
+								echo "<b>$ ".number_format($totalPrice,2,".",",")."</b>";
+								?>			
+							</td>
 							<td style="text-align: center;">
 								<?php
 								$operations = OperationData::getAllProductsBySellId($sell->id);
@@ -112,7 +116,7 @@
 							</td>
 							<td style="width:130px;text-align: center;">
 								
-								<?php if(isset($_SESSION["user_id"])):?>
+								<?php if(isset($_SESSION["user_id"]) && $sell->d_id == 3):?>
 								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 									<i class="fa fa-trash"></i> <span class="hidden-xs">ELIMINAR</span>
 								</a>

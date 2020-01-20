@@ -128,25 +128,37 @@ public function add_with_client(){
 	}
 
 	public function getCancelsCotizacion(){
-		$sql = "select * from ".self::$tablename." where d_id=3 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=3 and is_cotization=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public function getCancelsCotizacionByUser($id){
-		$sql = "select * from ".self::$tablename." where d_id=3 and user_id=$id order by created_at desc";
+		$sql = "select * from ".self::$tablename." where (d_id=3 or d_id=8) and user_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public function getDeleteCotizacion(){
-		$sql = "select * from ".self::$tablename." where d_id=8 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=8 and is_cotization=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public function getDeleteCotizacionByUser($id){
-		$sql = "select * from ".self::$tablename." where d_id=8 and user_id=$id order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=8 and is_cotization=1 and user_id=$id order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public function getOrdersDelete(){
+		$sql = "select * from ".self::$tablename." where d_id=8 and is_cotization=0 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public function getOrdersCancels(){
+		$sql = "select * from ".self::$tablename." where d_id=3 and is_cotization=0 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}

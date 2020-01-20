@@ -239,6 +239,8 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
                 <?php if (isset($_SESSION['is_admin'])): ?>
                   <li><a href="./?view=cotizationsdelete">Cotizaciones Eliminadas</a></li>
+                  <li><a href="./?view=orderscancel">Pedidos Cancelados</a></li>
+                  <li><a href="./?view=ordersdelete">Pedidos Eliminados</a></li>
                 <?php endif ?>
 
               </ul>
