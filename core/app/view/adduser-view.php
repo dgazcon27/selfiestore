@@ -27,29 +27,31 @@ if(count($_POST)>0){
 	$user->password = sha1(md5($_POST["password"]));
 	$u = $user->add();
 
-	$person = new PersonData();
-	$person->no = "";
+	if ($_POST['kind'] == 4 || $_POST['kind'] == 8) {
+		$person = new PersonData();
+		$person->no = "";
 
-	// CLIENTE DATA
-	$person->ci = isset($_POST['ci']) ? $_POST['ci']: "";
-	$person->name = isset($_POST['name']) ? $_POST['name'] : "";
-	$person->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : "";
-	$person->phone1 = isset($_POST["phone1"]) ? $_POST["phone1"] : "";
-	$person->email1 = isset($_POST["email"]) ? $_POST["email"]: "";
+		// CLIENTE DATA
+		$person->ci = isset($_POST['ci']) ? $_POST['ci']: "";
+		$person->name = isset($_POST['name']) ? $_POST['name'] : "";
+		$person->lastname = isset($_POST['lastname']) ? $_POST['lastname'] : "";
+		$person->phone1 = isset($_POST["phone1"]) ? $_POST["phone1"] : "";
+		$person->email1 = isset($_POST["email"]) ? $_POST["email"]: "";
 
-	// COMPANY DATA
-	$person->rif = isset($_POST['rif']) ? $_POST['rif'] : "";
-	$person->company = isset($_POST['company_name']) ? $_POST['company_name'] : "";
-	$person->phone2 = isset($_POST['company_phone']) ? $_POST['company_phone'] : "";
-	$person->address2 = isset($_POST['company_address']) ? $_POST['company_address'] : "";
+		// COMPANY DATA
+		$person->rif = isset($_POST['rif']) ? $_POST['rif'] : "";
+		$person->company = isset($_POST['company_name']) ? $_POST['company_name'] : "";
+		$person->phone2 = isset($_POST['company_phone']) ? $_POST['company_phone'] : "";
+		$person->address2 = isset($_POST['company_address']) ? $_POST['company_address'] : "";
 
-	$person->is_active_access = 0;
-	$person->kind = $user->kind;
-	$person->credit_limit = 0;
-	$person->has_credit = 0;
-	$person->created_at = "NOW()";
-	$person->user_id = $u[1];
-	$person->add_client();
+		$person->is_active_access = 0;
+		$person->kind = $user->kind;
+		$person->credit_limit = 0;
+		$person->has_credit = 0;
+		$person->created_at = "NOW()";
+		$person->user_id = $u[1];
+		$person->add_client();
+	}
 
 	Core::alert("Usuario Agregado Exitosamente!");
 	print "<script>window.location='index.php?view=users';</script>";

@@ -30,7 +30,7 @@
           <input type="file" name="image" id="image" placeholder="">
         </div>
       </div>
-      <?php if (isset($person)): ?>
+      <?php if (isset($person) && ($user->kind == 4 || $user->kind == 8)): ?>
         <div class="form-group">
           <label for="ci" class="col-lg-2 control-label">Identificacion</label>
           <div class="col-md-6">
@@ -39,19 +39,21 @@
         </div>
       <?php endif ?>
 
-      <div class="form-group">
-        <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>
-        <div class="col-md-6">
-          <input type="text" required name="name" value="<?php echo $user->name;?>" class="form-control" id="name" placeholder="Nombre">
+      <?php if ($user->kind != 1): ?>
+        <div class="form-group">
+          <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>
+          <div class="col-md-6">
+            <input type="text" required name="name" value="<?php echo $user->name;?>" class="form-control" id="name" placeholder="Nombre">
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="inputEmail1" class="col-lg-2 control-label">Apellido*</label>
-        <div class="col-md-6">
-          <input type="text" required name="lastname" value="<?php echo $user->lastname;?>" class="form-control" id="lastname" placeholder="Apellido">
+        <div class="form-group">
+          <label for="inputEmail1" class="col-lg-2 control-label">Apellido*</label>
+          <div class="col-md-6">
+            <input type="text" required name="lastname" value="<?php echo $user->lastname;?>" class="form-control" id="lastname" placeholder="Apellido">
+          </div>
         </div>
-      </div>
-      <?php if (isset($person)): ?>
+      <?php endif ?>
+      <?php if (isset($person) && ($user->kind == 4 || $user->kind == 8)): ?>
         <div class="form-group">
             <label for="phone1" class="col-lg-2 control-label">Teléfono</label>
           <div class="col-md-6">
@@ -59,12 +61,14 @@
           </div>
         </div> 
       <?php endif ?>
-      <div class="form-group">
-        <label for="inputEmail1" class="col-lg-2 control-label">Email*</label>
-        <div class="col-md-6">
-          <input type="text" required name="email" value="<?php echo $user->email;?>" class="form-control" id="email" placeholder="Email">
+      <?php if ($user->kind != 1): ?>
+        <div class="form-group">
+          <label for="inputEmail1" class="col-lg-2 control-label">Email*</label>
+          <div class="col-md-6">
+            <input type="text" required name="email" value="<?php echo $user->email;?>" class="form-control" id="email" placeholder="Email">
+          </div>
         </div>
-      </div>
+      <?php endif ?>
 <?php if($user->kind==3):?>
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">Comision de ventas(%)</label>
@@ -96,7 +100,7 @@
       </div>
     </div>
   <?php endif; ?>
-  <?php if (isset($person)): ?>
+  <?php if (isset($person) && ($user->kind == 4 || $user->kind == 8)): ?>
     <div class="col-lg-12">
       <h3>
         Datos de la empresa
