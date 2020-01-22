@@ -203,7 +203,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
 <!--            <li class="header">ADMINISTRACION</li> -->
             <?php if(isset($_SESSION["user_id"])):?>
                         
-<?php if(Core::$user->kind==1||Core::$user->kind==2):
+<?php if(Core::$user->kind==1):
 
 
 ?>
@@ -234,9 +234,13 @@ if( $q==0 ||  $q<=$product->inventary_min){
       <li class="treeview">
               <a href="#"><i class='fa fa-shopping-cart'></i> <span>COTIZACIONES Y PEDIDOS</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="./?view=cotizations">Cotizaciones</a></li> 
+                <?php if (Core::$user->kind != 2): ?>
+                  <li><a href="./?view=cotizations">Cotizaciones</a></li>
+                <?php endif ?>
                 <li><a href="./?view=orders-approved">Pedidos</a></li>
-                <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
+                <?php if (Core::$user->kind != 2): ?>
+                 <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
+                <?php endif ?>
                 <?php if (isset($_SESSION['is_admin'])): ?>
                   <li><a href="./?view=cotizationsdelete">Cotizaciones Eliminadas</a></li>
                   <li><a href="./?view=orderscancel">Pedidos Cancelados</a></li>
@@ -264,15 +268,15 @@ if( $q==0 ||  $q<=$product->inventary_min){
               </ul>
             </li>
 			  
-			<li class="treeview">
-              <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="./?view=inventary2&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
-               
-                <li><a href="./?view=search">Buscar Productos</a></li>
-                <li><a href="./?view=dev">Devolucion</a></li>
-              </ul>
-            </li>
+  			<li class="treeview">
+          <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a href="./?view=inventary2&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
+           
+            <li><a href="./?view=search">Buscar Productos</a></li>
+            <li><a href="./?view=dev">Devolucion</a></li>
+          </ul>
+        </li>
             
 			  
 			<li class="treeview">
@@ -337,23 +341,25 @@ if( $q==0 ||  $q<=$product->inventary_min){
             </li>
             
           <?php endif; ?>
-            <li class="treeview">
-              <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="./?view=inventary&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
-                <li><a href="./?view=re">Abastecer</a></li>
-            <?php if(Core::$user->kind==1):?>
-                <li><a href="./?view=inventaryval&stock=<?php echo StockData::getPrincipal()->id;?>">Valor del Inventario</a></li>
-                <li><a href="./?view=search">Buscar Productos</a></li>
-                <li><a href="./?view=inventaries">Inventario Global</a></li>
-                <li><a href="./?view=stocks">Sucursales</a></li>
-                <li><a href="./?view=selectstock">Traspasar</a></li>
-                <li><a href="./?view=dev">Devolucion</a></li>
-                <li><a href="./?view=trasps">Traspasos</a></li>
-                <li><a href="./?view=devs">Devoluciones</a></li>
-              <?php endif; ?>
-              </ul>
-            </li>
+            <?php if (Core::$user->kind == 1): ?>
+              <li class="treeview">
+                <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="./?view=inventary&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
+                  <li><a href="./?view=re">Abastecer</a></li>
+              <?php if(Core::$user->kind==1):?>
+                  <li><a href="./?view=inventaryval&stock=<?php echo StockData::getPrincipal()->id;?>">Valor del Inventario</a></li>
+                  <li><a href="./?view=search">Buscar Productos</a></li>
+                  <li><a href="./?view=inventaries">Inventario Global</a></li>
+                  <li><a href="./?view=stocks">Sucursales</a></li>
+                  <li><a href="./?view=selectstock">Traspasar</a></li>
+                  <li><a href="./?view=dev">Devolucion</a></li>
+                  <li><a href="./?view=trasps">Traspasos</a></li>
+                  <li><a href="./?view=devs">Devoluciones</a></li>
+                <?php endif; ?>
+                </ul>
+              </li>
+            <?php endif ?>
             <?php if(Core::$user->kind==1):?>
                         <li class="treeview">
               <a href="#"><i class='fa fa-file-text-o'></i> <span>REPORTES</span> <i class="fa fa-angle-left pull-right"></i></a>

@@ -27,7 +27,7 @@ if(count($_POST)>0){
 	$user->password = sha1(md5($_POST["password"]));
 	$u = $user->add();
 
-	if ($_POST['kind'] == 4 || $_POST['kind'] == 8) {
+	if ($_POST['kind'] == 4 || $_POST['kind'] == 8 || $_POST['kind'] == 5) {
 		$person = new PersonData();
 		$person->no = "";
 

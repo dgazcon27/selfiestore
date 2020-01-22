@@ -170,6 +170,12 @@ public function add_with_client(){
 		return Model::many($query[0],new SellData());
 	}
 
+	public static function getCotizationsForManager(){
+		$sql = "select * from ".self::$tablename." where (d_id=4 or d_id=5) order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
 	public function inProcessCotization($id){
 		$sql = "update ".self::$tablename." set d_id=4 where id=$id";
 		Executor::doit($sql);
@@ -189,7 +195,18 @@ public function add_with_client(){
 		Executor::doit($sql);
 	}
 
+	public function setStatusSell($id, $status)	{
+		$sql = "update ".self::$tablename." set d_id=$status where id=$id";
+		Executor::doit($sql);
+	}
+
 	public static function getOrdersApproved(){
+		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 or d_id=9 or d_id=10 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public static function getOrdersForManager(){
 		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());

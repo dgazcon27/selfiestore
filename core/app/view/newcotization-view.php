@@ -31,6 +31,29 @@ if (isset($_SESSION['is_client'])) {
 			</div>
 		</div>
 		</form>
+		<?php if(isset($_SESSION["errors"])):?>
+		<h2>Error</h2>
+		<p></p>
+		<table class="table table-bordered table-hover">
+		<tr class="danger">
+			<th>Codigo</th>
+			<th>Producto</th>
+			<th>Mensaje</th>
+		</tr>
+		<?php foreach ($_SESSION["errors"]  as $error):
+		$product = ProductData::getById($error["product_id"]);
+		?>
+		<tr class="danger">
+			<td><?php echo $product->id; ?></td>
+			<td><?php echo $product->name; ?></td>
+			<td><b><?php echo $error["message"]; ?></b></td>
+		</tr>
+
+		<?php endforeach; ?>
+		</table>
+		<?php
+		unset($_SESSION["errors"]);
+		 endif; ?>
 <div id="show_search_results"></div>
 
 <script>
@@ -65,29 +88,7 @@ $(document).ready(function(){
 });
 </script>
 
-<?php if(isset($_SESSION["errors"])):?>
-<h2>Errores</h2>
-<p></p>
-<table class="table table-bordered table-hover">
-<tr class="danger">
-	<th>Codigo</th>
-	<th>Producto</th>
-	<th>Mensaje</th>
-</tr>
-<?php foreach ($_SESSION["errors"]  as $error):
-$product = ProductData::getById($error["product_id"]);
-?>
-<tr class="danger">
-	<td><?php echo $product->id; ?></td>
-	<td><?php echo $product->name; ?></td>
-	<td><b><?php echo $error["message"]; ?></b></td>
-</tr>
 
-<?php endforeach; ?>
-</table>
-<?php
-unset($_SESSION["errors"]);
- endif; ?>
 
 
 <!--- Carrito de compras :) -->

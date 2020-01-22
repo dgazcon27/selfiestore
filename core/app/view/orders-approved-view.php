@@ -5,11 +5,11 @@
 			<div class="clearfix"></div>
 			<?php
 			$products=null;
-			if (isset($_SESSION['is_admin'])) {
+			if (isset($_SESSION['is_admin']) || Core::$user->kind == 5 || Core::$user->kind == 2) {
 				$products = SellData::getOrdersApproved();
 			} else {
 				$products = SellData::getOrdersApprovedByUser($_SESSION['user_id']);
-			}
+			}			
 			if(count($products)>0){
 			?>
 				<br>
@@ -21,7 +21,7 @@
 						<thead>
 							<th style="text-align: center;"></th>
 							<th style="text-align: center;"><span class="hidden-xs hidden-sm">COTIZACION</span> Nº</th>
-							<?php if (isset($_SESSION['is_admin'])): ?>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5 || Core::$user->kind == 2): ?>
 							<th style="text-align: center;">CLIENTE</th>
 							<th style="text-align: center;">TELEFONO</th>
 							<?php endif ?>
@@ -30,7 +30,7 @@
 							<th  class="visible-xs" style="text-align: center;">N° PRODUCTOS</th>
 							<th style="text-align: center;">TOTAL</th>
 							<th class="hidden-xs"  style="text-align: center;">FECHA</th>
-							<?php if (isset($_SESSION['is_admin'])): ?>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 2): ?>
 							<th style="width:100px; text-align: center;"></th>
 							<?php endif ?>
 						</thead>
@@ -48,7 +48,7 @@
 							</td>
 							
 							<td style="text-align: center;">#<?php echo $cotizationsCouner; ?></td>
-							<?php if (isset($_SESSION['is_admin'])): ?>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5 || Core::$user->kind == 2): ?>
 							<td style="text-align: center;">
 								<?php
 									$client = PersonData::getById($sell->person_id);
@@ -91,12 +91,14 @@
 							?>			
 
 							</td>
-							<td class="hidden-xs"  style="text-align: center;"><?php echo $sell->created_at; ?></td>
-							<?php if (isset($_SESSION['is_admin'])): ?>
+							<td class="hidden-xs"  style="text-align: center;"><?php echo $sell->created_at; ?>
+								
+							</td>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 2): ?>
 							<td style="width:200px;text-align: center;">
 								<?php if ($sell->d_id == 5 && isset($_SESSION['is_admin'])): ?>
 									<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
-									<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>
+										<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>
 									</a>
 								<?php endif ?>
 								<?php if (isset($_SESSION['is_admin'])): ?>
@@ -108,7 +110,21 @@
 									<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 										<i class="fa fa-trash"></i>
 									</a>
-									
+								<?php endif ?>
+								<?php if (Core::$user->kind == 2 && $sell->d_id == 5): ?>
+									<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
+										<span> ARMAR PEDIDO</span>
+									</a>
+								<?php endif ?>
+								<?php if (Core::$user->kind == 2 && $sell->d_id == 9): ?>
+									<a href="index.php?action=setorder&status=10&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ENVIAR ESTE PEDIDO');">
+										<span> ENVIAR PEDIDO</span>
+									</a>
+								<?php endif ?>
+								<?php if (Core::$user->kind == 2 && $sell->d_id == 10): ?>
+									<a href="index.php?action=setorder&status=1&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('¿CORFIRMAR LA ENTREGA DEL PEDIDO?');">
+										<span> CONFIRMAR</span>
+									</a>
 								<?php endif ?>
 							</td>
 							<?php endif ?>

@@ -42,7 +42,7 @@ if(isset($_COOKIE["selled"]) && isset($_SESSION['is_admin'])){
 <div class="row">
   <?php
     $class = "col-md-8";
-    if ($sell->d_id == 3 || $sell->d_id == 8) {
+    if ($sell->d_id == 3 || $sell->d_id == 8 || $sell->d_id == 1) {
       $class = "col-md-12";
      } 
   ?>
@@ -146,7 +146,7 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 
 
 </div>
-<?php if ((int)$sell->d_id != 3 && (int)$sell->d_id != 8): ?>
+<?php if ((int)$sell->d_id != 3 && (int)$sell->d_id != 8 && $sell->d_id != 1): ?>
   <div class="col-md-4">
     <form method="post" class="form-horizontal" action="./?action=updatesell" id="processsell" enctype="multipart/form-data">
     <div class="row">

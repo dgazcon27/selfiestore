@@ -74,7 +74,11 @@ if(count($products)>0){
 		<td>#<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?></td>
 		<td>#<?php echo $sell->id; ?></td>
 		
-		<td> <?php if($sell->user_id!=null){$c= $sell->getUser();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
+		<td> <?php 
+				$person = UserData::getById($sell->receive_by);
+				echo strtoupper($person->name." ".$person->lastname);
+			?> 
+		</td>
 		<td> <?php if($sell->person_id!=null){$c= $sell->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
 		
 		<?php		

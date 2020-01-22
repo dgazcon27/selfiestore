@@ -33,6 +33,11 @@ class OperationData {
 		Executor::doit($sql);
 	}
 
+	public function confirmCotization($id){
+		$sql = "update ".self::$tablename." set is_draft=0 where sell_id=$id";
+		Executor::doit($sql);
+	}
+
 	public static function delById($id){
 		$sql = "delete from ".self::$tablename." where id=$id";
 		Executor::doit($sql);

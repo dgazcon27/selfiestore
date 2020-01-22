@@ -105,7 +105,7 @@ $total = 0;
 	<th style="width:270px;">NOMBRE</th>
 	<th style="width:110px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
 	<th style="width:30px;"><span class="hidden-xs">CANTIDAD</span><span class="visible-xs">C.</span></th>
-	<?php if (isset($_SESSION['is_admin'])): ?>
+	<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
 		<th style="width: 60px;"></th>
 	<?php endif ?>
 	<th style="width:100px;">PRECIO <span class="hidden-xs">TOTAL</span></th>
@@ -118,12 +118,12 @@ $total = 0;
 $product = ProductData::getById($p["product_id"]);
 $total_products += $p['q'];
 ?>
-<tr >
+<tr>
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 	<td><?php echo $product->name; ?></td>
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td style="text-align: center;"><b><?php echo $p["q"]; ?></b></td>
-	<?php if (isset($_SESSION['is_admin'])): ?>
+	<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
 		<td style="text-align: center;">
 			<div class="input-group input-group-lg" style="margin:auto;">
 			  <input data-id="<?php echo $product->id; ?>" style="text-align: center;margin-top: -5px;" min="1" class="form-control q_update" type="number" name="q_update" value="<?php echo $p['q'];?>">

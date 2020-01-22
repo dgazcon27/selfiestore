@@ -18,8 +18,10 @@
 			if(isset($_SESSION["client_id"])){
 				$products = SellData::getCotizationsByClientId($_SESSION["client_id"]);
 			}else if(isset($_SESSION["user_id"])){
-				if (isset($_SESSION['is_admin']) || Core::$user->kind == 4) {
+				if (isset($_SESSION['is_admin'])) {
 					$products = SellData::getCotizations();
+				} elseif (Core::$user->kind == 5) {
+					$products = SellData::getCotizationsForManager();
 				} else {
 					$products = SellData::getCotizatiosByUser($_SESSION["user_id"]);
 				}
@@ -96,7 +98,7 @@
 							</td>
 							<td class="hidden-xs" style="text-align: center;"><?php echo $sell->created_at; ?></td>
 							<td style="width:200px;text-align: center;">
-							<?php if(isset($_SESSION["user_id"]) && isset($_SESSION['is_admin']) && $sell->d_id == 4):?>
+							<?php if(isset($_SESSION["user_id"]) && (isset($_SESSION['is_admin']) || Core::$user->kind == 5) && $sell->d_id == 4):?>
 								<a style="margin-bottom: 2px;" href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
 									<i class="fa fa-check"></i> <span class="hidden-xs" >PROCESAR</span>
 								</a>

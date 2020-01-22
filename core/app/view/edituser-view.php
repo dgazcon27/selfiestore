@@ -30,7 +30,7 @@
           <input type="file" name="image" id="image" placeholder="">
         </div>
       </div>
-      <?php if (isset($person) && ($user->kind == 4 || $user->kind == 8)): ?>
+      <?php if (isset($person) && ($user->kind == 4 || $user->kind == 8 || $user->kind == 5)): ?>
         <div class="form-group">
           <label for="ci" class="col-lg-2 control-label">Identificacion</label>
           <div class="col-md-6">
@@ -38,7 +38,12 @@
           </div>
         </div>
       <?php endif ?>
-
+      <div class="form-group">
+        <label for="username" required class="col-lg-2 control-label">Nombre de usuario*</label>
+        <div class="col-md-6">
+          <input readonly type="text" value="<?php echo $user->username;?>" name="username" class="form-control" required id="username" placeholder="Nombre de usuario">
+        </div>
+      </div>
       <?php if ($user->kind != 1): ?>
         <div class="form-group">
           <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>
@@ -53,7 +58,7 @@
           </div>
         </div>
       <?php endif ?>
-      <?php if (isset($person) && ($user->kind == 4 || $user->kind == 8)): ?>
+      <?php if (isset($person) && ($user->kind == 4 || $user->kind == 8 || $user->kind == 5)): ?>
         <div class="form-group">
             <label for="phone1" class="col-lg-2 control-label">Teléfono</label>
           <div class="col-md-6">

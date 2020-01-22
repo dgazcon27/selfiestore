@@ -26,13 +26,20 @@
         role="form">
         <input type="hidden" name="kind" value="<?php echo $_GET["kind"];?>">
         <!--  BEGIN SECTION CLIENTS DATA -->
-        <?php if (isset($_GET['kind']) && ($_GET['kind'] == 4 || $_GET['kind'] == 8)): ?>
+        <p class="alert alert-info">* Campos obligatorios</p>
+        <?php if (isset($_GET['kind']) && ($_GET['kind'] == 4 || $_GET['kind'] == 8 || $_GET['kind'] == 5)): ?>
           <div class="col-lg-12">
-            <p class="alert alert-info">* Campos obligatorios</p>
             <div class="col-lg-12">
-              <h3>
-                Datos del Cliente
-              </h3>
+              <?php if ($_GET['kind'] == 5): ?>
+                <h3>
+                  Datos Personales
+                </h3>
+              <?php endif ?>
+              <?php if ($_GET['kind'] != 5): ?>
+                <h3>
+                  Datos del Encargado
+                </h3>
+              <?php endif ?>
             </div>
               <div class="form-group">
                 <label for="ci" class="col-lg-2 control-label">Identificacion*</label>
