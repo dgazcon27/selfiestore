@@ -51,6 +51,7 @@ $client = $sell->getPerson();
 <tr>
 	<td style="width:150px;">Cliente</td>
 	<td><?php echo $client->name." ".$client->lastname;?></td>
+	<td >Telefono: <?php echo $client->phone1;?></td>
 </tr>
 
 <?php endif; ?>

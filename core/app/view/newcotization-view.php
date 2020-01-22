@@ -94,10 +94,10 @@ unset($_SESSION["errors"]);
 <?php if(isset($_SESSION["cotization"])):
 $total = 0;
 ?>
-<h2 style="margin-bottom: 20px">LISTA DE PRODUCTOS A COTIZAR </h2>
+<h2 style="margin-bottom: 20px; margin-top: 80px;">LISTA DE PRODUCTOS A COTIZAR </h2>
 <!-- BEGIN DESKTOP TABLE OF PRODUCTS  -->
-<div class="box box-primary desktop-table-responsive">
-<table class="table table-bordered table-hover">
+<div class="box box-primary" style="margin-top: 45px;">
+<table class="table table-bordered table-hover table-responsive">
 <thead>
 	<th style="width:30px;">IMAGEN</th>
 	<th style="width:270px;">NOMBRE</th>
@@ -107,8 +107,11 @@ $total = 0;
 	<th ></th>
 </thead>
 <?php 
+$total_products = 0;
+
 foreach($_SESSION["cotization"] as $p):
 $product = ProductData::getById($p["product_id"]);
+$total_products += $p['q'];
 ?>
 <tr >
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
@@ -153,6 +156,7 @@ $product = ProductData::getById($p["product_id"]);
 	<?php endforeach ?>
 </div>
 <!-- END MOVIL RESPONSIVE -->
+<input type="hidden" name="total_products" id="total_products" value="<?php echo $total_products;?>">
 <form method="post" class="form-horizontal" id="processsell" action="index.php?action=savecotization">
 <h2>RESUMEN</h2>
 
@@ -207,3 +211,15 @@ $product = ProductData::getById($p["product_id"]);
 
 </div>
 </section>
+
+<script>
+	let is_admin = $("#is_admin").val();
+	$("#processsell").submit(function (e) {
+		let total = $("#total_products").val();
+		if (is_admin == "0" && parseInt(total) <= 5) {
+			alert("NO ES POSIBLE COTIZAR MENOS DE 6 PRODUCTOS")
+			e.preventDefault();
+		}
+
+	})
+</script>

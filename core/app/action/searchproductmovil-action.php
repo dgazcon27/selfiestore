@@ -1,14 +1,14 @@
 <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
 <?php
-	$products = ProductData::getAll();
+	$products = ProductData::getProductsPaginate();
 	$products_in_cero=0;
 ?>
 <br>
 <br>
 <br>
 <div class="box box-primary table-desktop">
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover table-responsive datatable">
 	<thead>
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
@@ -46,12 +46,40 @@ $products_in_cero=0;
 			</form>
 		</td>
 	</tr>
-	
+
+	<!--  END DESKTOP TABLE -->
 <?php else:$products_in_cero++;
 ?>
 <?php  endif; ?>
 	<?php endforeach;?>
+<?php 
+	$total_result_desk = count(ProductData::getTotalSearchResponsive($_GET["product"]));
+	$total_pages_desk = ceil($total_result_desk/10);
+?>
 </table>
+	<nav id="paginator-desktop" aria-label="Page navigation example" style="margin: auto;float: right;cursor: pointer">
+	  <ul class="pagination">
+	  	<?php
+	  		$ii=0; 
+	  		if ($total_pages_desk > 1): 
+  		?>
+	    	<li class="page-item-desktop" id="previous-p-desktop" data-page="0"><a class="page-link">Anterior</a></li>
+	  	<?php endif ?>
+		<?php
+			if ($total_pages_desk > 1) {
+				while($ii < $total_pages_desk && $ii < 5) {
+					$x = $ii+1;
+					echo '<li class="page-item-desktop" data-page="'.$ii.'"><a class="page-link">'.$x.'</a></li>';
+					$ii++;
+				}	
+			 } 
+		?>
+		<?php if ($total_pages_desk > 1): ?>
+	    	<li class="page-item-desktop" id="next-p-desktop" data-page="1"><a class="page-link">Siguiente</a></li>
+		<?php endif ?>
+	  </ul>
+	  <input type="hidden" name="total_pages-desk" id="total_pages-desk" value="<?php echo $ii;?>">
+	</nav>
 </div>
 <div class="small-responsive">
 	<div id="search-result">
@@ -131,7 +159,7 @@ $products_in_cero=0;
 		echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary&stock=".StockData::getPrincipal()->id."'>Ir al Inventario</a></p>";
 	}
 ?>
-
+<!-- PAGINADOR VERSION MOVIL -->
 <script type="text/javascript">
 	$("#previous-p").addClass('hidden');
 
@@ -155,6 +183,35 @@ $products_in_cero=0;
 		$.get("./?action=searchproductpagination&q=<?php echo $_GET["product"];?>&page="+page, function (data) {
 			$("#search-result").empty()
 			$("#search-result").html(data);
+		})
+	})
+</script>
+
+<!-- PAGINADOR DESKTOP -->
+
+<script type="text/javascript">
+	$("#previous-p-desktop").addClass('hidden');
+
+	$(".page-item-desktop").on('click', function (a) {
+		let page = parseInt(a.currentTarget.dataset.page);
+		let total_pages = parseInt($("#total_pages-desk").val());
+		if (page == 0) {
+			$("#previous-p-desktop").addClass('hidden')
+		} else if(page >= 1) {
+			$("#previous-p-desktop").removeClass('hidden')
+		}
+		if (page < total_pages-1) {
+			$("#next-p-desktop").removeClass('hidden')
+			$("#next-p-desktop")[0].dataset.page = parseInt(page) + 1;
+		} else {
+			$("#next-p-desktop").addClass('hidden')
+		}
+
+		$("#previous-p-desktop")[0].dataset.page = parseInt(page)-1;
+
+		$.get("./?action=searchproduct2&q=<?php echo $_GET["product"];?>&page="+page, function (data) {
+			$("#show_search_results").empty()
+			$("#show_search_results").html(data);
 		})
 	})
 </script>

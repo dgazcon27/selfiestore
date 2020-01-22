@@ -106,10 +106,11 @@
 								<p style="margin-bottom: 2px;" data-id="<?php echo $sell->id; ?>" class="confirm_button btn btn-xs btn-success">
 									<i class="fa fa-check"></i> <span class="hidden-xs">CONFIRMAR</span>
 								</p>
+									
+							<?php endif ?>
 								<a style="margin-bottom: 2px;" href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
 									<i class="fa fa-pencil"></i> <span class="hidden-xs">EDITAR</span>
-								</a>	
-							<?php endif ?>
+								</a>
 								<a style="margin-bottom: 2px;" href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
 									<i class="fa fa-ban"></i> <span class="hidden-xs">CANCELAR</span>
 								</a>

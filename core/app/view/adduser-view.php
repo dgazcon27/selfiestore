@@ -5,7 +5,7 @@ if(count($_POST)>0){
 	$user = new UserData();
 
 	$user->kind = $_POST["kind"];
-	$user->stock_id = isset($_POST["stock_id"])?$_POST["stock_id"]:"NULL";
+	$user->stock_id = isset($_POST["stock_id"])?$_POST["stock_id"]:1;
 	$user->comision = isset($_POST["comision"])&&$_POST["comision"]!=""?$_POST["comision"]:"NULL";
 
 	$user->image="";

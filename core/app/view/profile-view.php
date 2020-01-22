@@ -14,7 +14,6 @@
 
   <br>
     <form class="form-horizontal" method="post" id="addproduct" enctype="multipart/form-data" action="index.php?action=updateprofile" role="form">
-
   <h3>Datos de usuario</h3>
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">Imagen (160x160)</label>

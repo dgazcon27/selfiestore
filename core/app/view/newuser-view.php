@@ -170,6 +170,8 @@
   </div>
 </section>
 <script>
+  pass = $("#password").val();
+  check_pass = $("#password").val();
   $("#adduser").submit( function (e) {
     if (pass != check_pass) {
       alert("LAS CONTRASEÑAS DEBEN COINCIDIR")

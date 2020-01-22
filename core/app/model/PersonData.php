@@ -47,7 +47,7 @@ class PersonData {
 	}
 
 	public function update_client(){
-		$sql = "update ".self::$tablename." set no=\"$this->no\",name=\"$this->name\",email1=\"$this->email1\",address1=\"$this->address1\",lastname=\"$this->lastname\",phone1=\"$this->phone1\",is_active_access=\"$this->is_active_access\",password=\"$this->password\",has_credit=\"$this->has_credit\",credit_limit=\"$this->credit_limit\" where id=$this->id";
+		$sql = "update ".self::$tablename." set rif=\"$this->rif\", ci=\"$this->ci\", company=\"$this->company\", name=\"$this->name\",email1=\"$this->email1\",address2=\"$this->address2\", lastname=\"$this->lastname\",phone1=\"$this->phone1\" where id=$this->id";
 		Executor::doit($sql);
 	}
 

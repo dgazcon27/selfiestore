@@ -43,8 +43,7 @@ if(isset($_SESSION["cotization"])){
 			unset($_SESSION["cotization"]);
 			setcookie("selled","selled");
 		}
-////////////////////
-print "<script>window.location='index.php?view=cotizations';</script>";
+		print "<script>window.location='index.php?view=cotizations';</script>";
 		}
 	}
 }
