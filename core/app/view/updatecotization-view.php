@@ -124,9 +124,12 @@ $total_products += $p['q'];
 	<td><b>$ <?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td style="text-align: center;"><b><?php echo $p["q"]; ?></b></td>
 	<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
+		<?php 
+			$max_q = OperationData::getQByStock($product->id,$p['stock_id']);
+		?>
 		<td style="text-align: center;">
 			<div class="input-group input-group-lg" style="margin:auto;">
-			  <input data-id="<?php echo $product->id; ?>" style="text-align: center;margin-top: -5px;" min="1" class="form-control q_update" type="number" name="q_update" value="<?php echo $p['q'];?>">
+			  <input data-id="<?php echo $product->id; ?>" style="text-align: center;margin-top: -5px;" min="1" max="<?php echo $p['q']+$max_q; ?>" class="form-control q_update" type="number" name="q_update" value="<?php echo $p['q'];?>">
 			</div>
 		</td>
 	<?php endif ?>
