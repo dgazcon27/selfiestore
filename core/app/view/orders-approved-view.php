@@ -30,7 +30,7 @@
 							<th  class="visible-xs" style="text-align: center;">N° PRODUCTOS</th>
 							<th style="text-align: center;">TOTAL</th>
 							<th class="hidden-xs"  style="text-align: center;">FECHA</th>
-							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 2): ?>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
 							<th style="width:100px; text-align: center;"></th>
 							<?php endif ?>
 						</thead>
@@ -94,14 +94,13 @@
 							<td class="hidden-xs"  style="text-align: center;"><?php echo $sell->created_at; ?>
 								
 							</td>
-							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 2): ?>
 							<td style="width:200px;text-align: center;">
-								<?php if ($sell->d_id == 5 && isset($_SESSION['is_admin'])): ?>
+								<?php if ($sell->d_id == 5 && (isset($_SESSION['is_admin']) || Core::$user->kind == 5) && !isset($sell->ref_id)): ?>
 									<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
 										<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>
 									</a>
 								<?php endif ?>
-								<?php if (isset($_SESSION['is_admin'])): ?>
+								<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
 									<?php if ($sell->d_id != 7): ?>
 										<a href="index.php?action=cancelcotization&from=orders&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
 											<i class="fa fa-ban"></i><span class="hidden-xs hidden-sm"> CANCELAR</span>
@@ -127,7 +126,6 @@
 									</a>
 								<?php endif ?>
 							</td>
-							<?php endif ?>
 						</tr>
 
 					<?php 

@@ -36,6 +36,7 @@ if(isset($_SESSION["cotization"])){
 			$op->stock_id = $c['stock_id'];
 			$op->sell_id=$s[1];
 			$op->q= $c["q"];
+			$op->is_draft = 1;
 
 
 			$add = $op->add_cotization();			 		

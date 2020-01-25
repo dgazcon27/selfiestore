@@ -24,7 +24,7 @@ class OperationData {
 
 	public function add_cotization(){
 		$sql = "insert into ".self::$tablename." (price_in,price_out,is_draft,stock_id,product_id,q,operation_type_id,sell_id,created_at) ";
-		$sql .= "value ($this->price_in,$this->price_out,1,	$this->stock_id,\"$this->product_id\",\"$this->q\",$this->operation_type_id,$this->sell_id,$this->created_at)";
+		$sql .= "value ($this->price_in,$this->price_out,$this->is_draft,$this->stock_id,\"$this->product_id\",\"$this->q\",$this->operation_type_id,$this->sell_id,$this->created_at)";
 		return Executor::doit($sql);
 	}
 

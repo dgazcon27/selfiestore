@@ -6,6 +6,7 @@
     $person = PersonData::getByUserId($user->id);
   }
 ?>
+  <?php Core::back(); ?>
 <div class="row">
 	<div class="col-md-12">
 	<h1>Editar Usuario</h1>

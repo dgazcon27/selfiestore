@@ -38,7 +38,6 @@ $products = SellData::getSells();
 }else if(isset($_SESSION["client_id"])){
 $products = SellData::getAllBySQL(" where person_id=$_SESSION[client_id] and operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 order by created_at desc");	
 }
-
 if(count($products)>0){
 
 	?>
@@ -74,9 +73,13 @@ if(count($products)>0){
 		<td>#<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?></td>
 		<td>#<?php echo $sell->id; ?></td>
 		
-		<td> <?php 
-				$person = UserData::getById($sell->receive_by);
-				echo strtoupper($person->name." ".$person->lastname);
+		<td> <?php
+				if (isset($sell->receive_by)) {
+					$person = UserData::getById($sell->receive_by);
+					echo strtoupper($person->name." ".$person->lastname);
+				} else {
+					echo "";
+				} 
 			?> 
 		</td>
 		<td> <?php if($sell->person_id!=null){$c= $sell->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>

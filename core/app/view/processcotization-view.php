@@ -105,7 +105,7 @@ $clients = PData::getAll();
     <thead>
         <th>Codigo</th>
         <th>Cantidad solicitada</th>
-        <th>Cantidad a despachar</th>
+        <!-- <th>Cantidad a despachar</th> -->
         <th>Nombre del Producto</th>
         <th>Precio</th>
         <th>Precio Unitario</th>
@@ -119,7 +119,7 @@ $clients = PData::getAll();
 <tr>
     <td><?php echo $product->id ;?></td>
     <td><?php echo $operation->q ;?></td>
-    <td><input class="inputs-type" data-id="<?php echo $operation->id; ?>" data-q="<?php echo $operation->q; ?>" type="text" name="q_approved" value="<?php echo $operation->q ;?>"></td>
+    <!-- <td><input class="inputs-type" data-id="<?php //echo $operation->id; ?>" data-q="<?php //echo $operation->q; ?>" type="text" name="q_approved" value="<?php// echo $operation->q ;?>"></td> -->
     <td><?php echo $product->name ;?></td>
     <td>$ <?php echo number_format($product->price_in,2,".",",") ;?></td>
     <td> <div data-price="<? echo $product->price_out;?>" id="price_out_<? echo $operation->id;?>" > $ <?php echo number_format($product->price_out,2,".",",") ;?> </div> </td>

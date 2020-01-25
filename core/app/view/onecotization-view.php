@@ -16,6 +16,7 @@
 	  </ul>
 	</div>
 <?php endif ?>
+<?php Core::back();?>
 <h1>Cotizacion</h1>
 <?php if(isset($_GET["id"]) && $_GET["id"]!=""):?>
 <?php
@@ -52,6 +53,7 @@ $client = $sell->getPerson();
 	<td style="width:150px;">Cliente</td>
 	<td><?php echo $client->name." ".$client->lastname;?></td>
 	<td >Telefono: <?php echo $client->phone1;?></td>
+	
 </tr>
 
 <?php endif; ?>
@@ -67,6 +69,7 @@ $user = $sell->getUser();
 		?>
 		<td>Atendido por</td>
 		<td><?php echo $receive_by->name." ".$receive_by->lastname;?></td>
+		<td >Direccion de Envio: <?php echo $client->address2;?></td>
 	<?php endif ?>
 </tr>
 <?php endif; ?>

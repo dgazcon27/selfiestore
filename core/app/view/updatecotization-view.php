@@ -25,6 +25,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 <section class="content">
+	<?php Core::back(); ?>
 <div class="row">
 	<div class="col-md-12">
 	<h1>COTIZAR PEDIDO</h1>
@@ -106,7 +107,7 @@ $total = 0;
 	<th style="width:110px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
 	<th style="width:30px;"><span class="hidden-xs">CANTIDAD</span><span class="visible-xs">C.</span></th>
 	<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
-		<th style="width: 60px;"></th>
+		<th style="width: 60px;">CANTIDAD EDITADA</th>
 	<?php endif ?>
 	<th style="width:100px;">PRECIO <span class="hidden-xs">TOTAL</span></th>
 	<th ></th>

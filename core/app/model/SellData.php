@@ -40,8 +40,7 @@ class SellData {
 	}
 
 	public function update_cotization($id)	{
-		$sql = "update ".self::$tablename." set total=$this->total, cash=$this->cash
-		where id=$id";
+		$sql = "update ".self::$tablename." set total=$this->total where id=$id";
 		Executor::doit($sql);
 	}
 
@@ -81,7 +80,7 @@ public function add_with_client(){
 	}
 
 	public function process_cotization(){
-		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,p_id=$this->p_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,discount=$this->discount,cash=$this->cash,is_draft=0,is_cotization=0,person_id=$this->person_id, f_id=$this->f_id, receive_by=$this->receive_by where id=$this->id";
+		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,is_draft=0,is_cotization=0,person_id=$this->person_id, f_id=$this->f_id, receive_by=$this->receive_by where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -165,33 +164,33 @@ public function add_with_client(){
 
 
 	public static function getCotizations(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and (d_id=2 or d_id=4) and is_draft=1 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and (d_id=2 or d_id=4) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public static function getCotizationsForManager(){
-		$sql = "select * from ".self::$tablename." where (d_id=4 or d_id=5) order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=4 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public function inProcessCotization($id){
-		$sql = "update ".self::$tablename." set d_id=4 where id=$id";
+		$sql = "update ".self::$tablename." set d_id=4, is_draft=0 where id=$id";
 		Executor::doit($sql);
 	}
 
-	public function updateOrderToSell($id){
+	public function updateOrderToSell(){
 		$x = new XXData();
 		$xx = $x->add();
-		$sql = "update ".self::$tablename." set d_id=1, ref_id=".$xx[1]." where id=$id";
+		$sql = "update ".self::$tablename." set d_id=1, ref_id=".$xx[1].",p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=$this->total,cash=$this->money where id=$this->id";
 		Executor::doit($sql);
 	}
 
-	public function updateOrderToSellToSucursal($id){
+	public function updateOrderToSellToSucursal(){
 		$x = new XXData();
 		$xx = $x->add();
-		$sql = "update ".self::$tablename." set d_id=1, ref_id=".$xx[1].", total=0,cash=0 where id=$id";
+		$sql = "update ".self::$tablename." set ref_id=".$xx[1].",p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=0,cash=0 where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -217,7 +216,7 @@ public function add_with_client(){
 		if (isset(PersonData::getByUserId($id)->id)) {
 			$data_person = PersonData::getByUserId($id)->id;
 		}
-		$sql = "select * from ".self::$tablename." where (user_id=$id or person_id=$data_person) and (d_id=5 or d_id=7 or d_id=1) order by created_at desc";
+		$sql = "select * from ".self::$tablename." where (user_id=$id or person_id=$data_person) and (d_id=5 or d_id=7 or d_id=1 or d_id=9 or d_id=10) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -229,7 +228,7 @@ public function add_with_client(){
 	}
 
 	public static function getCotizationsByClientId($id){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and (d_id=2 || d_id=4) and is_draft=1 and (person_id=$id or user_id=$id) order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=2 and (d_id=2 || d_id=4) and (person_id=$id or user_id=$id) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}

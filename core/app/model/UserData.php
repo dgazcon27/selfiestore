@@ -46,10 +46,20 @@ class UserData {
 		return Model::one($query[0],new UserData());
 	}
 
-
-
 	public static function getAll(){
 		$sql = "select * from ".self::$tablename;		
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new UserData());
+	}
+
+	public static function getClients(){
+		$sql = "select * from ".self::$tablename." where kind=4";		
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new UserData());
+	}
+
+	public static function getBranchs(){
+		$sql = "select * from ".self::$tablename." where kind=8";		
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new UserData());
 	}

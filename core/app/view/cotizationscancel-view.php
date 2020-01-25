@@ -28,7 +28,7 @@
 			<div class="clearfix"></div>
 			<?php
 			$products = null;
-			if (isset($_SESSION['is_admin'])) {
+			if (isset($_SESSION['is_admin']) || Core::$user->kind == 5) {
 				$products = SellData::getCancelsCotizacion();
 			} else {
 				$products = SellData::getCancelsCotizacionByUser(Core::$user->id);

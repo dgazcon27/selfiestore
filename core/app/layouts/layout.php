@@ -246,6 +246,9 @@ if( $q==0 ||  $q<=$product->inventary_min){
                   <li><a href="./?view=orderscancel">Pedidos Cancelados</a></li>
                   <li><a href="./?view=ordersdelete">Pedidos Eliminados</a></li>
                 <?php endif ?>
+                <?php if (Core::$user->kind == 5): ?>
+                  <li><a href="./?view=orderscancel">Pedidos Cancelados</a></li>
+                <?php endif ?>
 
               </ul>
             </li>
@@ -257,39 +260,44 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 </ul>
               </li>
             <?php endif ?>
-            <?php if(Core::$user->kind==3):?>
-			  <li class="treeview">
-              <a href="#"><i class='fa fa-briefcase'></i> <span>FINANZAS</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="./?view=credit">Credito</a></li>
-                <li><a href="./?view=spends">Gastos</a></li>
-                <li><a href="./?view=smallbox&opt=all">Caja Chica</a></li>
-                <li><a href="./?view=box">Caja</a></li>
-              </ul>
-            </li>
-			  
-  			<li class="treeview">
-          <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a href="./?view=inventary2&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
-           
-            <li><a href="./?view=search">Buscar Productos</a></li>
-            <li><a href="./?view=dev">Devolucion</a></li>
-          </ul>
-        </li>
-            
-			  
-			<li class="treeview">
-              <a href="#"><i class='fa fa-file-text-o'></i> <span>REPORTE</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-				  
+
+            <?php if(Core::$user->kind==3 || Core::$user->kind==5):?>
+
+              <li class="treeview">
+                <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="./?view=inventary2&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
+                 
+                  <li><a href="./?view=search">Buscar Productos</a></li>
+                  <li><a href="./?view=dev">Devolucion</a></li>
+                </ul>
+              </li>
+      			  <li class="treeview">
+                    <a href="#"><i class='fa fa-briefcase'></i> <span>FINANZAS</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                      <li><a href="./?view=credit">Credito</a></li>
+                      <li><a href="./?view=spends">Gastos</a></li>
+                      <li><a href="./?view=smallbox&opt=all">Caja Chica</a></li>
+                      <li><a href="./?view=box">Caja</a></li>
+                    </ul>
+                  </li>
+      			  
+        			
+                  
+      			  
+      			<?php if (Core::$user->kind == 1): ?>
+              <li class="treeview">
+                    <a href="#"><i class='fa fa-file-text-o'></i> <span>REPORTE</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
                 
-				  <li><a href="./?view=popularproductsreport">Balance de Productos</a></li>
-				  <li><a href="./?view=paymentreport">Reporte de pagos [credito]</a></li>
-				  
-               
-              </ul>
-            </li>
+                      
+                <li><a href="./?view=popularproductsreport">Balance de Productos</a></li>
+                <li><a href="./?view=paymentreport">Reporte de pagos [credito]</a></li>
+                
+                     
+                    </ul>
+                  </li>
+            <?php endif ?>
 			  
   
           <?php endif; ?>
@@ -340,7 +348,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
               </ul>
             </li>
             
-          <?php endif; ?>
+            <?php endif; ?>
             <?php if (Core::$user->kind == 1): ?>
               <li class="treeview">
                 <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -382,11 +390,10 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=users">Usuarios</a></li>
                 <li><a href="./?view=settings">Configuracion</a></li>
                 <li><a href="./?view=import">Importar Datos</a></li>
-
-
               </ul>
             </li>
           <?php endif; ?>
+         
           <?php endif; ?>
             <?php elseif(isset($_SESSION["client_id"])):?>
             <li><a href="./index.php?view=clienthome"><i class='fa fa-dashboard'></i> <span>Dashboard</span></a></li>
@@ -399,7 +406,12 @@ if( $q==0 ||  $q<=$product->inventary_min){
               </ul>
             </li>
           <?php endif;?>
-
+           <?php if (Core::$user->kind == 5): ?>
+                <li><a href="./?view=branch"><i class='fa fa-cog'></i><span>SUCURSALES</span></a></li>
+          <?php endif ?>
+          <?php if (Core::$user->kind == 5): ?>
+                <li><a href="./?view=users"><i class='fa fa-cog'></i><span>CLIENTES</span></a></li>
+          <?php endif ?>
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
