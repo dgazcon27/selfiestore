@@ -34,7 +34,7 @@
 						<thead>
 							<th></th>
 							<th class="hidden-xs" style="text-align: center;">N° PEDIDO</th>
-							<?php if (isset($_SESSION['is_admin'])): ?>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
 								<th style="text-align: center;">CLIENTE</th>
 							<?php endif ?>
 							<th class="hidden-xs" style="text-align: center;">TELEFONO</th>
@@ -66,7 +66,7 @@
 							<td style="text-align: center;">
 								<?php echo $ii; ?>
 							</td>
-							<?php if (isset($_SESSION['is_admin'])): ?>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
 								<td style="text-align: center;">
 									<?php
 									if($sell->user_id!=null)

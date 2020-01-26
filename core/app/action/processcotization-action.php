@@ -8,7 +8,9 @@ if(!empty($_POST)){
 	$op->operation_type_id = 7;
 	$iva_val = ConfigurationData::getByPreffix("imp-val")->val;
 
-
+	$x = new XXData();
+	$xx = $x->add();
+	$sell->ref_id = $xx[1];
 	$sell->d_id = $_POST["d_id"];
 	$sell->f_id = 1;
 	$sell->person_id = $_POST["client_id"];

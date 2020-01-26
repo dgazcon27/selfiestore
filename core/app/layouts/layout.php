@@ -220,12 +220,12 @@ if( $q==0 ||  $q<=$product->inventary_min){
               <a href="#"><i class='fa fa-shopping-cart'></i> <span>VENTAS</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
                 <li><a href="./?view=sells">Ventas</a></li>
-<?php if(Core::$user->kind==1):?>
-       
-   <?php endif; ?>
 				  <li><a href="./?view=bycob">Consignaciones</a></li>
 				<li><a href="./?view=sellscredit">Creditos</a></li>
+<?php if(Core::$user->kind==1):?>
 				 <li><a href="./?view=sellscancel">Ventas Canceladas</a></li>
+       
+   <?php endif; ?>
                 
               </ul>
             </li>

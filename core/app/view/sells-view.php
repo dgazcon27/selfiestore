@@ -125,7 +125,18 @@ elseif($sell->f_id == 5)
 <?php if(isset($_SESSION["user_id"]) && Core::$user->kind==1):?>
 		<a href="index.php?action=cancelsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA VENTA');">CANCELAR</a>
 		<!--a href="index.php?view=delsell&id=<?php //echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA VENTA');"><i class="fa fa-trash"></i></a-->
+
 <?php endif;?>
+<?php if (Core::$user->kind == 5 && $sell->d_id == 11): ?>
+			<a href="index.php?action=setorder&status=1&from=1&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('¿CORFIRMAR QUE EL PEDIDO FUE ENTREGADO?');">
+				<span> ENTREGADO AL CLIENTE</span>
+			</a>
+		<?php endif ?>
+		<?php if ((isset($_SESSION['is_admin']) || Core::$user->kind == 5)): ?>
+			<a onclick="report(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
+				<i class="fa fa-file"></i>
+			</a>
+		<?php endif ?>
 		</td>
 	</tr>
 	
@@ -218,4 +229,73 @@ doc.save('sells-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 doc.save('sells-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 <?php endif; ?>
 }
+</script>
+
+
+
+<script type="text/javascript">
+    function report(id, order, date) {
+    	newdate = new Date(date);
+    	month = parseInt(newdate.getMonth())+1;
+    	month_ = month < 10 ? "0"+month : month;
+    	printdate = newdate.getDate()+"/"+month_+"/"+newdate.getFullYear();
+		var doc = new jsPDF('p', 'pt');
+        doc.setFontSize(26);
+        doc.text("PEDIDO #"+order+" - FECHA "+printdate+" ", 100, 65);
+		var columns = [
+	        {title: "CODIGOS DE BARRAS", dataKey: "id"}, 
+		    {title: "PRODUCTO", dataKey: "product"}, 
+		    {title: "CANTIDAD", dataKey: "q"}, 
+		];
+
+		var rows = [];
+		$.get("./?action=movetransferdocument&id="+id+"&seller=1 ",function(data2){
+			let response = JSON.parse(data2);
+			let sell = response.sell;
+			let person = response.person;
+			let products = response.products;
+			let seller = response.seller.length > 0 ? response.seller : {'name':'', 'lastname':''};
+			console.log(response);
+			doc.setFontSize(12);
+    		doc.text("_____________________________________________________________________________", 40, 90);
+    		doc.text("NOMBRE DEL ENCARGADO: "+person.name+" "+person.lastname+"             TELÉFONO ENCARGADO: "+person.phone2+" ", 40, 105);
+    		doc.text("_____________________________________________________________________________", 40, 108);
+    		doc.text("EMPRESA: "+person.company+"        TELÉFONO: "+person.phone1+"           RIF: "+person.rif+"", 40, 125);
+    		doc.text("_____________________________________________________________________________", 40, 130);
+    		doc.text("DIRECCION DE ENTREGA: "+person.address2+" ", 40, 145);
+    		doc.text("_____________________________________________________________________________", 40, 150);
+    		doc.text("ATENTIDO POR: "+seller.name+" "+seller.lastname+" ", 40, 165);
+			doc.text("_____________________________________________________________________________", 40, 170);
+
+			doc.setFontSize(14);
+			for (var i = 0; i < products.length; i++) {
+				data = {
+					"id" : products[i].barcode,
+					"product": products[i].name,
+					"q": products[i].q
+				}
+				rows.push(data)
+			}
+			doc.autoTable(columns, rows, {
+			    theme: 'grid',
+			    overflow:'linebreak',
+			    styles: { 
+			        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+			    },
+			    columnStyles: {
+			        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+			    },
+			    margin: {top: 200},
+			    afterPageContent: function(data) {
+			    }
+			});
+			doc.setFontSize(12);
+			doc.text("__________________  __________________  __________________  __________________",40, doc.autoTableEndPosY()+200);
+			doc.text("           ENTREGA               TRANSPORTA                    RECIBE                       AUDITA",40, doc.autoTableEndPosY()+215);
+			doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+603);
+			doc.save('movimiento-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+		});
+
+		
+	}
 </script>

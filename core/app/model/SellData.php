@@ -44,6 +44,11 @@ class SellData {
 		Executor::doit($sql);
 	}
 
+	public function updateImei(){
+		$sql = "update ".self::$tablename." set comment=\"$this->comment\" where id=$this->id";
+		return Executor::doit($sql);
+	}
+
 	public function add_de(){
 		$sql = "insert into ".self::$tablename." (status,stock_to_id,sell_from_id,user_id,operation_type_id,created_at) ";
 		$sql .= "value (0,$this->stock_to_id,$this->sell_from_id,$this->user_id,5,$this->created_at)";
@@ -80,7 +85,7 @@ public function add_with_client(){
 	}
 
 	public function process_cotization(){
-		$sql = "update ".self::$tablename." set stock_to_id=$this->stock_to_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,is_draft=0,is_cotization=0,person_id=$this->person_id, f_id=$this->f_id, receive_by=$this->receive_by where id=$this->id";
+		$sql = "update ".self::$tablename." set ref_id=$this->ref_id, stock_to_id=$this->stock_to_id,d_id=$this->d_id,iva=$this->iva,total=$this->total,is_draft=0,is_cotization=0,person_id=$this->person_id, f_id=$this->f_id, receive_by=$this->receive_by where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -115,7 +120,7 @@ public function add_with_client(){
 	}
 
 	public static function getById($id){
-		 $sql = "select * from ".self::$tablename." where id=$id";
+		$sql = "select * from ".self::$tablename." where id=$id";
 		$query = Executor::doit($sql);
 		return Model::one($query[0],new SellData());
 	}
@@ -170,7 +175,7 @@ public function add_with_client(){
 	}
 
 	public static function getCotizationsForManager(){
-		$sql = "select * from ".self::$tablename." where d_id=4 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=4 or d_id=2 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -181,16 +186,14 @@ public function add_with_client(){
 	}
 
 	public function updateOrderToSell(){
-		$x = new XXData();
-		$xx = $x->add();
-		$sql = "update ".self::$tablename." set d_id=1, ref_id=".$xx[1].",p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=$this->total,cash=$this->money where id=$this->id";
+
+		$sql = "update ".self::$tablename." set p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=$this->total,cash=$this->money where id=$this->id";
 		Executor::doit($sql);
 	}
 
 	public function updateOrderToSellToSucursal(){
-		$x = new XXData();
-		$xx = $x->add();
-		$sql = "update ".self::$tablename." set ref_id=".$xx[1].",p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=0,cash=0 where id=$this->id";
+		
+		$sql = "update ".self::$tablename." set p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=0,cash=0 where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -200,13 +203,13 @@ public function add_with_client(){
 	}
 
 	public static function getOrdersApproved(){
-		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 or d_id=9 or d_id=10 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 or d_id=9 or d_id=10 or d_id=11 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public static function getOrdersForManager(){
-		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 or d_id=11 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -216,7 +219,7 @@ public function add_with_client(){
 		if (isset(PersonData::getByUserId($id)->id)) {
 			$data_person = PersonData::getByUserId($id)->id;
 		}
-		$sql = "select * from ".self::$tablename." where (user_id=$id or person_id=$data_person) and (d_id=5 or d_id=7 or d_id=1 or d_id=9 or d_id=10) order by created_at desc";
+		$sql = "select * from ".self::$tablename." where (user_id=$id or person_id=$data_person) and (d_id=5 or d_id=7 or d_id=1 or d_id=9 or d_id=10 or d_id=11) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -234,7 +237,7 @@ public function add_with_client(){
 	}
 
 	public static function getSells(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=1 and (d_id=1 or d_id=11) and is_draft=0 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}

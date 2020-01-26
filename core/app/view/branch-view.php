@@ -51,9 +51,12 @@
 					echo $role->name;
 				?>
 				</td>
-				<td style="width:70px;"><a href="index.php?view=edituser&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
-				<a href="./?action=deluser&id=<?php echo $user->id; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+				<td style="width:70px;">
+					<?php if (Core::$user->kind == 1): ?>
+						<a href="index.php?view=edituser&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
+					<a href="./?action=deluser&id=<?php echo $user->id; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
 
+					<?php endif ?>
 				</td>
 
 				</tr>
