@@ -16,8 +16,8 @@ class SellData {
 	public function getStockTo(){ return StockData::getById($this->stock_to_id);}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (invoice_code,invoice_file,comment,ref_id,person_id,stock_to_id,iva,f_id,p_id,d_id,total,discount,cash,user_id,created_at,refe,efe,tra,zel,pun) ";
-		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,$this->refe,$this->efe,$this->tra,$this->zel,$this->pun)";
+		$sql = "insert into ".self::$tablename." (invoice_code,invoice_file,comment,ref_id,person_id,stock_to_id,iva,f_id,p_id,d_id,total,discount,cash,user_id,created_at,refe,efe,tra,zel,pun,receive_by) ";
+		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,$this->refe,$this->efe,$this->tra,$this->zel,$this->pun,$this->receive_by)";
 		return Executor::doit($sql);
 	}
 	public function add_traspase(){
@@ -187,13 +187,13 @@ public function add_with_client(){
 
 	public function updateOrderToSell(){
 
-		$sql = "update ".self::$tablename." set p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=$this->total,cash=$this->money where id=$this->id";
+		$sql = "update ".self::$tablename." set is_official=0, p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=$this->total,cash=$this->money where id=$this->id";
 		Executor::doit($sql);
 	}
 
 	public function updateOrderToSellToSucursal(){
 		
-		$sql = "update ".self::$tablename." set p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=0,cash=0 where id=$this->id";
+		$sql = "update ".self::$tablename." set is_official=0, p_id=$this->p_id,f_id=$this->f_id,refe=$this->refe,efe=$this->efe,pun=$this->pun,tra=$this->tra,zel=$this->zel,discount=$this->discount,total=0,cash=0 where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -203,7 +203,7 @@ public function add_with_client(){
 	}
 
 	public static function getOrdersApproved(){
-		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 or d_id=9 or d_id=10 or d_id=11 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where is_official=1 and (d_id=5 or d_id=7 or d_id=9 or d_id=10 or d_id=11) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}

@@ -43,9 +43,13 @@
         <?php
           if (isset($_SESSION['is_client'])) {
             echo '<a href="./index.php?view=clienthome" class="logo">'; 
+           } elseif(Core::$user->kind == 5){
+            echo '<a href="./index.php?view=cotizations" class="logo">';
+           } elseif (Core::$user->kind == 2) {
+            echo '<a href="./index.php?view=orders-approved" class="logo">';
            } else {
-            echo '<a href="./" class="logo">';
-           } 
+            echo '<a href="./index.php?view=cotizations" class="logo">';
+           }
         ?>
         
           <!-- mini logo for sidebar mini 50x50 pixels -->

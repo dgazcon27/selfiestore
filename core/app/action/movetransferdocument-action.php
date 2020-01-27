@@ -9,7 +9,7 @@
 		}
 
 		$person = PersonData::getById($sell->person_id);
-		$seller = [];
+		$seller = null;
 		if (isset($_GET['seller'])) {
 			if (isset($sell->receive_by)) {
 				$seller = UserData::getById($sell->receive_by);

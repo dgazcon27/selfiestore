@@ -132,7 +132,7 @@ elseif($sell->f_id == 5)
 				<span> ENTREGADO AL CLIENTE</span>
 			</a>
 		<?php endif ?>
-		<?php if ((isset($_SESSION['is_admin']) || Core::$user->kind == 5)): ?>
+		<?php if (isset($_SESSION['is_admin'])): ?>
 			<a onclick="report(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
 				<i class="fa fa-file"></i>
 			</a>
@@ -254,7 +254,7 @@ doc.save('sells-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 			let sell = response.sell;
 			let person = response.person;
 			let products = response.products;
-			let seller = response.seller.length > 0 ? response.seller : {'name':'', 'lastname':''};
+			let seller = response.seller ? response.seller : {'name':'', 'lastname':''};
 			console.log(response);
 			doc.setFontSize(12);
     		doc.text("_____________________________________________________________________________", 40, 90);

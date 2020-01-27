@@ -119,7 +119,7 @@
 							</td>
 							<td style="width:200px;text-align: center;">
 
-								<?php if ($sell->d_id >= 5 && (isset($_SESSION['is_admin']) || Core::$user->kind == 5) && !isset($sell->ref_id)): ?>
+								<?php if ($sell->d_id >= 5 && (isset($_SESSION['is_admin']) || Core::$user->kind == 5) && $sell->is_official == 1): ?>
 									<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
 										<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>
 									</a>
@@ -136,23 +136,23 @@
 										<span> DISPONIBLE PARA RETIRO</span>
 									</a>
 								<?php endif ?>
-								
+								<?php 
+									$products_sell = OperationData::getAllProductsBySellId($sell->id);
+									$is_imeis = false;
+									if (count($products_sell) > 0) {
+										$i = 0;
+										while (!$is_imeis && $i < count($products_sell)) {
+											$p = ProductData::getById($products_sell[$i]->product_id);
+											if ($p->category_id == 47) {
+												$is_imeis = true;
+											}
+											$i = $i+1;
+										}
+									}
+								?>
 								<?php if (Core::$user->kind == 2 && $sell->d_id == 5): ?>
 									<!-- comprobar si tiene producto tecnologico -->
 									<?php
-										$products_sell = OperationData::getAllProductsBySellId($sell->id);
-										$is_imeis = false;
-										if (count($products_sell) > 0) {
-											$i = 0;
-											while (!$is_imeis && $i < count($products_sell)) {
-												$p = ProductData::getById($products_sell[$i]->product_id);
-												if ($p->category_id == 47) {
-													$is_imeis = true;
-												}
-												$i = $i+1;
-											}
-										} 
-
 										if ($is_imeis && $sell->comment != "") {
 										?>
 											<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
@@ -160,19 +160,14 @@
 											</a>
 											
 										<?php
-										} else if($is_imeis) {
+										}
+										if($is_imeis) {
 										?>
 											<a href="index.php?view=updateimeis&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
 												<span> AGREGAR IMEIS</span>
 											</a>
 										<?php
-										} else {
-											?>
-											<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
-												<span> ARMAR PEDIDO</span>
-											</a>
-											<?php
-										}
+										}   
 									?>
 								<?php endif ?>
 								<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>

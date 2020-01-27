@@ -89,7 +89,7 @@ $product = ProductData::getById($p["product_id"]);
 
 <form method="post" class="form-horizontal" id="processsell" enctype="multipart/form-data" name="processsell">
 <h2>RESUMEN DE VENTA</h2>
-
+<input type="hidden" name="receive_by" value="<?php echo Core::$user->id?>">
 <div class="row">
 <div class="col-md-12">
 <div>
