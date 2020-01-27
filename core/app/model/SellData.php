@@ -16,8 +16,8 @@ class SellData {
 	public function getStockTo(){ return StockData::getById($this->stock_to_id);}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (invoice_code,invoice_file,comment,ref_id,person_id,stock_to_id,iva,f_id,p_id,d_id,total,discount,cash,user_id,created_at,refe,efe,tra,zel,pun,receive_by) ";
-		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,$this->refe,$this->efe,$this->tra,$this->zel,$this->pun,$this->receive_by)";
+		$sql = "insert into ".self::$tablename." (invoice_code,invoice_file,comment,ref_id,person_id,stock_to_id,iva,f_id,p_id,d_id,total,discount,cash,user_id,created_at,refe,efe,tra,zel,pun,receive_by, is_official) ";
+		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,$this->refe,$this->efe,$this->tra,$this->zel,$this->pun,$this->receive_by,0)";
 		return Executor::doit($sql);
 	}
 	public function add_traspase(){
@@ -203,10 +203,17 @@ public function add_with_client(){
 	}
 
 	public static function getOrdersApproved(){
-		$sql = "select * from ".self::$tablename." where is_official=1 and (d_id=5 or d_id=7 or d_id=9 or d_id=10 or d_id=11) order by created_at desc";
+		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 or d_id=9 or d_id=10 or d_id=11 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
+
+	public static function getOrdersApprovedForManager(){
+		$sql = "select * from ".self::$tablename." where is_official=1 and (d_id=5 or d_id=7 or d_id=9 or d_id=10 or d_id=11) and is_official=1 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
 
 	public static function getOrdersForManager(){
 		$sql = "select * from ".self::$tablename." where d_id=5 or d_id=7 or d_id=11 order by created_at desc";
@@ -238,6 +245,12 @@ public function add_with_client(){
 
 	public static function getSells(){
 		$sql = "select * from ".self::$tablename." where operation_type_id=2 and p_id=1 and (d_id=1 or d_id=11) and is_draft=0 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public static function getSellsForManager(){
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and is_official=0 and (d_id != 3 or d_id != 8) order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -330,7 +343,7 @@ public function add_with_client(){
 
 
 	public static function getSellsUnBoxed(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 and box_id is NULL and p_id=1 and is_draft=0 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 and box_id is NULL and p_id=1 and is_draft=0 and is_official=0 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}

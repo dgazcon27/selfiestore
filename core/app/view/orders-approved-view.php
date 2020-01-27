@@ -11,19 +11,18 @@
 
 			<?php
 			$products=null;
-			if (isset($_SESSION['is_admin']) || Core::$user->kind == 5 || Core::$user->kind == 2) {
+			if (isset($_SESSION['is_admin']) || Core::$user->kind == 2) {
 				$products = SellData::getOrdersApproved();
+			} elseif(Core::$user->kind == 5){
+				$products = SellData::getOrdersApprovedForManager();
 			} else {
 				$products = SellData::getOrdersApprovedByUser($_SESSION['user_id']);
 			}			
 			if(count($products)>0){
 			?>
 				<br>
-				<div class="box box-primary">
-					<div class="box-header">
-						<h3 class="box-title">PEDIDOS APROBADOS</h3>
-					</div>
-					<table class="table table-bordered table-hover	">
+				<div class="box box-primary padding-table">
+					<table class="table table-bordered table-hover table-responsive datatable">
 						<thead>
 							<th style="text-align: center;"></th>
 							<th style="text-align: center;"><span class="hidden-xs hidden-sm">N° PEDIDO</span> Nº</th>
@@ -32,12 +31,14 @@
 							<th style="text-align: center;">TELEFONO</th>
 							<?php endif ?>
 							<th style="text-align: center;">ESTADO</th>
-							<th  class="hidden-xs" style="text-align: center;">TOTAL DE PRODUCTOS</th>
-							<th  class="visible-xs" style="text-align: center;">N° PRODUCTOS</th>
+							<th style="text-align: center;">
+								<span class="hidden-xs">TOTAL DE PRODUCTOS</span>
+								<span class="visible-xs">N° PRODUCTOS</span>
+							</th>
 							<th style="text-align: center;">TOTAL</th>
 							<th class="hidden-xs"  style="text-align: center;">FECHA</th>
-							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
-							<th style="width:100px; text-align: center;"></th>
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5 || Core::$user->kind == 2): ?>
+							<th style="width:100px; text-align: center;"><span class="hidden-xs">OPCIONES</span></th>
 							<?php endif ?>
 						</thead>
 						
@@ -117,75 +118,80 @@
 							<td class="hidden-xs"  style="text-align: center;"><?php echo $sell->created_at; ?>
 								
 							</td>
-							<td style="width:200px;text-align: center;">
+							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5 || Core::$user->kind == 2): ?>
+								<td style="width:200px;text-align: center;">
+									<?php if ($sell->d_id >= 5 && (isset($_SESSION['is_admin']) || Core::$user->kind == 5) && $sell->is_official == 1): ?>
+										<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
+											<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>
+										</a>
+									<?php endif ?>
+									
 
-								<?php if ($sell->d_id >= 5 && (isset($_SESSION['is_admin']) || Core::$user->kind == 5) && $sell->is_official == 1): ?>
-									<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
-										<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>
-									</a>
-								<?php endif ?>
-								
-
-								<?php if (Core::$user->kind == 2 && $sell->d_id == 9): ?>
-									<a href="index.php?action=setorder&status=10&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ENVIAR ESTE PEDIDO');">
-										<span> ENVIAR PEDIDO</span>
-									</a>
-								<?php endif ?>
-								<?php if (Core::$user->kind == 5 && $sell->d_id == 10): ?>
-									<a href="index.php?action=setorder&status=11&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('¿CORFIRMAR QUE EL PEDIDO ESTA DISPONIBLE?');">
-										<span> DISPONIBLE PARA RETIRO</span>
-									</a>
-								<?php endif ?>
-								<?php 
-									$products_sell = OperationData::getAllProductsBySellId($sell->id);
-									$is_imeis = false;
-									if (count($products_sell) > 0) {
-										$i = 0;
-										while (!$is_imeis && $i < count($products_sell)) {
-											$p = ProductData::getById($products_sell[$i]->product_id);
-											if ($p->category_id == 47) {
-												$is_imeis = true;
+									<?php if (Core::$user->kind == 2 && $sell->d_id == 9): ?>
+										<a href="index.php?action=setorder&status=10&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ENVIAR ESTE PEDIDO');">
+											<span> ENVIAR PEDIDO</span>
+										</a>
+									<?php endif ?>
+									<?php if (Core::$user->kind == 5 && $sell->d_id == 10): ?>
+										<a href="index.php?action=setorder&status=11&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('¿CORFIRMAR QUE EL PEDIDO ESTA DISPONIBLE?');">
+											<span> DISPONIBLE PARA RETIRO</span>
+										</a>
+									<?php endif ?>
+									<?php 
+										$products_sell = OperationData::getAllProductsBySellId($sell->id);
+										$is_imeis = false;
+										if (count($products_sell) > 0) {
+											$i = 0;
+											while (!$is_imeis && $i < count($products_sell)) {
+												$p = ProductData::getById($products_sell[$i]->product_id);
+												if ($p->category_id == 47) {
+													$is_imeis = true;
+												}
+												$i = $i+1;
 											}
-											$i = $i+1;
 										}
-									}
-								?>
-								<?php if (Core::$user->kind == 2 && $sell->d_id == 5): ?>
-									<!-- comprobar si tiene producto tecnologico -->
-									<?php
-										if ($is_imeis && $sell->comment != "") {
-										?>
-											<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
-												<span> ARMAR PEDIDO</span>
-											</a>
-											
+									?>
+									<?php if (Core::$user->kind == 2 && $sell->d_id == 5): ?>
+										<!-- comprobar si tiene producto tecnologico -->
 										<?php
-										}
-										if($is_imeis) {
+											if ($is_imeis && $sell->comment != "") {
+											?>
+												<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
+													<span> ARMAR PEDIDO</span>
+												</a>
+												
+											<?php
+											}
+											  
+										?>
+									<?php endif ?>
+
+									<?php 
+										if(Core::$user->kind == 2 && $is_imeis && $sell->d_id != 1) {
 										?>
 											<a href="index.php?view=updateimeis&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
 												<span> AGREGAR IMEIS</span>
 											</a>
 										<?php
-										}   
+										} 
 									?>
-								<?php endif ?>
-								<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
-									<?php if ($sell->d_id != 7): ?>
-										<a href="index.php?action=cancelcotization&from=orders&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
-											<i class="fa fa-ban"></i><span class="hidden-xs hidden-sm"> CANCELAR</span>
+									<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5): ?>
+										<?php if ($sell->d_id != 7): ?>
+											<a href="index.php?action=cancelcotization&from=orders&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
+												<i class="fa fa-ban"></i><span class="hidden-xs hidden-sm"> CANCELAR</span>
+											</a>
+										<?php endif ?>
+										<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
+											<i class="fa fa-trash"></i>
 										</a>
 									<?php endif ?>
-									<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
-										<i class="fa fa-trash"></i>
-									</a>
-								<?php endif ?>
-								<?php if ((isset($_SESSION['is_admin']) || Core::$user->kind == 2)): ?>
-									<a onclick="thePDF(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
-										<i class="fa fa-file"></i>
-									</a>
-								<?php endif ?>
-							</td>
+									<?php if ((isset($_SESSION['is_admin']) || Core::$user->kind == 2)): ?>
+										<a onclick="thePDF(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
+											<i class="fa fa-file"></i>
+										</a>
+									<?php endif ?>
+								</td>
+							<?php endif ?>
 						</tr>
 
 					<?php 

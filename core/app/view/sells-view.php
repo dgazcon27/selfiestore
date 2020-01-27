@@ -24,19 +24,20 @@
 $products = null;
 // print_r(Core::$user);
 if(isset($_SESSION["user_id"])){
-if(Core::$user->kind==3){
-$products = SellData::getAllBySQL(" where user_id=".Core::$user->id." and operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 order by created_at desc");
+	if(Core::$user->kind==3){
+		$products = SellData::getAllBySQL(" where user_id=".Core::$user->id." and operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 order by created_at desc");
 
-}
-else if(Core::$user->kind==2){
-$products = SellData::getAllBySQL(" where operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 and stock_to_id=".Core::$user->stock_id." order by created_at desc");
-}
-else{
-$products = SellData::getSells();
+	} elseif(Core::$user->kind==2){
+		$products = SellData::getAllBySQL(" where operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 and stock_to_id=".Core::$user->stock_id." order by created_at desc");
+	} elseif (Core::$user->kind == 5) {
+		$products = SellData::getSellsForManager();
+	} else {
+		$products = SellData::getSells();
 
-}
+	}
+	
 }else if(isset($_SESSION["client_id"])){
-$products = SellData::getAllBySQL(" where person_id=$_SESSION[client_id] and operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 order by created_at desc");	
+	$products = SellData::getAllBySQL(" where person_id=$_SESSION[client_id] and operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 order by created_at desc");	
 }
 if(count($products)>0){
 
@@ -127,9 +128,14 @@ elseif($sell->f_id == 5)
 		<!--a href="index.php?view=delsell&id=<?php //echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA VENTA');"><i class="fa fa-trash"></i></a-->
 
 <?php endif;?>
-<?php if (Core::$user->kind == 5 && $sell->d_id == 11): ?>
+		<?php if (Core::$user->kind == 5 && $sell->d_id == 11): ?>
 			<a href="index.php?action=setorder&status=1&from=1&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('¿CORFIRMAR QUE EL PEDIDO FUE ENTREGADO?');">
 				<span> ENTREGADO AL CLIENTE</span>
+			</a>
+		<?php endif ?>
+		<?php if (Core::$user->kind == 5 && $sell->d_id == 10): ?>
+			<a href="index.php?action=setorder&status=11&from=1&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('¿CORFIRMAR QUE EL PEDIDO ESTA DISPONIBLE PARA RETIRAR?');">
+				<span> DISPONIBLE PARA RETIRO</span>
 			</a>
 		<?php endif ?>
 		<?php if (isset($_SESSION['is_admin'])): ?>
