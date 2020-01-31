@@ -18,6 +18,13 @@ class PersonData {
 		Executor::doit($sql);
 	}
 
+	function add_solo_client()	{
+		$sql = "insert into person (no,ci,name,lastname,address1,phone1,is_active_access,kind,created_at)";
+
+		$sql .= "value (\"$this->no\",\"$this->ci\",\"$this->name\",\"$this->lastname\",\"$this->address1\",\"$this->phone1\",$this->is_active_access,10,NOW())";
+		Executor::doit($sql);
+	}
+
 	public function add_provider(){
 		$sql = "insert into person (no,name,address1,phone1,kind,created_at, specialties) ";
 		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->address1\",\"$this->phone1\",7,$this->created_at, \"$this->specialties\")";
@@ -89,6 +96,12 @@ class PersonData {
 
 	public static function getClients(){
 		$sql = "select * from ".self::$tablename." where kind=4 order by name,lastname";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new PersonData());
+	}
+
+	function getClientsToSell(){
+		$sql = "select * from ".self::$tablename." where kind=4 or kind=10 order by name,lastname";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new PersonData());
 	}

@@ -31,6 +31,7 @@
 <script type="text/javascript" src="plugins/jsqrcode/llqrcode.js"></script>
 <script type="text/javascript" src="plugins/jsqrcode/webqr.js"></script>
           <?php endif;?>
+<script type="text/javascript" src="res/js/mousetrap.min.js"></script>
 
   </head>
 

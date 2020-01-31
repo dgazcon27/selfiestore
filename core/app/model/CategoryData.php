@@ -16,7 +16,7 @@ class CategoryData {
 	public function add(){
 		$sql = "insert into category (name,created_at) ";
 		$sql .= "value (\"$this->name\",$this->created_at)";
-		Executor::doit($sql);
+		return Executor::doit($sql);
 	}
 
 	public static function delById($id){
@@ -41,7 +41,11 @@ class CategoryData {
 		return Model::one($query[0],new CategoryData());
 	}
 
-
+	public static function getCategoryByName($name){
+		$sql = "select * from ".self::$tablename." where name=$name";
+		$query = Executor::doit($sql);
+		return Model::one($query[0],new CategoryData());
+	}
 
 	public static function getAll(){
 		$sql = "select * from ".self::$tablename;

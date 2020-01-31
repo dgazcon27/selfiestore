@@ -17,7 +17,7 @@ class SellData {
 
 	public function add(){
 		$sql = "insert into ".self::$tablename." (invoice_code,invoice_file,comment,ref_id,person_id,stock_to_id,iva,f_id,p_id,d_id,total,discount,cash,user_id,created_at,refe,efe,tra,zel,pun,receive_by, is_official) ";
-		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,$this->refe,$this->efe,$this->tra,$this->zel,$this->pun,$this->receive_by,0)";
+		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,\"$this->refe\",$this->efe,$this->tra,$this->zel,$this->pun,$this->receive_by,0)";
 		return Executor::doit($sql);
 	}
 	public function add_traspase(){

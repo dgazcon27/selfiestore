@@ -138,7 +138,7 @@ elseif($sell->f_id == 5)
 				<span> DISPONIBLE PARA RETIRO</span>
 			</a>
 		<?php endif ?>
-		<?php if (isset($_SESSION['is_admin'])): ?>
+		<?php if (isset($_SESSION['is_admin']) && $sell->user_id): ?>
 			<a onclick="report(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
 				<i class="fa fa-file"></i>
 			</a>
@@ -261,7 +261,6 @@ doc.save('sells-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 			let person = response.person;
 			let products = response.products;
 			let seller = response.seller ? response.seller : {'name':'', 'lastname':''};
-			console.log(response);
 			doc.setFontSize(12);
     		doc.text("_____________________________________________________________________________", 40, 90);
     		doc.text("NOMBRE DEL ENCARGADO: "+person.name+" "+person.lastname+"             TELÉFONO ENCARGADO: "+person.phone2+" ", 40, 105);

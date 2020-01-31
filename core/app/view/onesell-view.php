@@ -11,6 +11,7 @@ $sell = SellData::getById($_GET["id"]);
 	 <li><a onclick="thePDF()" id="makepdf" class="fa fa-download"><i class=""></i> &nbsp;&nbsp;&nbsp;GARANTIA</a>
   </ul>
 </div>
+<div id="loading" class="hidden">LOADING...</div>
 <h1>RESUMEN DE VENTA #<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?></h1>
 <?php if(isset($_GET["id"]) && $_GET["id"]!=""):?>
 <?php
@@ -49,15 +50,22 @@ if(isset($_COOKIE["selled"]) && isset($_SESSION['is_admin'])){
 <div class="<?php echo $class;?>">
 <div class="box box-primary">
 <table class="table table-bordered">
-<?php if($sell->user_id!=""):
-$client = UserData::getById($sell->user_id);
+<?php if(isset($sell->user_id)) {
+  $client = UserData::getById($sell->user_id);
+} else if(isset($sell->person_id)){
+  $client = PersonData::getById($sell->person_id);
+} else {
+  $client = null;
+}
 ?>
-<tr>
-  <td style="width:150px;">CLIENTE</td>
-  <td><?php echo strtoupper($client->name." ".$client->lastname);?></td>
-</tr>
 
-<?php endif; ?>
+<?php if (isset($client)): ?>
+  <tr>
+    <td style="width:150px;">CLIENTE</td>
+    <td><?php echo strtoupper($client->name." ".$client->lastname);?></td>
+  </tr>
+<?php endif ?>
+
 <?php if($sell->receive_by!=""):
 $seller = UserData::getById($sell->receive_by);
 ?>
@@ -368,164 +376,210 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 	
 	
 <script type="text/javascript">
-        function thePDF() {
-
-var columns = [
 
 
-];
 
 
-var columns2 = [
 
-	
-];
 
-var rows = [
-  <?php foreach($operations as $operation):
-  $product  = $operation->getProduct();
+function thePDF() {
+
+  var columns = [
+
+
+  ];
+
+
+  var columns2 = [
+
+  	
+  ];
+
+  var rows = [
+    <?php foreach($operations as $operation):
+    $product  = $operation->getProduct();
+    ?>
+
+      {
+        "code": "<?php echo $product->id; ?>",
+        "q": "<?php echo $operation->q; ?>",
+        "product": "<?php echo $product->name; ?>",
+        "pu": "$ <?php echo number_format($operation->price_out,2,".",","); ?>",
+        "total": "$ <?php echo number_format($operation->q*$operation->price_out,2,".",","); ?>",
+        },
+   <?php endforeach; ?>
+  ];
+
+  var rows2 = [
+  <?php if($sell->person_id!=""):
+  $person = $sell->getPerson();
   ?>
 
-    {
-      "code": "<?php echo $product->id; ?>",
-      "q": "<?php echo $operation->q; ?>",
-      "product": "<?php echo $product->name; ?>",
-      "pu": "$ <?php echo number_format($operation->price_out,2,".",","); ?>",
-      "total": "$ <?php echo number_format($operation->q*$operation->price_out,2,".",","); ?>",
-      },
- <?php endforeach; ?>
-];
-
-var rows2 = [
-<?php if($sell->person_id!=""):
-$person = $sell->getPerson();
-?>
-
-    {
-      "clave": "Cliente",
-      "valor": "<?php echo $person->name." ".$person->lastname." ".$person->no." ".$person->phone1." ".$person->address1; ?>",
-      },
-      <?php endif; ?>
+      {
+        "clave": "Cliente",
+        "valor": "<?php echo $person->name." ".$person->lastname." ".$person->no." ".$person->phone1." ".$person->address1; ?>",
+        },
+        <?php endif; ?>
 
 
-];
+  ];
 			
 
      
 
 
-var rows3 = [
+  var rows3 = [
 
-   ,
-];
+     ,
+  ];
 
 
 // Only pt supported (not mm or in)
-var doc = new jsPDF('p', 'pt');
-			img = new Image();
-img.src = "garantia.png";
-doc.addImage(img, 'PNG', 0, 0, 600, 850, 'monkey'); // Cache the image using the alias 'monkey'
-        doc.setFontSize(26);
-        doc.text("#<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?>", 249, 476);
-        doc.setFontSize(9);
-			
-		<?php	
-		$fecha_actual = $sell->created_at;
-		?>		
-					
-        doc.text("DESDE: <?php echo date("d-m-Y",strtotime($fecha_actual)); ?>", 156, 170);
-				
-		doc.text("HASTA: <?php echo date("d-m-Y",strtotime($fecha_actual."+ 3 month")); ?>", 364, 170);
-		doc.setFontSize(12);	
-		doc.text("<?php
-					 
-					 if($sell->person_id!="")
-					 $client = $sell->getPerson();
-					 
-					 echo $person->name." ".$person->lastname; ?>", 50, 545);
-				 
-		doc.text("<?php
-					 
-					 if($sell->person_id!="")
-					 $client = $sell->getPerson();
-					 
-					 echo $person->no; ?>", 250, 545);
-				 
-		doc.text("<?php
-					 
-					 if($sell->person_id!="")
-					 $client = $sell->getPerson();
-					 
-					 echo $person->phone1; ?>", 450, 545);
-				 
-		doc.text("<?php
-					 
-					 if($sell->person_id!="")
-					 $client = $sell->getPerson();
-					 
-					 echo $person->address1; ?>", 50, 595);		 
-				 
-					 
-					 
-					 
-//        doc.text("Operador:", 40, 150);
-//        doc.text("Header", 40, 30);
-  //      doc.text("Header", 40, 30);
+  var doc = new jsPDF('p', 'pt');
+  img = new Image();
+  $("#loading").removeClass('hidden');
+  img.onLoad = function (argument) {
+    console.log(img)
+    $("#loading").addClass('hidden');
+  }
 
-doc.autoTable(columns2, rows2, {
-    theme: 'grid',
-    overflow:'linebreak',
-    styles: {
-        fillColor: [100, 100, 100]
-    },
-    columnStyles: {
-        id: {fillColor: 255}
-    },
-    margin: {top: 100},
-    afterPageContent: function(data) {
-//        doc.text("Header", 40, 30);
+  img.src = "garantia.png";
+  doc.addImage(img, 'PNG', 0, 0, 600, 850)
+    
+  doc.setFontSize(26);
+  doc.text("#<?php $acumulador = 100000; $code = $acumulador+$sell->ref_id; echo $code; ?>", 249, 476);
+  doc.setFontSize(9);
+    
+  <?php 
+  $fecha_actual = $sell->created_at;
+  ?>    
+        
+  doc.text("DESDE: <?php echo date("d-m-Y",strtotime($fecha_actual)); ?>", 156, 170);
+      
+  doc.text("HASTA: <?php echo date("d-m-Y",strtotime($fecha_actual."+ 3 month")); ?>", 364, 170);
+  doc.setFontSize(12);
+  let name = "<?php
+              if(isset($sell->person_id)) {
+                $client = $sell->getPerson();
+                echo $person->name." ".$person->lastname; 
+              } else {
+                echo "";
+              }
+            ?>"
+  doc.text(name, 50, 545);
+  
+  let no = "<?php
+           if($sell->person_id!="") {
+             $client = $sell->getPerson();
+             echo $person->no; 
+           } else 
+            echo "";
+         ?>";
+  doc.text(no, 250, 545);
+  
+  let phone = "<?php
+           if($sell->person_id!="") {
+             $client = $sell->getPerson();
+             echo $person->phone1; 
+           } else {
+            echo "";
+           }
+         ?>";  
+  doc.text(phone, 450, 545);
+  
+  let address = "<?php
+           if($sell->person_id!="") {
+             $client = $sell->getPerson();
+             echo $person->address1; 
+           } else {
+            echo "";
+           }
+         ?>"; 
+  doc.text(address, 50, 595);
+  doc.setFontSize(8);
+  let imeis = `<?php
+           if(isset($sell->comment)) {
+             echo $sell->comment; 
+           } else {
+            echo "";
+           }
+         ?>`;
+  imeiText = null;
+  let space = 119;
+  let jump = 21;
+  let vertical = 688;
+  let horizontalInit = 38;
+  let horizontal = horizontalInit;
+  let limit = 4;
+  if (imeis.trim().length > 0) {
+    imeiText = imeis.split('\n');
+    for (var i = 0; i < imeiText.length; i++) {
+      doc.text(imeiText[i], horizontal, vertical);
+      horizontal = parseInt(horizontal)+space;
+      if (i%limit == 0 && i != 0) {
+        vertical = parseInt(vertical)+jump;
+        horizontal = horizontalInit;
+      }
     }
-});
 
+  }
+       
+  doc.autoTable(columns2, rows2, {
+      theme: 'grid',
+      overflow:'linebreak',
+      styles: {
+          fillColor: [100, 100, 100]
+      },
+      columnStyles: {
+          id: {fillColor: 255}
+      },
+      margin: {top: 100},
+      afterPageContent: function(data) {
+  //        doc.text("Header", 40, 30);
+      }
+  });
+  doc.autoTable(columns, rows, {
+      theme: 'grid',
+      overflow:'linebreak',
+      styles: {
+          fillColor: [100, 100, 100]
+      },
+      columnStyles: {
+          id: {fillColor: 255}
+      },
+      margin: {top: doc.autoTableEndPosY()+15},
+      afterPageContent: function(data) {
+  //        doc.text("Header", 40, 30);
+      }
+  });
 
-doc.autoTable(columns, rows, {
-    theme: 'grid',
-    overflow:'linebreak',
-    styles: {
-        fillColor: [100, 100, 100]
-    },
-    columnStyles: {
-        id: {fillColor: 255}
-    },
-    margin: {top: doc.autoTableEndPosY()+15},
-    afterPageContent: function(data) {
-//        doc.text("Header", 40, 30);
-    }
-});
-
-doc.autoTable(columns2, rows3, {
-    theme: 'grid',
-    overflow:'linebreak',
-    styles: {
-        fillColor: [100, 100, 100]
-    },
-    columnStyles: {
-        id: {fillColor: 255}
-    },
-    margin: {top: doc.autoTableEndPosY()+15},
-    afterPageContent: function(data) {
-//        doc.text("Header", 40, 30);
-    }
-});
+  doc.autoTable(columns2, rows3, {
+      theme: 'grid',
+      overflow:'linebreak',
+      styles: {
+          fillColor: [100, 100, 100]
+      },
+      columnStyles: {
+          id: {fillColor: 255}
+      },
+      margin: {top: doc.autoTableEndPosY()+15},
+      afterPageContent: function(data) {
+  //        doc.text("Header", 40, 30);
+      }
+  });
 //doc.setFontsize
 
-doc.setFontSize(20);
-doc.setFontSize(12);
+  doc.setFontSize(20);
+  doc.setFontSize(12);
 
-doc.save('sell-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
-//doc.output("datauri");
+  doc.save('sell-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+ 
 
-        }
+  
+
+
+
+}
     </script>
 
 <script>

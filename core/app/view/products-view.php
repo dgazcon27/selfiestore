@@ -52,7 +52,7 @@ if(count($products)>0){
 	</thead>
 	<?php foreach($products as $product):?>
 	<tr>
-		<td><?php echo $product->code; ?></td>
+		<td><?php echo $product->barcode; ?></td>
 		<td>
 			<?php if($product->image!=""):?>
 				<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
@@ -166,5 +166,13 @@ doc.save('products-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 doc.save('products-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 <?php endif; ?>
 }
+</script>
+
+<script type="text/javascript">
+  Mousetrap.bind('a+p', function(e) {
+    // let url = "/sistemaselfie/index.php?view=newproduct";
+    let url = "/index.php?view=newproduct";
+    window.location = url;
+  });
 </script>
 

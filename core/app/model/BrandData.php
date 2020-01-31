@@ -16,7 +16,7 @@ class BrandData {
 	public function add(){
 		$sql = "insert into brand (name,created_at) ";
 		$sql .= "value (\"$this->name\",$this->created_at)";
-		Executor::doit($sql);
+		return Executor::doit($sql);
 	}
 
 	public static function delById($id){
@@ -41,7 +41,15 @@ class BrandData {
 		return Model::one($query[0],new BrandData());
 	}
 
+	public function getLastInsert(){
+		
+	}
 
+	public static function getBrandByName($name){
+		$sql = "select * from ".self::$tablename." where name=$name";
+		$query = Executor::doit($sql);
+		return Model::one($query[0],new BrandData());
+	}
 
 	public static function getAll(){
 		$sql = "select * from ".self::$tablename;

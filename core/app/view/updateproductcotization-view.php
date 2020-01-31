@@ -59,7 +59,7 @@ if(!isset($_SESSION["cotization"])){
 			$q1 = $cart[$index]["q"];
 			$q2 = $_POST["q"];
 			$cart[$index]["q"]=$q1+$q2;
-			array_push($_SESSION["cotization"], array("product_id"=>$_POST["product_id"],"q"=>$_POST["q"], "stock_id"=>$_POST["stock_id"]));
+			$_SESSION["cotization"] = $cart;
 		}
 
 		if($found==false){
@@ -73,6 +73,5 @@ if(!isset($_SESSION["cotization"])){
 	}
 }
  print "<script>window.location='index.php?view=updatecotization&id=".$_GET['id']."&set=update';</script>";
-// unset($_SESSION["cotization"]);
 
 ?>

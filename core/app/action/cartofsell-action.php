@@ -133,14 +133,7 @@ $product = ProductData::getById($p["product_id"]);
 <div class="col-md-6">
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUEVO CLIENTE</label>
     <div class="col-lg-12">
-    <?php 
-$clients = PData::getAll();
-    ?>
-
-
       <a href="index.php?view=newclient2" class="form-control"><i class='fa fa-smile-o'></i>&nbsp;&nbsp;&nbsp;&nbsp;AGREGAR</a>
-
-
     </div>
   </div>
 
@@ -148,7 +141,7 @@ $clients = PData::getAll();
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECCIONA UN CLIENTE</label>
     <div class="col-lg-12">
     <?php 
-$clients = PersonData::getClients();
+$clients = PersonData::getClientsToSell();
     ?>
     <select name="client_id" id="client_id" class="form-control">
     <option value=""> NINGUNO </option>
@@ -369,6 +362,8 @@ $clients = FData::getAll();
 		pun = parseInt($("#pun").val());
 		var conditionOne = false;
 		var numeroNormal = efe+tra+zel+pun;
+		var regexE = new RegExp(/^[A-Za-z0-9]+$/g);
+		e.preventDefault();
 		//FIN VARIABLES PARA DUAL
 		// procedemos
 		cli=Array();
@@ -441,12 +436,17 @@ $clients = FData::getAll();
 				}
 				else
 				{
-					if(p!=1 && (referenceText==0 || referenceText==""))
-					{
+					console.log(referenceText.toString().trim().length+" zzzzz")
+					if(p!=1 && (referenceText==0 || referenceText==""))	{
 						alert("LA REFERENCIA ES OBLIGATORIA");
 						e.preventDefault();
-					}
-					else if(conditionOne == false){
+					} else if(referenceText.toString().trim().length < 5) {
+						alert("LA REFERENCIA DEBE POSEER AL MENOS 6 CARACTERES");
+						e.preventDefault();
+					} else if (!regexE.test(referenceText.toString())) {
+						alert("LA REFERENCIA NO DEBE POSEER CARACTERES ESPECIALES");
+						e.preventDefault();
+					} else if(conditionOne == false){
 						if(discount==""){ discount=0;}
 						go = confirm("CAMBIO: $"+(money-(<?php echo $total;?>-discount ) ) );
 						if(go){
@@ -480,12 +480,18 @@ $clients = FData::getAll();
 					}
 					else
 					{
-						if(referenceText==0 || referenceText=="")
-						{
+					console.log(referenceText.toString().trim().length+" xxxxx")
+
+						if((referenceText==0 || referenceText=="")){
 							alert("LA REFERENCIA ES OBLIGATORIA");
 							e.preventDefault();
-						}
-						else if(conditionOne == false){
+						} else if(referenceText.toString().trim().length < 6){
+							alert("LA REFERENCIA DEBE POSEER AL MENOS 6 CARACTERES");
+							e.preventDefault();
+						} else if (!regexE.test(referenceText.toString())) {
+							alert("LA REFERENCIA NO DEBE POSEER CARACTERES ESPECIALES");
+							e.preventDefault();
+						} else if(conditionOne == false){
 							if(discount==""){ discount=0;}
 							go = confirm("CAMBIO: $"+( parseInt(money) - parseInt(<?php echo $total;?>-discount ) ) );
 							if(go){
