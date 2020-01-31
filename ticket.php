@@ -251,7 +251,7 @@ $pdf->Cell(5,5,'.............................................');
 $pdf->setY(67);
 $pdf->setX(9);
 $pdf->SetFont('Arial','B',7); 
-$pdf->Cell(5,5,"DATOS DEL CLIENTE ".strtoupper($phone));
+$pdf->Cell(5,5,"DATOS DEL CLIENTE ");
 $pdf->setY(68);
 $pdf->setX(0.10);
 $pdf->SetFont('Arial','',10); 
