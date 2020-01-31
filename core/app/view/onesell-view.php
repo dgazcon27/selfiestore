@@ -43,7 +43,7 @@ if(isset($_COOKIE["selled"]) && isset($_SESSION['is_admin'])){
 <div class="row">
   <?php
     $class = "col-md-8";
-    if ($sell->d_id == 3 || $sell->d_id == 8 || $sell->d_id == 1) {
+    if (($sell->d_id == 3 || $sell->d_id == 8 || $sell->d_id == 1) && $sell->p_id == 1) {
       $class = "col-md-12";
      } 
   ?>
@@ -154,7 +154,7 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 
 
 </div>
-<?php if ((int)$sell->d_id != 3 && (int)$sell->d_id != 8 && $sell->d_id != 1): ?>
+<?php if (((int)$sell->d_id != 3 || (int)$sell->d_id != 8 || $sell->d_id != 1) && $sell->p_id != 1): ?>
   <div class="col-md-4">
     <form method="post" class="form-horizontal" action="./?action=updatesell" id="processsell" enctype="multipart/form-data">
     <div class="row">
@@ -510,16 +510,19 @@ function thePDF() {
   let vertical = 688;
   let horizontalInit = 38;
   let horizontal = horizontalInit;
-  let limit = 4;
+  let limit = 5;
   if (imeis.trim().length > 0) {
     imeiText = imeis.split('\n');
-    for (var i = 0; i < imeiText.length; i++) {
-      doc.text(imeiText[i], horizontal, vertical);
+    let i = 1;
+    while (i < imeiText.length && i < 16) {
+      doc.text(imeiText[i-1], horizontal, vertical);
       horizontal = parseInt(horizontal)+space;
-      if (i%limit == 0 && i != 0) {
+      if (i%limit == 0 && i != 1) {
+        console.log(i);
         vertical = parseInt(vertical)+jump;
         horizontal = horizontalInit;
       }
+      i++;
     }
 
   }

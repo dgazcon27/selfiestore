@@ -1,7 +1,7 @@
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
-		<h1>Lista de Usuarios</h1>
+		<h1>Lista de Clientes</h1>
 <br><br>
 		<?php
 

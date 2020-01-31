@@ -66,7 +66,7 @@ $product = ProductData::getById($p["product_id"]);
 
 <script>
   $("#clearcart-<?php echo $product->id; ?>").click(function(){
-    $.get("index.php?view=clearcart","product_id=<?php echo $product->id; ?>",function(data){
+    $.get("index.php?view=clearcartproduct","product_id=<?php echo $product->id; ?>",function(data){
         $.get("./?action=cartofsell",null,function(data2){
           $("#cartofsell").html(data2);
         });
@@ -163,7 +163,9 @@ $clients = PData::getAll();
     ?>
     <select name="p_id" id="p_id" class="form-control">
     <?php foreach($clients as $client):?>
-      <option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php if ($client->id != 3): ?>
+      		<option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php endif ?>
     <?php endforeach;?>
       </select>
     </div>
@@ -172,14 +174,9 @@ $clients = PData::getAll();
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENTREGA</label>
 
     <div class="col-lg-12">
-    <?php 
-$clients = DData::getAll();
-    ?>
     <select name="d_id" class="form-control">
-    <?php foreach($clients as $client):?>
-      <option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
-    <?php endforeach;?>
-      </select>
+      <option value="1">ENTREGADO</option>
+    </select>
     </div>
   </div>
 
@@ -196,15 +193,18 @@ $clients = FData::getAll();
     ?>
     <select name="f_id" id="f_id" class="form-control">
     <?php foreach(FData::getAll() as $client):?>
-      <option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php if ($client->id != 4): ?>
+      		<option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php endif ?>
     <?php endforeach;?>
+  		<option value="4">DUAL</option>
       </select>
     </div>
   </div>
 
 </div>
 		
-<div class="row">
+<div class="row" id="form-ref">
 
 	<div class="col-md-12">
 		<label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMERO DE REFERENCIA</label>
@@ -217,7 +217,7 @@ $clients = FData::getAll();
 		
 		
 	
-<div class="row">
+<div class="row" id="pay_dual">
 
 <div class="col-md-6">
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL EFECTIVO</label>
@@ -363,7 +363,6 @@ $clients = FData::getAll();
 		var conditionOne = false;
 		var numeroNormal = efe+tra+zel+pun;
 		var regexE = new RegExp(/^[A-Za-z0-9]+$/g);
-		e.preventDefault();
 		//FIN VARIABLES PARA DUAL
 		// procedemos
 		cli=Array();
@@ -427,6 +426,7 @@ $clients = FData::getAll();
 		{
 			if(p!=4)
 			{
+				console.log(money, parseInt(<?php echo $total;?>-discount))
 				if(money < parseInt(<?php echo $total;?>-discount))
 				{
 					if(paymentType!=4 && paymentType!=2){
@@ -440,10 +440,7 @@ $clients = FData::getAll();
 					if(p!=1 && (referenceText==0 || referenceText==""))	{
 						alert("LA REFERENCIA ES OBLIGATORIA");
 						e.preventDefault();
-					} else if(referenceText.toString().trim().length < 5) {
-						alert("LA REFERENCIA DEBE POSEER AL MENOS 6 CARACTERES");
-						e.preventDefault();
-					} else if (!regexE.test(referenceText.toString())) {
+					} else if (p!=1 && !regexE.test(referenceText.toString())) {
 						alert("LA REFERENCIA NO DEBE POSEER CARACTERES ESPECIALES");
 						e.preventDefault();
 					} else if(conditionOne == false){
@@ -467,21 +464,15 @@ $clients = FData::getAll();
 				//alert("DESCUENTO = "+parseInt(discount));
 				//alert("numeroNormal = "+numeroNormal);
 				//alert("money = "+money);
-				e.preventDefault();
-				if((money<parseInt((<?php echo $total;?>-discount)) || (numeroNormal < ((parseInt(<?php echo $total;?>))-parseInt(discount))) && (paymentType!=4 && paymentType!=2)))
-				{
+				if((money<parseInt((<?php echo $total;?>-discount)) || (numeroNormal < ((parseInt(<?php echo $total;?>))-parseInt(discount))) && (paymentType!=4 && paymentType!=2))){
 					alert("PAGO INSUFICIENTE!");
 					e.preventDefault();
 				}
-				else
-				{
-					if(numeroNormal != parseInt(money)){
+				else {
+					if(numeroNormal <= parseInt(money)){
 						alert("PAGO INSUFICIENTE!");
-					}
-					else
-					{
-					console.log(referenceText.toString().trim().length+" xxxxx")
-
+						e.preventDefault();
+					} else {
 						if((referenceText==0 || referenceText=="")){
 							alert("LA REFERENCIA ES OBLIGATORIA");
 							e.preventDefault();
@@ -493,7 +484,8 @@ $clients = FData::getAll();
 							e.preventDefault();
 						} else if(conditionOne == false){
 							if(discount==""){ discount=0;}
-							go = confirm("CAMBIO: $"+( parseInt(money) - parseInt(<?php echo $total;?>-discount ) ) );
+							console.log("sadsa")
+							go = confirm("CAMBIO: $"+( parseInt(numeroNormal) - parseInt(<?php echo $total;?>-discount ) ) );
 							if(go){
 								e.preventDefault();
 								$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
@@ -516,6 +508,25 @@ $clients = FData::getAll();
 			e.preventDefault();
 	    }
 	});
+
+	$("#pay_dual").addClass("hidden")
+	$("#form-ref").addClass("hidden")
+	$("#f_id").change(function (a) {
+		let pay = $("#f_id").val();
+		if (pay == 4) {
+			$("#pay_dual").removeClass("hidden")
+			$("#form-ref").removeClass("hidden")
+		}
+		if (pay == 1) {
+			$("#pay_dual").addClass("hidden")
+			$("#form-ref").addClass("hidden")
+		}
+		if (pay == 2 || pay == 3 || pay == 5) {
+			$("#form-ref").removeClass("hidden")
+			$("#pay_dual").addClass("hidden")
+		}
+	})
+
 </script>
 </div>
 </div>

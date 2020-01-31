@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set("America/Mexico_City");
+date_default_timezone_set("America/Caracas");
 if(isset($_SESSION["cart"])){
 	$cart = $_SESSION["cart"];
 	if(count($cart)>0){
@@ -68,22 +68,30 @@ $_SESSION["errors"] = $errors;
 			$sell->zel = $_POST["zel"];
 			$sell->pun = $_POST["pun"];
 
+			if ($sell->f_id == 4 && $sell->efe > 0) {
+				$total_dual = $_POST["efe"]+$_POST["tra"]+$_POST["zel"]+$_POST["pun"];
+				$total_count = $sell->total-$sell->discount;
+				if ($total_dual > $total_count) {
+					$count = $total_dual-$total_count;
+					$sell->efe = $total_dual-$count;
+				}
+			}
 			$s = $sell->add();
 
 			 /// si es credito....
-			 if($_POST["p_id"]==4){
-			 	$payment = new PaymentData();
-			 	$payment->sell_id = $s[1];
-			 	$payment->val = ($_POST["total"]-$_POST["discount"]);
-			 	$payment->person_id = $_POST["client_id"];
-			 	$payment->add();
-			 	if($_POST["money"]>0){
-					$payment2 = new PaymentData();
-				 	$payment2->val = -1*$_POST["money"];
-				 	$payment2->person_id = $_POST["client_id"];
-				 	$payment2->add_payment();
-			 	}
-			 }
+			if($_POST["p_id"]==4){
+				$payment = new PaymentData();
+				$payment->sell_id = $s[1];
+				$payment->val = ($_POST["total"]-$_POST["discount"]);
+				$payment->person_id = $_POST["client_id"];
+				$payment->add();
+				if($_POST["money"]>0){
+				$payment2 = new PaymentData();
+			 	$payment2->val = -1*$_POST["money"];
+			 	$payment2->person_id = $_POST["client_id"];
+			 	$payment2->add_payment();
+				}
+			}
 
 		foreach($cart as  $c){
 			$operation_type = "salida";
