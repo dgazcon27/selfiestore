@@ -107,7 +107,7 @@ class PersonData {
 	}
 
 	public static function getClientsWithCredit(){
-		$sql = "select * from ".self::$tablename." where kind=1 and has_credit=1 order by name,lastname";
+		$sql = "select * from ".self::$tablename." where kind=4 and has_credit=1 order by name,lastname";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new PersonData());
 	}

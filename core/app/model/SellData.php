@@ -16,8 +16,8 @@ class SellData {
 	public function getStockTo(){ return StockData::getById($this->stock_to_id);}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (invoice_code,invoice_file,comment,ref_id,person_id,stock_to_id,iva,f_id,p_id,d_id,total,discount,cash,user_id,created_at,refe,efe,tra,zel,pun,receive_by, is_official) ";
-		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,\"$this->refe\",$this->efe,$this->tra,$this->zel,$this->pun,$this->receive_by,0)";
+		$sql = "insert into ".self::$tablename." (invoice_code,invoice_file,comment,ref_id,person_id,stock_to_id,iva,f_id,p_id,d_id,total,discount,cash,user_id,created_at,refe,efe,tra,zel,pun,receive_by, is_official,change_sell,type_change)";
+		$sql .= "value (\"$this->invoice_code\",\"$this->invoice_file\",\"$this->comment\",$this->ref_id,$this->person_id,$this->stock_to_id,$this->iva,$this->f_id,$this->p_id,$this->d_id,$this->total,$this->discount,$this->cash,$this->user_id,$this->created_at,\"$this->refe\",$this->efe,$this->tra,$this->zel,$this->pun,$this->receive_by,0,$this->change_sell, $this->type_change)";
 		return Executor::doit($sql);
 	}
 	public function add_traspase(){
@@ -90,7 +90,7 @@ public function add_with_client(){
 	}
 
 	public function update(){
-		$sql = "update ".self::$tablename." set refe=$this->refe,efe=$this->efe,tra=$this->tra,zel=$this->zel,pun=$this->pun,total=$this->total,f_id=$this->f_id,person_id=$this->person_id,invoice_code=\"$this->invoice_code\",invoice_file=\"$this->invoice_file\",comment=\"$this->comment\",discount=\"$this->discount\" where id=$this->id";
+		$sql = "update ".self::$tablename." set refe=$this->refe,efe=$this->efe,tra=$this->tra,zel=$this->zel,pun=$this->pun,total=$this->total,f_id=$this->f_id,person_id=$this->person_id,invoice_code=\"$this->invoice_code\",invoice_file=\"$this->invoice_file\",comment=\"$this->comment\",discount=\"$this->discount\", created_at=$this->created_at where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -411,34 +411,35 @@ public function add_with_client(){
 	}
 
 	public static function getAllByDateOp($start,$end,$op){
-	  $sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op and is_draft=0 and p_id=1 and d_id=1 order by created_at desc";
+	  $sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op and is_draft=0 and d_id=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public static function getAllByDateOpByUserId($user,$start,$end,$op){
-	  $sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op and is_draft=0 and p_id=1 and d_id=1 and user_id=$user order by created_at desc";
+	  $sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op and user_id=$user order by created_at desc";
 		$query = Executor::doit($sql);
+		echo $sql;
 		return Model::many($query[0],new SellData());
 	}
 
 
 		public static function getGroupByDateOp($start,$end,$op){
-  $sql = "select id,sum(total) as tot,discount,sum(total-discount) as t,count(*) as c from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op and p_id!=4";
+  $sql = "select id,sum(total) as tot,discount,sum(total-discount) as t,count(*) as c from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 
 	public static function getAllByDateBCOp($clientid,$start,$end,$op){
- 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op and is_draft=0 and p_id=1 and d_id=1 order by created_at desc";
+ 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op and is_draft=0 and d_id=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 
 	}
 
 	public static function getAllByDateBCOpByUserId($user,$clientid,$start,$end,$op){
- 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op and is_draft=0 and p_id=1 and d_id=1 and user_id=$user order by created_at desc";
+ 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op and is_draft=0 and and d_id=1 and user_id=$user order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 

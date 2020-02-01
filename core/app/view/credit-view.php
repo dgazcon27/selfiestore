@@ -25,7 +25,6 @@
       <?php
       foreach($users as $user)
       {
-        unset($sells);
         $sells=0;
         ?>
         <tr style="border-bottom: none !important;background-color:#3c8dbc;color: #fff;">

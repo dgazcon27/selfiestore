@@ -37,10 +37,6 @@ $_SESSION["errors"] = $errors;
 <?php
 }
 
-
-
-
-
 //////////////////////////////////
 		if($process==true){
 			$iva_val = ConfigurationData::getByPreffix("imp-val")->val;
@@ -62,23 +58,26 @@ $_SESSION["errors"] = $errors;
 			$sell->stock_to_id = StockData::getPrincipal()->id;
 			$sell->person_id=$_POST["client_id"]!=""?$_POST["client_id"]:"NULL";
 			$sell->receive_by=$_POST["receive_by"];
-			$sell->refe = $_POST["refe"];
+			$sell->refe = $_POST["refe"];	
 			$sell->efe = $_POST["efe"];
 			$sell->tra = $_POST["tra"];
 			$sell->zel = $_POST["zel"];
 			$sell->pun = $_POST["pun"];
+			$sell->change_sell = $_POST["change_sell"];
+			$sell->type_change = $_POST["type_change"];
 
-			if ($sell->f_id == 4 && $sell->efe > 0) {
-				$total_dual = $_POST["efe"]+$_POST["tra"]+$_POST["zel"]+$_POST["pun"];
-				$total_count = $sell->total-$sell->discount;
-				if ($total_dual > $total_count) {
-					$count = $total_dual-$total_count;
-					$sell->efe = $total_dual-$count;
-				}
-			}
+			// if ($sell->f_id == 4 && $sell->efe > 0) {
+			// 	$total_dual = $_POST["efe"]+$_POST["tra"]+$_POST["zel"]+$_POST["pun"];
+			// 	$total_count = $sell->total-$sell->discount;
+			// 	if ($total_dual > $total_count) {
+			// 		$count = $total_dual-$total_count;
+			// 		$sell->efe = $total_dual-$count;
+			// 	}
+			// }
 			$s = $sell->add();
 
-			 /// si es credito....
+
+
 			if($_POST["p_id"]==4){
 				$payment = new PaymentData();
 				$payment->sell_id = $s[1];
@@ -87,6 +86,7 @@ $_SESSION["errors"] = $errors;
 				$payment->add();
 				if($_POST["money"]>0){
 				$payment2 = new PaymentData();
+				$payment2->sell_id = $s[1];
 			 	$payment2->val = -1*$_POST["money"];
 			 	$payment2->person_id = $_POST["client_id"];
 			 	$payment2->add_payment();
@@ -172,7 +172,6 @@ if($_POST["client_id"]!=""){
 			    $m->send();
 			}
 //////////////////
-
 
 
 

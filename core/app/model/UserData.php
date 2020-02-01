@@ -52,6 +52,12 @@ class UserData {
 		return Model::many($query[0],new UserData());
 	}
 
+	public static function getSellers(){
+		$sql = "select * from ".self::$tablename." where kind=5 or kind=1 or kind=3 or kind=8";		
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new UserData());
+	}
+
 	public static function getClients(){
 		$sql = "select * from ".self::$tablename." where kind=4";		
 		$query = Executor::doit($sql);

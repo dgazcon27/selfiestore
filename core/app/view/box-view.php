@@ -32,6 +32,12 @@ if(count($products)>0){
 	$total_dual = 0;
 	$total_punto = 0;
 	$total_descuento = 0;
+	$total_vuelto = 0;
+	$total_vuelto_efectivo = 0;
+	$total_vuelto_trans = 0;
+	$total_vuelto_zelle = 0;
+	$total_vuelto_dual = 0;
+	$total_vuelto_punto = 0;
 	?>
 	<br>
 	<div class="box box-primary">
@@ -94,7 +100,30 @@ if(count($products)>0){
 			if($sell->refe == 0 )
 				$variablerefe = "N/A";
 			else
-				$variablerefe = $sell->refe;	
+				$variablerefe = $sell->refe;
+
+			if ($sell->type_change == 1) {
+				$total_vuelto += $sell->change_sell;
+				$total_vuelto_efectivo += $sell->change_sell;
+			}
+			if ($sell->type_change == 2) {
+				$total_vuelto += $sell->change_sell;
+				$total_vuelto_trans += $sell->change_sell;		
+			}
+			if ($sell->type_change == 3) {
+				$total_vuelto += $sell->change_sell;
+				$total_vuelto_zelle += $sell->change_sell;
+			}
+			if ($sell->type_change == 5) {
+				$total_vuelto += $sell->change_sell;
+				$total_vuelto_punto += $sell->change_sell;
+			}
+			if ($sell->type_change == 4) {
+				$total_vuelto_efectivo += $sell->change_sell;
+				$total_vuelto_trans += $sell->change_sell;
+				$total_vuelto_zelle += $sell->change_sell;
+				$total_vuelto_punto += $sell->change_sell;
+			}
 			?>
 			<td style="text-align: center;"><?php echo strtoupper($variable); ?></td>
 			<td style="text-align: center;"><?php echo $variablerefe; ?></td>
@@ -200,7 +229,9 @@ if(count($products)>0){
 <h1>TOTAL: <?php echo "$ ".number_format($total_total,2,".",","); ?></h1>
 
 <h4>TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL PUNTO DE VENTA: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL DESCUENTO: $ ".number_format($total_descuento,2,".",","); ?></h4>
-		
+<h1>TOTAL VUELTO: <?php echo "$ ".number_format($total_vuelto,2,".",","); ?></h1>
+<h4>TOTAL EFECTIVO: <?php echo "$ ".number_format($total_vuelto_efectivo,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp;TOTAL PUNTO DE VENTA: $ ".number_format($total_vuelto_punto,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp;TOTAL TRANSFERENCIA: $ ".number_format($total_vuelto_trans,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbspTOTAL ZELLE: $ ".number_format($total_vuelto_zelle,2,".",",")."&nbsp;&nbsp;";
+?></h4>
 	<?php
 }else {
 

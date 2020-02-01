@@ -243,6 +243,27 @@ $clients = FData::getAll();
       <input type="text" name="zel" class="form-control" required value="0" id="zel" placeholder="ZELLE">
     </div>
 </div>
+<div class="col-md-6">
+    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VUELTO</label>
+    <div class="col-lg-12">
+      <input type="text" name="change_sell" class="form-control" required value="0" id="change_sell" placeholder="0">
+    </div>
+</div>
+<div class="col-md-6">
+    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIPO DE VUELTO</label>
+    <div class="col-lg-12">
+      <?php 
+		$clients = FData::getAll();
+		    ?>
+		 <select name="type_change" id="type_change" class="form-control">
+		 	<?php foreach(FData::getAll() as $client):?>
+		 		<?php if ($client->id != 4 && $client->id != 5): ?>
+				<option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+		 		<?php endif ?>
+			<?php endforeach;?>
+		</select>
+    </div>
+</div>
 </div>		
 		
 		
@@ -380,8 +401,7 @@ $clients = FData::getAll();
 				if(cli[client]==1){
 					if(discount==""){ discount=0;}
 					
-					if(p==4 && numeroNormal == money )
-					{
+					if(p==4 && numeroNormal == money ){
 						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
 						if(go){
 							e.preventDefault();
@@ -393,8 +413,9 @@ $clients = FData::getAll();
 							});
 						}
 						else{e.preventDefault();}
-					}
-					else if(p!=4){
+					} else if(p!=4){
+						console.log(( (<?php echo $total;?> - discount) - money));
+						e.preventDefault();
 						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
 						if(go){
 							e.preventDefault();
@@ -406,8 +427,7 @@ $clients = FData::getAll();
 							});
 						}
 						else{e.preventDefault();}
-					}
-					else{
+					} else {
 					  alert("EL MONTO A CANCELAR Y LOS DATOS DE PAGO NO COINCIDEN");
 					  e.preventDefault();
 					}
@@ -436,7 +456,6 @@ $clients = FData::getAll();
 				}
 				else
 				{
-					console.log(referenceText.toString().trim().length+" zzzzz")
 					if(p!=1 && (referenceText==0 || referenceText==""))	{
 						alert("LA REFERENCIA ES OBLIGATORIA");
 						e.preventDefault();
@@ -459,17 +478,12 @@ $clients = FData::getAll();
 					}
 				}
     		}else if(p==4){ // usaremos credito
-				//validar que el monto no supere el monto menor
-				//alert("TOTAL = "+<?php echo $total;?>);
-				//alert("DESCUENTO = "+parseInt(discount));
-				//alert("numeroNormal = "+numeroNormal);
-				//alert("money = "+money);
 				if((money<parseInt((<?php echo $total;?>-discount)) || (numeroNormal < ((parseInt(<?php echo $total;?>))-parseInt(discount))) && (paymentType!=4 && paymentType!=2))){
 					alert("PAGO INSUFICIENTE!");
 					e.preventDefault();
 				}
 				else {
-					if(numeroNormal <= parseInt(money)){
+					if(numeroNormal < parseInt(money)){
 						alert("PAGO INSUFICIENTE!");
 						e.preventDefault();
 					} else {
@@ -483,19 +497,26 @@ $clients = FData::getAll();
 							alert("LA REFERENCIA NO DEBE POSEER CARACTERES ESPECIALES");
 							e.preventDefault();
 						} else if(conditionOne == false){
-							if(discount==""){ discount=0;}
-							console.log("sadsa")
-							go = confirm("CAMBIO: $"+( parseInt(numeroNormal) - parseInt(<?php echo $total;?>-discount ) ) );
-							if(go){
-								e.preventDefault();
-								$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
-									$.get("./?action=cartofsell",null,function(data2){
-										$("#cartofsell").html(data);
-										$("#show_search_results").html("");
-									  });
-								});
+							if(discount==""){
+								discount=0;
 							}
-							else{e.preventDefault();}
+							let cambio_sell = parseInt(numeroNormal)-parseInt(<?php echo $total;?>-discount )
+							if (cambio_sell > 0 && cambio_sell != parseInt($("#change_sell").val())) {
+								alert("EL CAMBIO A SER DEVUELTO NO COINCIDE");
+								e.preventDefault();
+							} else {
+								go = confirm("CAMBIO: $"+ cambio_sell);
+								if(go){
+									e.preventDefault();
+									$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
+										$.get("./?action=cartofsell",null,function(data2){
+											$("#cartofsell").html(data);
+											$("#show_search_results").html("");
+										  });
+									});
+								}else{e.preventDefault();}
+							}
+							
 						}
 					}
 						
