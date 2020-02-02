@@ -45,6 +45,14 @@ class Core {
 		echo "<script>window.location='".$url."';</script>";
 	}
 
+	public static function back(){
+		echo "<a class='btn btn-default pull-right' onclick='return window.history.back()'>
+				<span>REGRESAR</span>
+			</a>";
+	}
+
+	
+
 	public static function includeJS(){
 		$path = "res/js/";
 		$handle=opendir($path);

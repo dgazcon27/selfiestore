@@ -24,19 +24,22 @@ if ($query->num_rows > 0) {
 
 if($found==true) {
 	print "Cargando ... $user";
+	$_SESSION['user_id']=$userid;
 	if ($kind == 1) {
 		$_SESSION['is_admin'] = true;
-		$_SESSION['user_id']=$userid;
 		print "<script>window.location='index.php?view=home';</script>";
-	} elseif ($kind == 4) {
+	} elseif ($kind == 4 || $kind == 8) {
 		# code...
 		$_SESSION['is_client'] = true;
-		$_SESSION['user_id'] = $userid;
 		$user_data = PersonData::getByUserId($userid);
 		$_SESSION['client_id'] = $user_data->id;
-		print "<script>window.location='index.php?view=clienthome';</script>";
+		print "<script>window.location='index.php?view=cotizations';</script>";
+	} elseif ($kind == 2) {
+		print "<script>window.location='index.php?view=orders-approved';</script>";
+	} elseif ($kind == 5) {
+		print "<script>window.location='index.php?view=cotizations';</script>";
+		
 	} else {
-		$_SESSION['user_id'] = $userid;
 		print "<script>window.location='index.php?view=home';</script>";
 	}
 }else {

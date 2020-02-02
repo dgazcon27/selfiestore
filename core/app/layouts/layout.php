@@ -12,6 +12,7 @@
     <link href="plugins/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
     <link href="plugins/dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="res/css/movil-responsive.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,6 +31,7 @@
 <script type="text/javascript" src="plugins/jsqrcode/llqrcode.js"></script>
 <script type="text/javascript" src="plugins/jsqrcode/webqr.js"></script>
           <?php endif;?>
+<script type="text/javascript" src="res/js/mousetrap.min.js"></script>
 
   </head>
 
@@ -42,9 +44,13 @@
         <?php
           if (isset($_SESSION['is_client'])) {
             echo '<a href="./index.php?view=clienthome" class="logo">'; 
+           } elseif(Core::$user->kind == 5){
+            echo '<a href="./index.php?view=cotizations" class="logo">';
+           } elseif (Core::$user->kind == 2) {
+            echo '<a href="./index.php?view=orders-approved" class="logo">';
            } else {
-            echo '<a href="./" class="logo">';
-           } 
+            echo '<a href="./index.php?view=cotizations" class="logo">';
+           }
         ?>
         
           <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -202,7 +208,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
 <!--            <li class="header">ADMINISTRACION</li> -->
             <?php if(isset($_SESSION["user_id"])):?>
                         
-<?php if(Core::$user->kind==1||Core::$user->kind==2):
+<?php if(Core::$user->kind==1):
 
 
 ?>
@@ -219,13 +225,12 @@ if( $q==0 ||  $q<=$product->inventary_min){
               <a href="#"><i class='fa fa-shopping-cart'></i> <span>VENTAS</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
                 <li><a href="./?view=sells">Ventas</a></li>
-<?php if(Core::$user->kind==1):?>
-       
-   <?php endif; ?>
 				  <li><a href="./?view=bycob">Consignaciones</a></li>
 				<li><a href="./?view=sellscredit">Creditos</a></li>
+<?php if(Core::$user->kind==1):?>
 				 <li><a href="./?view=sellscancel">Ventas Canceladas</a></li>
-         <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
+       
+   <?php endif; ?>
                 
               </ul>
             </li>
@@ -234,11 +239,25 @@ if( $q==0 ||  $q<=$product->inventary_min){
       <li class="treeview">
               <a href="#"><i class='fa fa-shopping-cart'></i> <span>COTIZACIONES Y PEDIDOS</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="./?view=cotizations">Cotizaciones</a></li> 
+                <?php if (Core::$user->kind != 2): ?>
+                  <li><a href="./?view=cotizations">Cotizaciones</a></li>
+                <?php endif ?>
                 <li><a href="./?view=orders-approved">Pedidos</a></li>
+                <?php if (Core::$user->kind != 2): ?>
+                 <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>
+                <?php endif ?>
+                <?php if (isset($_SESSION['is_admin'])): ?>
+                  <li><a href="./?view=cotizationsdelete">Cotizaciones Eliminadas</a></li>
+                  <li><a href="./?view=orderscancel">Pedidos Cancelados</a></li>
+                  <li><a href="./?view=ordersdelete">Pedidos Eliminados</a></li>
+                <?php endif ?>
+                <?php if (Core::$user->kind == 5): ?>
+                  <li><a href="./?view=orderscancel">Pedidos Cancelados</a></li>
+                <?php endif ?>
+
               </ul>
             </li>
-            <?php if (Core::$user->kind==4): ?>
+            <?php if (Core::$user->kind==4 || Core::$user->kind==8): ?>
               <li class="treeview">
                 <a href="#"><i class='fa fa-cog'></i> <span>DATOS PERSONALES</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
@@ -246,39 +265,44 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 </ul>
               </li>
             <?php endif ?>
-            <?php if(Core::$user->kind==3):?>
-			  <li class="treeview">
-              <a href="#"><i class='fa fa-briefcase'></i> <span>FINANZAS</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="./?view=credit">Credito</a></li>
-                <li><a href="./?view=spends">Gastos</a></li>
-                <li><a href="./?view=smallbox&opt=all">Caja Chica</a></li>
-                <li><a href="./?view=box">Caja</a></li>
-              </ul>
-            </li>
-			  
-			<li class="treeview">
-              <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="./?view=inventary2&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
-               
-                <li><a href="./?view=search">Buscar Productos</a></li>
-                <li><a href="./?view=dev">Devolucion</a></li>
-              </ul>
-            </li>
-            
-			  
-			<li class="treeview">
-              <a href="#"><i class='fa fa-file-text-o'></i> <span>REPORTE</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-				  
+
+            <?php if(Core::$user->kind==3 || Core::$user->kind==5):?>
+
+              <li class="treeview">
+                <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="./?view=inventary2&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
+                 
+                  <li><a href="./?view=search">Buscar Productos</a></li>
+                  <li><a href="./?view=dev">Devolucion</a></li>
+                </ul>
+              </li>
+      			  <li class="treeview">
+                    <a href="#"><i class='fa fa-briefcase'></i> <span>FINANZAS</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                      <li><a href="./?view=credit">Credito</a></li>
+                      <li><a href="./?view=spends">Gastos</a></li>
+                      <li><a href="./?view=smallbox&opt=all">Caja Chica</a></li>
+                      <li><a href="./?view=box">Caja</a></li>
+                    </ul>
+                  </li>
+      			  
+        			
+                  
+      			  
+      			<?php if (Core::$user->kind == 1): ?>
+              <li class="treeview">
+                    <a href="#"><i class='fa fa-file-text-o'></i> <span>REPORTE</span> <i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
                 
-				  <li><a href="./?view=popularproductsreport">Balance de Productos</a></li>
-				  <li><a href="./?view=paymentreport">Reporte de pagos [credito]</a></li>
-				  
-               
-              </ul>
-            </li>
+                      
+                <li><a href="./?view=popularproductsreport">Balance de Productos</a></li>
+                <li><a href="./?view=paymentreport">Reporte de pagos [credito]</a></li>
+                
+                     
+                    </ul>
+                  </li>
+            <?php endif ?>
 			  
   
           <?php endif; ?>
@@ -305,7 +329,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=products">Productos</a></li>
                 <li><a href="./?view=categories&opt=all">Categorias</a></li>
                 <li><a href="./?view=brands&opt=all">Marcas</a></li>
-                <li><a href="./?view=clients">Clientes</a></li>
+                <li><a href="./?view=branch">Clientes</a></li>
                 <li><a href="./?view=providers">Proveedores</a></li>
               </ul>
             </li>
@@ -329,24 +353,26 @@ if( $q==0 ||  $q<=$product->inventary_min){
               </ul>
             </li>
             
-          <?php endif; ?>
-            <li class="treeview">
-              <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="./?view=inventary&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
-                <li><a href="./?view=re">Abastecer</a></li>
-            <?php if(Core::$user->kind==1):?>
-                <li><a href="./?view=inventaryval&stock=<?php echo StockData::getPrincipal()->id;?>">Valor del Inventario</a></li>
-                <li><a href="./?view=search">Buscar Productos</a></li>
-                <li><a href="./?view=inventaries">Inventario Global</a></li>
-                <li><a href="./?view=stocks">Sucursales</a></li>
-                <li><a href="./?view=selectstock">Traspasar</a></li>
-                <li><a href="./?view=dev">Devolucion</a></li>
-                <li><a href="./?view=trasps">Traspasos</a></li>
-                <li><a href="./?view=devs">Devoluciones</a></li>
-              <?php endif; ?>
-              </ul>
-            </li>
+            <?php endif; ?>
+            <?php if (Core::$user->kind == 1): ?>
+              <li class="treeview">
+                <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="./?view=inventary&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
+                  <li><a href="./?view=re">Abastecer</a></li>
+              <?php if(Core::$user->kind==1):?>
+                  <li><a href="./?view=inventaryval&stock=<?php echo StockData::getPrincipal()->id;?>">Valor del Inventario</a></li>
+                  <li><a href="./?view=search">Buscar Productos</a></li>
+                  <li><a href="./?view=inventaries">Inventario Global</a></li>
+                  <li><a href="./?view=stocks">Sucursales</a></li>
+                  <li><a href="./?view=selectstock">Traspasar</a></li>
+                  <li><a href="./?view=dev">Devolucion</a></li>
+                  <li><a href="./?view=trasps">Traspasos</a></li>
+                  <li><a href="./?view=devs">Devoluciones</a></li>
+                <?php endif; ?>
+                </ul>
+              </li>
+            <?php endif ?>
             <?php if(Core::$user->kind==1):?>
                         <li class="treeview">
               <a href="#"><i class='fa fa-file-text-o'></i> <span>REPORTES</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -369,11 +395,10 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=users">Usuarios</a></li>
                 <li><a href="./?view=settings">Configuracion</a></li>
                 <li><a href="./?view=import">Importar Datos</a></li>
-
-
               </ul>
             </li>
           <?php endif; ?>
+         
           <?php endif; ?>
             <?php elseif(isset($_SESSION["client_id"])):?>
             <li><a href="./index.php?view=clienthome"><i class='fa fa-dashboard'></i> <span>Dashboard</span></a></li>
@@ -386,7 +411,12 @@ if( $q==0 ||  $q<=$product->inventary_min){
               </ul>
             </li>
           <?php endif;?>
-
+           <?php if (Core::$user->kind == 5): ?>
+                <li><a href="./?view=branch"><i class='fa fa-cog'></i><span>SUCURSALES</span></a></li>
+          <?php endif ?>
+          <?php if (Core::$user->kind == 5): ?>
+                <li><a href="./?view=users"><i class='fa fa-cog'></i><span>CLIENTES</span></a></li>
+          <?php endif ?>
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
@@ -403,7 +433,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
         <div class="pull-right hidden-xs">
           <b>Version</b> 1
         </div>
-        <strong>COPYRIGHT &copy; 2019 <?php echo ConfigurationData::getByPreffix("company_name")->val;?></strong>
+        <strong>COPYRIGHT &copy; 2020 <?php echo ConfigurationData::getByPreffix("company_name")->val;?></strong>
       </footer>
       <?php else:?>
         <?php if(isset($_GET["view"]) && $_GET["view"]=="clientaccess"):?>

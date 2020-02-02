@@ -1,7 +1,6 @@
 <?php
 
 $sell = SellData::getById($_POST["id"]);
-
 $sell->person_id=$_POST["client_id"]!=""?$_POST["client_id"]:"NULL";
 $sell->f_id = $_POST["f_id"];
 $sell->refe = $_POST["refe"];
@@ -9,11 +8,9 @@ $sell->efe = $_POST["efe"];
 $sell->tra = $_POST["tra"];
 $sell->zel = $_POST["zel"];
 $sell->total = $_POST["total"];
-$sell->discount = $_POST["discount"];
-
+$sell->discount = isset($_POST["discount"]) ? $_POST["discount"] : 0;
+$sell->created_at = "NOW()";
 $sell->invoice_code = $_POST["invoice_code"];
-
-
 
 
 

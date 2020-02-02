@@ -1,5 +1,4 @@
 <?php
-
 if(isset($_SESSION["cotization"])){
 	$cart = $_SESSION["cotization"];
 	if(count($cart)>0){
@@ -27,16 +26,17 @@ if(isset($_SESSION["cotization"])){
 		foreach($cart as  $c){
 			$operation_type = "salida";
 			if(isset($_POST["d_id"]) && $_POST["d_id"]==2){ $operation_type="salida-pendiente"; }
-
 			$product = ProductData::getById($c["product_id"]);
 			$op = new OperationData();
-			 $op->product_id = $c["product_id"] ;
-			 $op->price_in = $product->price_in;
-			 $op->price_out = $product->price_out;
-			 $op->operation_type_id=OperationTypeData::getByName($operation_type)->id;
-			 $op->stock_id = StockData::getPrincipal()->id;
-			 $op->sell_id=$s[1];
-			 $op->q= $c["q"];
+			$op->product_id = $c["product_id"] ;
+
+			$op->price_in = $product->price_in;
+			$op->price_out = $product->price_out;
+			$op->operation_type_id=OperationTypeData::getByName($operation_type)->id;
+			$op->stock_id = $c['stock_id'];
+			$op->sell_id=$s[1];
+			$op->q= $c["q"];
+			$op->is_draft = 1;
 
 
 			$add = $op->add_cotization();			 		
@@ -44,8 +44,7 @@ if(isset($_SESSION["cotization"])){
 			unset($_SESSION["cotization"]);
 			setcookie("selled","selled");
 		}
-////////////////////
-print "<script>window.location='index.php?view=cotizations';</script>";
+		print "<script>window.location='index.php?view=cotizations';</script>";
 		}
 	}
 }

@@ -3,7 +3,9 @@
 	<div class="col-md-12">
 	<h1>NUEVO CLIENTE</h1>
 	<br>
-<div class="box box-primary"><br>
+  <p class="alert alert-info">* CAMPOS OBLIGATORIOS</p>
+<div class="box box-primary" style="height: 350px;"><br>
+
 		<form class="form-horizontal" method="post" id="addproduct" action="index.php?view=addclient" role="form">
 
   <div class="form-group">
@@ -16,7 +18,13 @@
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">NOMBRE*</label>
     <div class="col-md-6">
-      <input type="text" name="name" class="form-control" id="name" placeholder="INGRESAR EL NOMBRE COMPLETO" required="required">
+      <input type="text" name="name" class="form-control" id="name" placeholder="INGRESAR EL NOMBRE" required="required">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputEmail1" class="col-lg-2 control-label">APELLIDO*</label>
+    <div class="col-md-6">
+      <input type="text" name="lastname" class="form-control" id="lastname" placeholder="INGRESAR EL APELLIDO" required="required">
     </div>
   </div>
   <div class="form-group">
@@ -35,7 +43,6 @@
 
 
  
-  <p class="alert alert-info">* CAMPOS OBLIGATORIOS</p>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">

@@ -75,13 +75,27 @@ class ProductData {
 		return Model::many($query[0],new ProductData());
 	}
 
+	public static function getProductsPaginate(){
+		$sql = "select * from ".self::$tablename." LIMIT 0, 10";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
+	public static function getProductsSearchByPage($like, $page = 0){
+		$min = $page*10;
+		$max = $min+10;
+		$sql = "select * from ".self::$tablename." LIMIT $min,$max";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
 	public static function getAllByCategoryId($id){
 		$sql = "select * from ".self::$tablename." where category_id=$id";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
 	
-		public static function getAllByBrandId($id){
+	public static function getAllByBrandId($id){
 		$sql = "select * from ".self::$tablename." where brand_id=$id";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
@@ -95,16 +109,32 @@ class ProductData {
 
 
 	public static function getLike($p){
-		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%'";
+		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT 0,10";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
 
 	public static function getLikeResponsive($p){
-		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT 10";
+		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT 0,10";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
+
+	public static function getTotalSearchResponsive($p) {
+		$sql = "select id from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%'";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
+	public static function getLikeResponsivePaginate($p, $page){
+		$min = $page*10;
+		$max = $min+10;
+		$sql = "select * from ".self::$tablename." where code like '%$p%' or barcode like '%$p%' or name like '%$p%' or id like '%$p%' LIMIT $min,$max";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new ProductData());
+	}
+
+
 
 
 	public static function getLike2($p){

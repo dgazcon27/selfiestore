@@ -25,7 +25,6 @@
       <?php
       foreach($users as $user)
       {
-        unset($sells);
         $sells=0;
         ?>
         <tr style="border-bottom: none !important;background-color:#3c8dbc;color: #fff;">
@@ -40,6 +39,12 @@
         </tr>
         <?php
         $sells = SellData::getCreditsByClientId($user->id);
+        $hasDebt = false;
+        $i = 0;
+        while(!$hasDebt && $i < count($sells)) {
+
+          $i++;
+        }
         if(count($sells)>0)
         {
         ?>
@@ -57,29 +62,31 @@
           foreach($sells as $sell)
           {
           ?>
-          <tr>
-            <td style="text-align:center;">
-              <a href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
-                <i class="glyphicon glyphicon-eye-open"></i>
-              </a>
-               #<?php echo $sell->ref_id; ?>
-            </td>
+            <?php if ($sell->total-$sell->payments > 0): ?>
+               <tr>
+                <td style="text-align:center;">
+                  <a href="index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default">
+                    <i class="glyphicon glyphicon-eye-open"></i>
+                  </a>
+                   #<?php echo $sell->ref_id; ?>
+                </td>
 
-            <td style="text-align: center;"><?php echo strtoupper($sell->getP()->name); ?></td>
-            <td style="text-align: center;"><?php echo strtoupper($sell->getD()->name); ?></td>
-            <td style="text-align: center;">
-            <?php
-            $total= $sell->total-$sell->discount;
-              echo "<b>$ ".number_format($total,2,".",",")."</b>";
-            ?>      
-            </td>
-            <td style="text-align: center;"><?php echo $sell->created_at; ?></td>
-            <td style="text-align: center;">
-              <a href="index.php?view=makepayment&id=<?php echo $user->id;?>&sell=<?php echo $sell->id;?>" class="btn btn-default btn-xs">
-                REALIZAR PAGO
-              </a>
-            </td>
-          </tr>
+                <td style="text-align: center;"><?php echo strtoupper($sell->getP()->name); ?></td>
+                <td style="text-align: center;"><?php echo strtoupper($sell->getD()->name); ?></td>
+                <td style="text-align: center;">
+                <?php
+                $total= $sell->total-$sell->discount;
+                  echo "<b>$ ".number_format($total,2,".",",")."</b>";
+                ?>      
+                </td>
+                <td style="text-align: center;"><?php echo $sell->created_at; ?></td>
+                <td style="text-align: center;">
+                  <a href="index.php?view=makepayment&id=<?php echo $user->id;?>&sell=<?php echo $sell->id;?>" class="btn btn-default btn-xs">
+                    REALIZAR PAGO
+                  </a>
+                </td>
+              </tr>
+            <?php endif ?>
           <?php
           }
         }

@@ -18,6 +18,13 @@ class PersonData {
 		Executor::doit($sql);
 	}
 
+	function add_solo_client()	{
+		$sql = "insert into person (no,ci,name,lastname,address1,phone1,is_active_access,kind,created_at)";
+
+		$sql .= "value (\"$this->no\",\"$this->ci\",\"$this->name\",\"$this->lastname\",\"$this->address1\",\"$this->phone1\",$this->is_active_access,4,NOW())";
+		Executor::doit($sql);
+	}
+
 	public function add_provider(){
 		$sql = "insert into person (no,name,address1,phone1,kind,created_at, specialties) ";
 		$sql .= "value (\"$this->no\",\"$this->name\",\"$this->address1\",\"$this->phone1\",7,$this->created_at, \"$this->specialties\")";
@@ -47,7 +54,7 @@ class PersonData {
 	}
 
 	public function update_client(){
-		$sql = "update ".self::$tablename." set no=\"$this->no\",name=\"$this->name\",email1=\"$this->email1\",address1=\"$this->address1\",lastname=\"$this->lastname\",phone1=\"$this->phone1\",is_active_access=\"$this->is_active_access\",password=\"$this->password\",has_credit=\"$this->has_credit\",credit_limit=\"$this->credit_limit\" where id=$this->id";
+		$sql = "update ".self::$tablename." set rif=\"$this->rif\", ci=\"$this->ci\", company=\"$this->company\", name=\"$this->name\",email1=\"$this->email1\",address2=\"$this->address2\", lastname=\"$this->lastname\",phone1=\"$this->phone1\" where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -88,13 +95,19 @@ class PersonData {
 	}
 
 	public static function getClients(){
-		$sql = "select * from ".self::$tablename." where kind=1 order by name,lastname";
+		$sql = "select * from ".self::$tablename." where kind=4 order by name,lastname";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new PersonData());
+	}
+
+	function getClientsToSell(){
+		$sql = "select * from ".self::$tablename." where kind=4 order by name,lastname";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new PersonData());
 	}
 
 	public static function getClientsWithCredit(){
-		$sql = "select * from ".self::$tablename." where kind=1 and has_credit=1 order by name,lastname";
+		$sql = "select * from ".self::$tablename." where kind=4 and has_credit=1 order by name,lastname";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new PersonData());
 	}

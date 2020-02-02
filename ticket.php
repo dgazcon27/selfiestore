@@ -14,6 +14,7 @@ include "core/app/model/UserData.php";
 include "core/app/model/SellData.php";
 include "core/app/model/OperationData.php";
 include "core/app/model/ProductData.php";
+include "core/app/model/PersonData.php";
 include "core/app/model/StockData.php";
 include "core/app/model/ConfigurationData.php";
 include "fpdf/fpdf.php";
@@ -34,7 +35,6 @@ else
 {
 	$title = "";
 }
-
 if(ConfigurationData::getByPreffix("slogan")->val == TRUE)
 {
 	$slogan = ConfigurationData::getByPreffix("slogan")->val;
@@ -76,15 +76,14 @@ else
 $stock = StockData::getPrincipal();
 $sell = SellData::getById($_GET["id"]);
 $operations = OperationData::getAllProductsBySellId($_GET["id"]);
-$user = $sell->getUser();
-
+$user = isset($sell->receive_by) ? SellData::getSellUser($sell->receive_by) : PersonData::getById($sell->receive_by);
 
 $servidor = "localhost";
 $usuario = "root";
 $pass = "";
 
 
-if($sell->person_id == TRUE)
+if(isset($sell->person_id))
 {
 	$con = Database::getCon();
 	$c = $con->query("SELECT * FROM person WHERE ID=$sell->person_id");
@@ -252,7 +251,7 @@ $pdf->Cell(5,5,'.............................................');
 $pdf->setY(67);
 $pdf->setX(9);
 $pdf->SetFont('Arial','B',7); 
-$pdf->Cell(5,5,"DATOS DEL CLIENTE ".strtoupper($stock->phone));
+$pdf->Cell(5,5,"DATOS DEL CLIENTE ");
 $pdf->setY(68);
 $pdf->setX(0.10);
 $pdf->SetFont('Arial','',10); 

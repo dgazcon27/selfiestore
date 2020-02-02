@@ -66,7 +66,7 @@ $product = ProductData::getById($p["product_id"]);
 
 <script>
   $("#clearcart-<?php echo $product->id; ?>").click(function(){
-    $.get("index.php?view=clearcart","product_id=<?php echo $product->id; ?>",function(data){
+    $.get("index.php?view=clearcartproduct","product_id=<?php echo $product->id; ?>",function(data){
         $.get("./?action=cartofsell",null,function(data2){
           $("#cartofsell").html(data2);
         });
@@ -89,7 +89,7 @@ $product = ProductData::getById($p["product_id"]);
 
 <form method="post" class="form-horizontal" id="processsell" enctype="multipart/form-data" name="processsell">
 <h2>RESUMEN DE VENTA</h2>
-
+<input type="hidden" name="receive_by" value="<?php echo Core::$user->id?>">
 <div class="row">
 <div class="col-md-12">
 <div>
@@ -133,14 +133,7 @@ $product = ProductData::getById($p["product_id"]);
 <div class="col-md-6">
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUEVO CLIENTE</label>
     <div class="col-lg-12">
-    <?php 
-$clients = PData::getAll();
-    ?>
-
-
       <a href="index.php?view=newclient2" class="form-control"><i class='fa fa-smile-o'></i>&nbsp;&nbsp;&nbsp;&nbsp;AGREGAR</a>
-
-
     </div>
   </div>
 
@@ -148,7 +141,7 @@ $clients = PData::getAll();
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECCIONA UN CLIENTE</label>
     <div class="col-lg-12">
     <?php 
-$clients = PersonData::getClients();
+$clients = PersonData::getClientsToSell();
     ?>
     <select name="client_id" id="client_id" class="form-control">
     <option value=""> NINGUNO </option>
@@ -170,7 +163,9 @@ $clients = PData::getAll();
     ?>
     <select name="p_id" id="p_id" class="form-control">
     <?php foreach($clients as $client):?>
-      <option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php if ($client->id != 3): ?>
+      		<option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php endif ?>
     <?php endforeach;?>
       </select>
     </div>
@@ -179,14 +174,9 @@ $clients = PData::getAll();
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENTREGA</label>
 
     <div class="col-lg-12">
-    <?php 
-$clients = DData::getAll();
-    ?>
     <select name="d_id" class="form-control">
-    <?php foreach($clients as $client):?>
-      <option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
-    <?php endforeach;?>
-      </select>
+      <option value="1">ENTREGADO</option>
+    </select>
     </div>
   </div>
 
@@ -203,15 +193,18 @@ $clients = FData::getAll();
     ?>
     <select name="f_id" id="f_id" class="form-control">
     <?php foreach(FData::getAll() as $client):?>
-      <option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php if ($client->id != 4): ?>
+      		<option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+    	<?php endif ?>
     <?php endforeach;?>
+  		<option value="4">DUAL</option>
       </select>
     </div>
   </div>
 
 </div>
 		
-<div class="row">
+<div class="row" id="form-ref">
 
 	<div class="col-md-12">
 		<label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMERO DE REFERENCIA</label>
@@ -224,7 +217,7 @@ $clients = FData::getAll();
 		
 		
 	
-<div class="row">
+<div class="row" id="pay_dual">
 
 <div class="col-md-6">
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL EFECTIVO</label>
@@ -248,6 +241,27 @@ $clients = FData::getAll();
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DUAL ZELLE</label>
     <div class="col-lg-12">
       <input type="text" name="zel" class="form-control" required value="0" id="zel" placeholder="ZELLE">
+    </div>
+</div>
+<div class="col-md-6">
+    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VUELTO</label>
+    <div class="col-lg-12">
+      <input type="text" name="change_sell" class="form-control" required value="0" id="change_sell" placeholder="0">
+    </div>
+</div>
+<div class="col-md-6">
+    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIPO DE VUELTO</label>
+    <div class="col-lg-12">
+      <?php 
+		$clients = FData::getAll();
+		    ?>
+		 <select name="type_change" id="type_change" class="form-control">
+		 	<?php foreach(FData::getAll() as $client):?>
+		 		<?php if ($client->id != 4 && $client->id != 5): ?>
+				<option value="<?php echo $client->id;?>"><?php echo strtoupper($client->name);?></option>
+		 		<?php endif ?>
+			<?php endforeach;?>
+		</select>
     </div>
 </div>
 </div>		
@@ -369,6 +383,7 @@ $clients = FData::getAll();
 		pun = parseInt($("#pun").val());
 		var conditionOne = false;
 		var numeroNormal = efe+tra+zel+pun;
+		var regexE = new RegExp(/^[A-Za-z0-9]+$/g);
 		//FIN VARIABLES PARA DUAL
 		// procedemos
 		cli=Array();
@@ -386,8 +401,7 @@ $clients = FData::getAll();
 				if(cli[client]==1){
 					if(discount==""){ discount=0;}
 					
-					if(p==4 && numeroNormal == money )
-					{
+					if(p==4 && numeroNormal == money ){
 						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
 						if(go){
 							e.preventDefault();
@@ -399,8 +413,9 @@ $clients = FData::getAll();
 							});
 						}
 						else{e.preventDefault();}
-					}
-					else if(p!=4){
+					} else if(p!=4){
+						console.log(( (<?php echo $total;?> - discount) - money));
+						e.preventDefault();
 						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
 						if(go){
 							e.preventDefault();
@@ -412,8 +427,7 @@ $clients = FData::getAll();
 							});
 						}
 						else{e.preventDefault();}
-					}
-					else{
+					} else {
 					  alert("EL MONTO A CANCELAR Y LOS DATOS DE PAGO NO COINCIDEN");
 					  e.preventDefault();
 					}
@@ -432,6 +446,7 @@ $clients = FData::getAll();
 		{
 			if(p!=4)
 			{
+				console.log(money, parseInt(<?php echo $total;?>-discount))
 				if(money < parseInt(<?php echo $total;?>-discount))
 				{
 					if(paymentType!=4 && paymentType!=2){
@@ -441,12 +456,13 @@ $clients = FData::getAll();
 				}
 				else
 				{
-					if(p!=1 && (referenceText==0 || referenceText==""))
-					{
+					if(p!=1 && (referenceText==0 || referenceText==""))	{
 						alert("LA REFERENCIA ES OBLIGATORIA");
 						e.preventDefault();
-					}
-					else if(conditionOne == false){
+					} else if (p!=1 && !regexE.test(referenceText.toString())) {
+						alert("LA REFERENCIA NO DEBE POSEER CARACTERES ESPECIALES");
+						e.preventDefault();
+					} else if(conditionOne == false){
 						if(discount==""){ discount=0;}
 						go = confirm("CAMBIO: $"+(money-(<?php echo $total;?>-discount ) ) );
 						if(go){
@@ -462,42 +478,45 @@ $clients = FData::getAll();
 					}
 				}
     		}else if(p==4){ // usaremos credito
-				//validar que el monto no supere el monto menor
-				//alert("TOTAL = "+<?php echo $total;?>);
-				//alert("DESCUENTO = "+parseInt(discount));
-				//alert("numeroNormal = "+numeroNormal);
-				//alert("money = "+money);
-				e.preventDefault();
-				if((money<parseInt((<?php echo $total;?>-discount)) || (numeroNormal < ((parseInt(<?php echo $total;?>))-parseInt(discount))) && (paymentType!=4 && paymentType!=2)))
-				{
+				if((money<parseInt((<?php echo $total;?>-discount)) || (numeroNormal < ((parseInt(<?php echo $total;?>))-parseInt(discount))) && (paymentType!=4 && paymentType!=2))){
 					alert("PAGO INSUFICIENTE!");
 					e.preventDefault();
 				}
-				else
-				{
-					if(numeroNormal != parseInt(money)){
+				else {
+					if(numeroNormal < parseInt(money)){
 						alert("PAGO INSUFICIENTE!");
-					}
-					else
-					{
-						if(referenceText==0 || referenceText=="")
-						{
+						e.preventDefault();
+					} else {
+						if((referenceText==0 || referenceText=="")){
 							alert("LA REFERENCIA ES OBLIGATORIA");
 							e.preventDefault();
-						}
-						else if(conditionOne == false){
-							if(discount==""){ discount=0;}
-							go = confirm("CAMBIO: $"+( parseInt(money) - parseInt(<?php echo $total;?>-discount ) ) );
-							if(go){
-								e.preventDefault();
-								$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
-									$.get("./?action=cartofsell",null,function(data2){
-										$("#cartofsell").html(data);
-										$("#show_search_results").html("");
-									  });
-								});
+						} else if(referenceText.toString().trim().length < 6){
+							alert("LA REFERENCIA DEBE POSEER AL MENOS 6 CARACTERES");
+							e.preventDefault();
+						} else if (!regexE.test(referenceText.toString())) {
+							alert("LA REFERENCIA NO DEBE POSEER CARACTERES ESPECIALES");
+							e.preventDefault();
+						} else if(conditionOne == false){
+							if(discount==""){
+								discount=0;
 							}
-							else{e.preventDefault();}
+							let cambio_sell = parseInt(numeroNormal)-parseInt(<?php echo $total;?>-discount )
+							if (cambio_sell > 0 && cambio_sell != parseInt($("#change_sell").val())) {
+								alert("EL CAMBIO A SER DEVUELTO NO COINCIDE");
+								e.preventDefault();
+							} else {
+								go = confirm("CAMBIO: $"+ cambio_sell);
+								if(go){
+									e.preventDefault();
+									$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
+										$.get("./?action=cartofsell",null,function(data2){
+											$("#cartofsell").html(data);
+											$("#show_search_results").html("");
+										  });
+									});
+								}else{e.preventDefault();}
+							}
+							
 						}
 					}
 						
@@ -510,6 +529,25 @@ $clients = FData::getAll();
 			e.preventDefault();
 	    }
 	});
+
+	$("#pay_dual").addClass("hidden")
+	$("#form-ref").addClass("hidden")
+	$("#f_id").change(function (a) {
+		let pay = $("#f_id").val();
+		if (pay == 4) {
+			$("#pay_dual").removeClass("hidden")
+			$("#form-ref").removeClass("hidden")
+		}
+		if (pay == 1) {
+			$("#pay_dual").addClass("hidden")
+			$("#form-ref").addClass("hidden")
+		}
+		if (pay == 2 || pay == 3 || pay == 5) {
+			$("#form-ref").removeClass("hidden")
+			$("#pay_dual").addClass("hidden")
+		}
+	})
+
 </script>
 </div>
 </div>

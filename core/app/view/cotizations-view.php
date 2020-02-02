@@ -1,3 +1,10 @@
+<style type="text/css">
+	@media (max-width: 528px) {
+		.box {
+			font-size: 13px;
+		}
+	}
+</style>
 <section class="content"> 
 	<div class="row">
 		<div class="col-md-12">
@@ -13,6 +20,8 @@
 			}else if(isset($_SESSION["user_id"])){
 				if (isset($_SESSION['is_admin'])) {
 					$products = SellData::getCotizations();
+				} elseif (Core::$user->kind == 5) {
+					$products = SellData::getCotizationsForManager();
 				} else {
 					$products = SellData::getCotizatiosByUser($_SESSION["user_id"]);
 				}
@@ -21,22 +30,19 @@
 			?>
 				<br>
 				<div class="box box-primary">
-					<div class="box-header">
-						<h3 class="box-title">COTIZACIONES</h3>
-					</div>
 					<table class="table table-bordered table-hover	">
 						<thead>
 							<th style="text-align: center;"></th>
-							<th style="text-align: center;">COTIZACION Nº</th>
+							<th class="hidden-xs" style="width: 110px;text-align: center;"><span >COTIZACION</span> Nº</th>
 							<?php if (isset($_SESSION['is_admin'])): ?>
 							<th style="text-align: center;">CLIENTE</th>
 							<th style="text-align: center;">TELEFONO</th>
 								
 							<?php endif ?>
-							<th style="text-align: center;">ESTADO</th>
-							<th style="text-align: center;">TOTAL</th>
-							<th style="text-align: center;">FECHA</th>
-							<th style="width:100px; text-align: center;"></th>
+							<th style="text-align: center;width: 200px;">ESTADO</th>
+							<th style="text-align: center;width: 130px;">TOTAL</th>
+							<th class="hidden-xs" style="width: 135px;text-align: center;">FECHA</th>
+							<th style="width:280px; text-align: center;"></th>
 						</thead>
 						
 						<?php 
@@ -51,7 +57,7 @@
 								</a>
 							</td>
 							
-							<td style="text-align: center;">#<?php echo $cotizationsCouner; ?></td>
+							<td class="hidden-xs" style="text-align: center;">#<?php echo $cotizationsCouner; ?></td>
 							<?php if (isset($_SESSION['is_admin'])) {
 								if (isset($sell->person_id)) {
 									# code...
@@ -59,8 +65,8 @@
 									echo "<td style='text-align: center;'>".$user_data->name." ".$user_data->lastname ."</td>";
 									echo "<td style='text-align: center;'>".$user_data->phone1."</td>";
 								} else {
-									echo "<td>Sin cliente asignado</td>";
-									echo "<td>Sin telefono asignado</td>";
+									echo "<td>Sin cliente</td>";
+									echo "<td>Sin telefono</td>";
 								}
 							}
 							?>
@@ -90,26 +96,30 @@
 							?>			
 
 							</td>
-							<td style="text-align: center;"><?php echo $sell->created_at; ?></td>
+							<td class="hidden-xs" style="text-align: center;"><?php echo $sell->created_at; ?></td>
 							<td style="width:200px;text-align: center;">
-							<?php if(isset($_SESSION["user_id"]) && isset($_SESSION['is_admin']) && $sell->d_id == 4):?>
-								<a href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
-									<i class="fa fa-check"></i> PROCESAR
+							<?php if((isset($_SESSION['is_admin']) || Core::$user->kind == 5) && $sell->d_id == 4):?>
+								<a style="margin-bottom: 2px;" href="index.php?view=processcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES PROCESAR  ESTA COTIZACION');">
+									<i class="fa fa-check"></i> <span class="hidden-xs" >PROCESAR</span>
+								</a>
+								<a style="margin-bottom: 2px;" href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
+									<i class="fa fa-pencil"></i> <span class="hidden-xs">EDITAR</span>
 								</a>
 							<?php endif;?>
 							<?php if ($sell->d_id == 2 && $_SESSION['user_id'] == $sell->user_id): ?>
-								<p data-id="<?php echo $sell->id; ?>" class="confirm_button btn btn-xs btn-success">
-									<i class="fa fa-check"></i> CONFIRMAR
+								<p style="margin-bottom: 2px;" data-id="<?php echo $sell->id; ?>" class="confirm_button btn btn-xs btn-success">
+									<i class="fa fa-check"></i> <span class="hidden-xs">CONFIRMAR</span>
 								</p>
-								<a href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
-									<i class="fa fa-pencil"></i> EDITAR
+								<a style="margin-bottom: 2px;" href="index.php?view=updatecotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
+									<i class="fa fa-pencil"></i> <span class="hidden-xs">EDITAR</span>
 								</a>	
 							<?php endif ?>
-							<?php if (isset($_SESSION['is_admin'])): ?>
-								<a href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
-									CANCELAR
+								
+								<a style="margin-bottom: 2px;" href="index.php?action=cancelcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES CANCELAR ESTA COTIZACION');">
+									<i class="fa fa-ban"></i> <span class="hidden-xs">CANCELAR</span>
 								</a>
-								<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
+							<?php if (isset($_SESSION['is_admin'])): ?>
+								<a style="margin-bottom: 2px;" href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 									<i class="fa fa-trash"></i>
 								</a>
 

@@ -78,11 +78,35 @@ $total= $sell->total-$sell->discount;
 
 ?>			
 		</td>
-	<td> <?php if($sell->person_id!=null){$c= $sell->getPerson();echo $c->name." ".$c->lastname;} ?> </td>
-	<td> <?php if($sell->user_id!=null){$c= $sell->getUser();echo $c->name." ".$c->lastname;} ?> </td>
-		<td><?php echo $sell->getStockTo()->name; ?></td>
-		<td><?php echo $sell->created_at; ?></td>
-		<td style="width:130px;">
+	<td> 
+		<?php
+			if(isset($sell->person_id)){
+				$c= $sell->getPerson();
+				echo $c->name." ".$c->lastname;
+			} 
+		?> 
+	</td>
+	<td> 
+		<?php 
+			if(isset($sell->receive_by)){
+				$c= UserData::getById($sell->receive_by);
+				echo $c->name." ".$c->lastname;
+			} 
+		?> 
+	</td>
+	<td>
+		<?php 
+			if (isset($sell->user_id)) {
+				$c = UserData::getById($sell->user_id)->stock_id;
+			 	echo StockData::getById($sell->getUser()->stock_id)->name;
+			} else {
+				echo "";
+			} 
+		?>
+			
+	</td>
+	<td><?php echo $sell->created_at; ?></td>
+	<td style="width:130px;">
 <?php if(isset($_SESSION["user_id"])):?>
 		<a href="index.php?action=cancelsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger">Cancelar</a>
 		<!--a href="index.php?view=delsell&id=<?php //echo $sell->id; ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a-->

@@ -2,14 +2,22 @@
 <div class="row">
 	<div class="col-md-12">
 		<h1>Lista de Usuarios</h1>
-	<a href="index.php?view=newuser&kind=1" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Nuevo Administrador</a>
-	<a href="index.php?view=newuser&kind=2" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Nuevo Almacenista</a>
-	<a href="index.php?view=newuser&kind=3" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Nuevo Vendedor</a>
-	<a href="index.php?view=newuser&kind=4" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Cliente</a>
+	<?php if (Core::$user->kind == 1): ?>
+		<a href="index.php?view=newuser&kind=1" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Nuevo Administrador</a>
+		<a href="index.php?view=newuser&kind=5" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Nuevo Gerente</a>
+		<a href="index.php?view=newuser&kind=2" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Nuevo Almacenista</a>
+		<a href="index.php?view=newuser&kind=3" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Nuevo Vendedor</a>
+		<a href="index.php?view=newuser&kind=4" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Cliente</a>
+		<a href="index.php?view=newuser&kind=8" class="btn btn-default"><i class='glyphicon glyphicon-user'></i> Sucursal</a>
+	<?php endif ?>
 <br><br>
 		<?php
 
-		$users = UserData::getAll();
+		if (Core::$user->kind == 1) {
+			$users = UserData::getAll();			
+		} else if (Core::$user->kind == 5) {
+			$users = UserData::getClients();
+		}
 		if(count($users)>0){
 			// si hay usuarios
 			?>
@@ -55,8 +63,15 @@
 					echo $role->name;
 				?>
 				</td>
-				<td style="width:70px;"><a href="index.php?view=edituser&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">Editar</a>
-				<a href="./?action=deluser&id=<?php echo $user->id; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+				<td style="width:70px;">
+					<?php if (Core::$user->kind == 1): ?>
+						<a href="index.php?view=edituser&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">
+							Editar
+						</a>
+						<a href="./?action=deluser&id=<?php echo $user->id; ?>" class="btn btn-danger btn-xs">
+							<i class="fa fa-trash"></i>
+						</a>
+					<?php endif ?>
 
 				</td>
 

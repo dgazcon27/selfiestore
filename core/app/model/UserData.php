@@ -30,9 +30,7 @@ class UserData {
 
 // partiendo de que ya tenemos creado un objecto UserData previamente utilizamos el contexto
 	public function update(){
-		$sql = "update ".self::$tablename." set name=\"$this->name\",email=\"$this->email\",username=\"$this->username\",lastname=\"$this->lastname\",image=\"$this->image\" where id=$this->id";
-		echo $sql;
-		die;
+		$sql = "update ".self::$tablename." set name=\"$this->name\",email=\"$this->email\",lastname=\"$this->lastname\",stock_id=$this->stock_id,image=\"$this->image\" where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -48,10 +46,26 @@ class UserData {
 		return Model::one($query[0],new UserData());
 	}
 
-
-
 	public static function getAll(){
 		$sql = "select * from ".self::$tablename;		
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new UserData());
+	}
+
+	public static function getSellers(){
+		$sql = "select * from ".self::$tablename." where kind=5 or kind=1 or kind=3 or kind=8";		
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new UserData());
+	}
+
+	public static function getClients(){
+		$sql = "select * from ".self::$tablename." where kind=4";		
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new UserData());
+	}
+
+	public static function getBranchs(){
+		$sql = "select * from ".self::$tablename." where kind=8";		
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new UserData());
 	}
