@@ -17,10 +17,10 @@ if(count($_POST)>0){
 		SellData::updateSellPaymentById($_POST["sellid"],$payments);
 		//Fin actualizar abonos en la venta
 		//Inicio actualizar estatus de la venta a credito
-		if(($sell->total - $_POST["val"] - $sell->discount - $sell->payments) == 0){
-			$sell->p_id=1;
-			$sell->update_p();
-		}
+		// if(($sell->total - $_POST["val"] - $sell->discount - $sell->payments) == 0){
+		// 	$sell->p_id=1;
+		// 	$sell->update_p();
+		// }
 		$sell->created_at = date('Y-m-d H:i:s');
 		$sell->update_date();
 	}

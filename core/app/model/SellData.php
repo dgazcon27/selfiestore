@@ -417,9 +417,8 @@ public function add_with_client(){
 	}
 
 	public static function getAllByDateOpByUserId($user,$start,$end,$op){
-	  $sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op and user_id=$user order by created_at desc";
+	  $sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op and receive_by=$user order by created_at desc";
 		$query = Executor::doit($sql);
-		echo $sql;
 		return Model::many($query[0],new SellData());
 	}
 
@@ -439,7 +438,7 @@ public function add_with_client(){
 	}
 
 	public static function getAllByDateBCOpByUserId($user,$clientid,$start,$end,$op){
- 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op and is_draft=0 and and d_id=1 and user_id=$user order by created_at desc";
+ 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op and is_draft=0 and and d_id=1 and receive_by=$user order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 
