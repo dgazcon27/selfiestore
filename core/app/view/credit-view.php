@@ -42,10 +42,12 @@
         $hasDebt = false;
         $i = 0;
         while(!$hasDebt && $i < count($sells)) {
-
+          if ($sells[$i]->total-$sells[$i]->payments > 0) {
+            $hasDebt = true;
+          }
           $i++;
         }
-        if(count($sells)>0)
+        if(count($sells)>0 && $hasDebt)
         {
         ?>
           <tr>

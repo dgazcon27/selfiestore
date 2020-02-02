@@ -177,6 +177,12 @@ $total_dual = 0;
 								$supergasto_credito = 0;
 								$superganancia_credito = 0;
 								$superdescuento_credito = 0;
+
+								$total_efectivo_contado = $total_efectivo;
+					        	$total_punto_contado = $total_punto;
+					        	$total_transferencia_contado = $total_transferencia;
+					        	$total_zelle_contado = $total_zelle;
+
 								$total_efectivo = 0;
 					        	$total_punto = 0;
 					        	$total_transferencia = 0;
@@ -301,14 +307,14 @@ $total_dual = 0;
 							}
 							else
 							{
-								$com = $superganancia-$superdescuento;
-								$ceo = ($superganancia-$superdescuento)*0.47;
-								$car = ($superganancia-$superdescuento)*0.16;	
-								$egl = ($superganancia-$superdescuento)*0.16;	
-								$adm = ($superganancia-$superdescuento)*0.10;		
-								$mar = ($superganancia-$superdescuento)*0.10;		
-								$ven = ($superganancia-$superdescuento)*0.06;		
-								$ofi = ($superganancia-$superdescuento)*0.05;		
+								$com = ($superganancia+$superganancia_credito)-$superdescuento;
+								$ceo = ($com)*0.47;
+								$car = ($com)*0.16;	
+								$egl = ($com)*0.16;	
+								$adm = ($com)*0.10;		
+								$mar = ($com)*0.10;		
+								$ven = ($com)*0.06;		
+								$ofi = ($com)*0.05;		
 							}
 							?>
 							<h1>COMISIONES: $ <?php echo number_format($com,2,'.',','); ?></h1>
@@ -317,105 +323,146 @@ $total_dual = 0;
         function thePDF() {
 var doc = new jsPDF('p', 'pt');
         doc.setFontSize(26);
-        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 230, 65);
+        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 170, 65);
         doc.setFontSize(18);
         doc.text("REPORTE DE VENTAS", 200, 80);
         doc.setFontSize(12);
         doc.text("Usuario: <?php echo Core::$user->name." ".Core::$user->lastname; ?>  -  Fecha: <?php echo date("d-m-Y h:i:s");?> ", 130, 90);
-var columns = [
-    {title: "Id", dataKey: "id"},
-	{title: "gasto", dataKey: "gasto"}, 
-	{title: "ganacia", dataKey: "ganacia"}, 
-    {title: "Subtotal", dataKey: "subtotal"}, 
-    {title: "Descuento", dataKey: "discount"}, 
-    {title: "Total", dataKey: "total"}, 
-    {title: "Cliente", dataKey: "client"}, 
-    {title: "Vendedor", dataKey: "vendor"}, 
-    {title: "Fecha", dataKey: "created_at"}, 
-];
+		doc.setFontSize(18);
+		doc.text("OPERACIONES DE CONTADO", 40, 130);
 
-var columns2 = [
-    {title: "Id", dataKey: "id"},
-	{title: "gasto", dataKey: "gasto"}, 
-	{title: "ganacia", dataKey: "ganacia"}, 
-    {title: "Subtotal", dataKey: "subtotal"}, 
-    {title: "Descuento", dataKey: "discount"}, 
-    {title: "Total", dataKey: "total"}, 
-    {title: "Cliente", dataKey: "client"}, 
-    {title: "Vendedor", dataKey: "vendor"}, 
-    {title: "Fecha", dataKey: "created_at"}, 
-];
+		var columns = [
+		    {title: "Id", dataKey: "id"},
+			{title: "gasto", dataKey: "gasto"}, 
+			{title: "ganacia", dataKey: "ganacia"}, 
+		    {title: "Subtotal", dataKey: "subtotal"}, 
+		    {title: "Descuento", dataKey: "discount"}, 
+		    {title: "Total", dataKey: "total"}, 
+		    {title: "Cliente", dataKey: "client"}, 
+		    {title: "Vendedor", dataKey: "vendor"}, 
+		    {title: "Fecha", dataKey: "created_at"}, 
+		];
 
-var columns3 = [
-    {title: "Id", dataKey: "id"},
-	{title: "gasto", dataKey: "gasto"}, 
-	{title: "ganacia", dataKey: "ganacia"}, 
-    {title: "Subtotal", dataKey: "subtotal"}, 
-    {title: "Descuento", dataKey: "discount"}, 
-    {title: "Total", dataKey: "total"}, 
-    {title: "Cliente", dataKey: "client"}, 
-    {title: "Vendedor", dataKey: "vendor"}, 
-    {title: "Fecha", dataKey: "created_at"}, 
-];
-var rows = [
-  <?php foreach($operations as $operation):
-  ?>
-    {
-      "id": "<?php echo $operation->ref_id; ?>",
-	  "gasto": "<?php echo $operation->invoice_code; ?>",
-	  "ganacia": "<?php echo $ganancia = $operation->total-$operation->discount-$operation->invoice_code; ?>",
-      "subtotal": "$ <?php echo number_format($operation->total,2,'.',','); ?>",
-      "discount": "$ <?php echo number_format($operation->discount,2,'.',','); ?>",
-      "total": "$ <?php echo number_format($operation->total-$operation->discount,2,'.',','); ?>",
-      "client": "<?php if($operation->person_id!=null){$c= $operation->getPerson();echo $c->name." ".$c->lastname;} ?>",
-      "vendor": "<?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo $c->name." ".$c->lastname;} ?>",
-      "created_at": "<?php echo $operation->created_at; ?>",
-      },
- <?php endforeach; ?>
-];
-doc.autoTable(columns, rows, {
-    theme: 'grid',
-    overflow:'linebreak',
-    styles: { 
-        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
-    },
-    columnStyles: {
-        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
-    },
-    margin: {top: 100},
-    afterPageContent: function(data) {
-    }
-});
-doc.setFontSize(12);
-doc.text("Total de ventas: $ <?php echo number_format($supertotal,2,'.',','); ?> | Total de inversión: $ <?php echo number_format($supergasto,2,'.',','); ?> | Total de ganancias: $ <?php echo number_format($superganancia,2,'.',','); ?>", 40, doc.autoTableEndPosY()+25);
-		
-doc.setFontSize(10);
-doc.text("Venta en efectivo: $ <?php echo number_format($supertotal,2,'.',','); ?> | venta en trasferencia: $ <?php echo number_format($supergasto,2,'.',','); ?> | venta en punto de venta: $ <?php echo number_format($superganancia,2,'.',','); ?>", 40, doc.autoTableEndPosY()+65);
-		
-		
-doc.setFontSize(12);
-doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+145);
-<?php 
-$con = ConfigurationData::getByPreffix("report_image");
-if($con!=null && $con->val!=""):
-?>
-var img = new Image();
-img.src= "storage/configuration/<?php echo $con->val;?>";
-img.onload = function(){
-doc.addImage(img, 'PNG', 495, 20, 60, 60,'mon');	
-doc.save('sellreports-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
-}
-<?php else:?>
-doc.save('sellreports-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
-<?php endif; ?>
-}
-</script>
+		var columns2 = [
+		    {title: "Id", dataKey: "id"},
+			{title: "gasto", dataKey: "gasto"}, 
+			{title: "ganacia", dataKey: "ganacia"}, 
+		    {title: "Subtotal", dataKey: "subtotal"}, 
+		    {title: "Descuento", dataKey: "discount"}, 
+		    {title: "Total", dataKey: "total"}, 
+		    {title: "Cliente", dataKey: "client"}, 
+		    {title: "Vendedor", dataKey: "vendor"}, 
+		    {title: "Fecha", dataKey: "created_at"}, 
+		];
+
+		var rows = [
+		  <?php foreach($operations as $operation):
+		  	if ($operation->p_id == 1) {
+
+		  ?>
+		    {
+		      "id": "<?php echo $operation->ref_id; ?>",
+			  "gasto": "<?php echo $operation->invoice_code; ?>",
+			  "ganacia": "<?php echo $ganancia = $operation->total-$operation->discount-$operation->invoice_code; ?>",
+		      "subtotal": "$ <?php echo number_format($operation->total,2,'.',','); ?>",
+		      "discount": "$ <?php echo number_format($operation->discount,2,'.',','); ?>",
+		      "total": "$ <?php echo number_format($operation->total-$operation->discount,2,'.',','); ?>",
+		      "client": "<?php if($operation->person_id!=null){$c= $operation->getPerson();echo $c->name." ".$c->lastname;} ?>",
+		      "vendor": "<?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo $c->name." ".$c->lastname;} ?>",
+		      "created_at": "<?php echo $operation->created_at; ?>",
+		      },
+		 <?php
+		  	}
+
+			endforeach; 
+		  ?>
+		];
+
+		var rows2 = [
+		  <?php foreach($operations as $operation):
+		  	if ($operation->p_id == 4 && $operation->payments > 0) {
+
+		  ?>
+		    {
+		      "id": "<?php echo $operation->ref_id; ?>",
+			  "gasto": "<?php echo $operation->invoice_code; ?>",
+			  "ganacia": "<?php echo $ganancia = $operation->total-$operation->discount-$operation->invoice_code; ?>",
+		      "subtotal": "$ <?php echo number_format($operation->total,2,'.',','); ?>",
+		      "discount": "$ <?php echo number_format($operation->discount,2,'.',','); ?>",
+		      "total": "$ <?php echo number_format($operation->total-$operation->discount,2,'.',','); ?>",
+		      "client": "<?php if($operation->person_id!=null){$c= $operation->getPerson();echo $c->name." ".$c->lastname;} ?>",
+		      "vendor": "<?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo $c->name." ".$c->lastname;} ?>",
+		      "created_at": "<?php echo $operation->created_at; ?>",
+		      },
+		 <?php
+		  	}
+		 	
+			endforeach; 
+		  ?>
+		];
+		doc.autoTable(columns, rows, {
+		    theme: 'grid',
+		    overflow:'linebreak',
+		    styles: { 
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		    },
+		    columnStyles: {
+		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+		    },
+		    margin: {top: 140},
+		    afterPageContent: function(data) {
+		    }
+		});
+		doc.setFontSize(12);
+		doc.text("Total de ventas: $ <?php echo number_format($supertotal,2,'.',','); ?> | Total de inversión: $ <?php echo number_format($supergasto,2,'.',','); ?> | Total de ganancias: $ <?php echo number_format($superganancia,2,'.',','); ?>", 40, doc.autoTableEndPosY()+25);
+		doc.text("Total de descuento: $ <?php echo number_format($superdescuento,2,'.',','); ?>", 40, doc.autoTableEndPosY()+45);
+				
+		doc.setFontSize(10);
+		doc.text("Venta en efectivo: $ <?php echo number_format($total_efectivo_contado,2,'.',','); ?> | venta en trasferencia: $ <?php echo number_format($total_transferencia_contado,2,'.',','); ?> | venta en punto de venta: $ <?php echo number_format($total_punto_contado,2,'.',','); ?>", 40, doc.autoTableEndPosY()+65);
+		doc.text("Venta en Zelle: $ <?php echo number_format($total_zelle_contado,2,'.',','); ?>", 40, doc.autoTableEndPosY()+85);
+
+
+		doc.addPage();
+				
+		doc.autoTable(columns2, rows2, {
+		    theme: 'grid',
+		    overflow:'linebreak',
+		    styles: { 
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		    },
+		    columnStyles: {
+		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+		    },
+		    margin: {top: 40},
+		    afterPageContent: function(data) {
+		    }
+		});
+		// doc.setFontSize(12);
+		// doc.text("Total de ventas: $ <?php echo number_format($supertotal_credito,2,'.',','); ?> | Total de inversión: $ <?php echo number_format($supergasto_credito,2,'.',','); ?> | Total de ganancias: $ <?php echo number_format($superganancia_credito,2,'.',','); ?>", 40, doc.autoTableEndPosY()+120);
+				
+		doc.setFontSize(12);
+		doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+145);
+		<?php 
+		$con = ConfigurationData::getByPreffix("report_image");
+		if($con!=null && $con->val!=""):
+		?>
+		var img = new Image();
+		img.src= "storage/configuration/<?php echo $con->val;?>";
+		img.onload = function(){
+		doc.addImage(img, 'PNG', 495, 20, 60, 60,'mon');	
+		doc.save('sellreports-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+		}
+		<?php else:?>
+		doc.save('sellreports-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+		<?php endif; ?>
+		}
+		</script>
 
 
 
-<?php else:
-// si no hay operaciones
-?>
+		<?php else:
+		// si no hay operaciones
+		?>
 <script>
 	$("#wellcome").hide();
 </script>
