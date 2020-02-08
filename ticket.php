@@ -319,10 +319,10 @@ $pdf->setX(12.50);
 $pdf->Cell(35,$off,"$op->q");
 $pdf->setY(96);
 $pdf->setX(17.50);
-$pdf->Cell(11,$off,$simbolo.number_format(($product->price_out)*$tasa),2,".",",");
+$pdf->Cell(11,$off,$simbolo.number_format(($product->price_out*$tasa),2,",","."));
 $pdf->setY(96);
 $pdf->setX(31);
-$pdf->Cell(11,$off,$simbolo.number_format(($op->q*$product->price_out)*$tasa),2,".",",");
+$pdf->Cell(11,$off,$simbolo.number_format(($op->q*$product->price_out*$tasa),2,",","."));
 	
 //    ".."  ".number_format($op->q*$product->price_out,2,"."."."));
 $total += $op->q*$product->price_out;
@@ -346,7 +346,7 @@ $pdf->setX(0.10);
 $pdf->Cell(5,$off,"PAGO: " );
 $pdf->setY(98);
 $pdf->setX(28);
-$pdf->Cell(5,$off,$simbolo.number_format($sell->cash*$tasa),2,".",",");
+$pdf->Cell(5,$off,$simbolo.number_format(($sell->cash*$tasa),2,",","."));
 $pdf->setY(101);
 $pdf->setX(0.10);
 $pdf->Cell(5,$off,"CAMBIO: " );
@@ -354,20 +354,20 @@ $pdf->setY(101);
 $pdf->setX(28);
 $totalcambio= $total - $sell->discount;
 $totalcambio= $sell->cash - $totalcambio;
-$pdf->Cell(5,$off,$simbolo.number_format($totalcambio*$tasa),2,".",",");
+$pdf->Cell(5,$off,$simbolo.number_format(($totalcambio*$tasa),2,",","."));
 $pdf->setY(104);
 $pdf->setX(0.10);
 $pdf->SetFont('Arial','',6);
 $pdf->Cell(5,$off,"SUBTOTAL:  " );
 $pdf->setY(104);
 $pdf->setX(28);
-$pdf->Cell(5,$off,$simbolo.number_format($total*$tasa),2,".",",");
+$pdf->Cell(5,$off,$simbolo.number_format(($total*$tasa),2,",","."));
 $pdf->setY(107);
 $pdf->setX(0.10);
 $pdf->Cell(5,$off,"DESCUENTO: " );
 $pdf->setY(107);
 $pdf->setX(28);
-$pdf->Cell(5,$off,$simbolo.number_format($sell->discount*$tasa),2,".",",");
+$pdf->Cell(5,$off,$simbolo.number_format(($sell->discount*$tasa),2,",","."));
 
 
 
@@ -381,7 +381,7 @@ $pdf->setX(0.10);
 $pdf->Cell(5,$off,"TOTAL: " );
 $pdf->setY(110);
 $pdf->setX(28);
-$pdf->Cell(5,$off,$simbolo.number_format(($total - $sell->discount)*$tasa),2,".",",");
+$pdf->Cell(5,$off,$simbolo.number_format((($total - $sell->discount)*$tasa),2,".",","));
 
 
 $pdf->setY(116);

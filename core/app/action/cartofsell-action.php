@@ -246,7 +246,7 @@ $clients = FData::getAll();
 <div class="col-md-6">
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VUELTO</label>
     <div class="col-lg-12">
-      <input type="text" name="change_sell" class="form-control" required value="0" id="change_sell" placeholder="0">
+      <input readonly="" type="text" name="change_sell" class="form-control" required value="0" id="change_sell" placeholder="0">
     </div>
 </div>
 <div class="col-md-6">
@@ -280,7 +280,7 @@ $clients = FData::getAll();
  <div class="col-md-6">
     <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MONTO A CANCELAR</label>
     <div class="col-lg-12">
-      <input type="text" name="money" value="0" class="form-control" id="money" placeholder="EFECTIVO">
+      <input type="text"  name="money" value="0" class="form-control" id="money" placeholder="EFECTIVO">
     </div>
   </div>
   </div>
@@ -317,7 +317,7 @@ $clients = FData::getAll();
 
 
 
-<input type="hidden" name="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
+<input type="hidden" name="total" id="total" value="<?php echo $total; ?>" class="form-control" placeholder="Total">
 <div class="clearfix"></div>
 <br>
   <div class="row">
@@ -370,11 +370,12 @@ $clients = FData::getAll();
 
 <script>
 	$("#processsell").submit(function(e){
+
 		discount = $("#discount").val();
     	p = $("#f_id").val();		
     	paymentType = $("#p_id").val();
     	client = $("#client_id").val();
-		money = $("#money").val();
+		money = $("#money").val().replace(",",".");
 		referenceText = $("#refe").val();
 		//INICIO VARIABLES PARA DUAL
 		efe = parseInt($("#efe").val());
@@ -401,8 +402,8 @@ $clients = FData::getAll();
 				if(cli[client]==1){
 					if(discount==""){ discount=0;}
 					
-					if(p==4 && numeroNormal == money ){
-						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
+					if(p==4 && parseFloat(numeroNormal) == parseFloat(money) ){
+						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (parseFloat(<?php echo $total;?>) - parseFloat(discount)) - parseFloat(money)) );
 						if(go){
 							e.preventDefault();
 							$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
@@ -414,9 +415,8 @@ $clients = FData::getAll();
 						}
 						else{e.preventDefault();}
 					} else if(p!=4){
-						console.log(( (<?php echo $total;?> - discount) - money));
 						e.preventDefault();
-						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (<?php echo $total;?> - discount) - money) );
+						go = confirm("ESTAS SEGURO DE ASIGNARLE CREDITO A ESTE CLIENTE POR: $"+( (parseFloat(<?php echo $total;?>) - parseFloat(discount)) - parseFloat(money)) );
 						if(go){
 							e.preventDefault();
 							$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
@@ -446,8 +446,7 @@ $clients = FData::getAll();
 		{
 			if(p!=4)
 			{
-				console.log(money, parseInt(<?php echo $total;?>-discount))
-				if(money < parseInt(<?php echo $total;?>-discount))
+				if(parseFloat(money) < parseFloat(<?php echo $total;?>-discount))
 				{
 					if(paymentType!=4 && paymentType!=2){
 						alert("EFECTIVO INSUFICIENTE!");
@@ -456,6 +455,7 @@ $clients = FData::getAll();
 				}
 				else
 				{
+
 					if(p!=1 && (referenceText==0 || referenceText==""))	{
 						alert("LA REFERENCIA ES OBLIGATORIA");
 						e.preventDefault();
@@ -464,7 +464,7 @@ $clients = FData::getAll();
 						e.preventDefault();
 					} else if(conditionOne == false){
 						if(discount==""){ discount=0;}
-						go = confirm("CAMBIO: $"+(money-(<?php echo $total;?>-discount ) ) );
+						go = confirm("CAMBIO: $"+(parseFloat(money)-(parseFloat(<?php echo $total;?>)-parseFloat(discount) ) ) );
 						if(go){
 							e.preventDefault();
 							$.post("./index.php?action=processsell",$("#processsell").serialize(),function(data){
@@ -478,12 +478,12 @@ $clients = FData::getAll();
 					}
 				}
     		}else if(p==4){ // usaremos credito
-				if((money<parseInt((<?php echo $total;?>-discount)) || (numeroNormal < ((parseInt(<?php echo $total;?>))-parseInt(discount))) && (paymentType!=4 && paymentType!=2))){
+				if((parseFloat(money)<parseFloat((<?php echo $total;?>-discount)) || (numeroNormal < ((parseFloat(<?php echo $total;?>))-parseFloat(discount))) && (paymentType!=4 && paymentType!=2))){
 					alert("PAGO INSUFICIENTE!");
 					e.preventDefault();
 				}
 				else {
-					if(numeroNormal < parseInt(money)){
+					if(parseFloat(numeroNormal) < parseFloat(money)){
 						alert("PAGO INSUFICIENTE!");
 						e.preventDefault();
 					} else {
@@ -500,8 +500,9 @@ $clients = FData::getAll();
 							if(discount==""){
 								discount=0;
 							}
-							let cambio_sell = parseInt(numeroNormal)-parseInt(<?php echo $total;?>-discount )
-							if (cambio_sell > 0 && cambio_sell != parseInt($("#change_sell").val())) {
+							let cambio_sell = (parseFloat(numeroNormal)-parseFloat(<?php echo $total;?>-discount)).toFixed(2)
+							let change_sell = parseFloat($("#change_sell").val()).toFixed(2)
+							if (cambio_sell > 0 && cambio_sell != change_sell) {
 								alert("EL CAMBIO A SER DEVUELTO NO COINCIDE");
 								e.preventDefault();
 							} else {
@@ -546,6 +547,41 @@ $clients = FData::getAll();
 			$("#form-ref").removeClass("hidden")
 			$("#pay_dual").addClass("hidden")
 		}
+	})
+	let total_ = parseFloat($("#total").val());
+
+	$("#efe").change(function (argument) {
+
+		let efe = parseFloat($("#efe").val());
+		let pun = parseFloat($("#pun").val());
+		let tra = parseFloat($("#tra").val());
+		let zel = parseFloat($("#zel").val());
+		let change_sell = (efe+pun+tra+zel)-total_;
+		$("#change_sell").val(change_sell.toFixed(2));
+	})
+	$("#pun").change(function (argument) {
+		let efe = parseFloat($("#efe").val());
+		let pun = parseFloat($("#pun").val());
+		let tra = parseFloat($("#tra").val());
+		let zel = parseFloat($("#zel").val());
+		let change_sell = (efe+pun+tra+zel)-total_;
+		$("#change_sell").val(change_sell.toFixed(2));
+	})
+	$("#tra").change(function (argument) {
+		let efe = parseFloat($("#efe").val());
+		let pun = parseFloat($("#pun").val());
+		let tra = parseFloat($("#tra").val());
+		let zel = parseFloat($("#zel").val());
+		let change_sell = (efe+pun+tra+zel)-total_;
+		$("#change_sell").val(change_sell.toFixed(2));
+	})
+	$("#zel").change(function (argument) {
+		let efe = parseFloat($("#efe").val());
+		let pun = parseFloat($("#pun").val());
+		let tra = parseFloat($("#tra").val());
+		let zel = parseFloat($("#zel").val());
+		let change_sell = (efe+pun+tra+zel)-total_;
+		$("#change_sell").val(change_sell.toFixed(2));
 	})
 
 </script>

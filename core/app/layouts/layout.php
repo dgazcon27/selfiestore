@@ -32,6 +32,8 @@
 <script type="text/javascript" src="plugins/jsqrcode/webqr.js"></script>
           <?php endif;?>
 <script type="text/javascript" src="res/js/mousetrap.min.js"></script>
+<script type="text/javascript" src="res/js/jszip.js"></script>
+<script type="text/javascript" src="res/js/xlsx.js"></script>
 
   </head>
 
@@ -275,6 +277,12 @@ if( $q==0 ||  $q<=$product->inventary_min){
                  
                   <li><a href="./?view=search">Buscar Productos</a></li>
                   <li><a href="./?view=dev">Devolucion</a></li>
+                </ul>
+              </li>
+               <li class="treeview">
+                <a href="#"><i class='fa fa-database'></i> <span>LISTADO DE PRODUCTOS</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li><a href="./?view=products">Productos</a></li>
                 </ul>
               </li>
       			  <li class="treeview">
