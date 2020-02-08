@@ -11,18 +11,20 @@
 <div class="row">
 	<div class="col-md-12">
 
-<div class="btn-group">
-  <a href="index.php?view=newproduct" class="btn btn-default">AGREGAR PRODUCTO</a>
-<div class="btn-group pull-right">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <li><a href="report/products-word.php">DOCUMENTO</a></li>
+<?php if (Core::$user->kind==1): ?>
+  <div class="btn-group">
+    <a href="index.php?view=newproduct" class="btn btn-default">AGREGAR PRODUCTO</a>
+  <div class="btn-group pull-right">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <i class="fa fa-download"></i> DESCARGAR <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="report/products-word.php">DOCUMENTO</a></li>
 
-  </ul>
-</div>
-</div>
+    </ul>
+  </div>
+  </div>
+<?php endif ?>
 <br><br>
 
 <?php
@@ -44,7 +46,7 @@ if(count($products)>0){
 		<th>NOMBRE</th>
 		<th>PRECIO DE ENTRADA</th>
 		<th>PRECIO DE SALIDA</th>
-		<th>CATEGORIA</th>
+		<th>PESO</th>
 		<th>MARCA</th>
     	<th>TIPO</th>
 	
@@ -52,7 +54,7 @@ if(count($products)>0){
 	</thead>
 	<?php foreach($products as $product):?>
 	<tr>
-		<td><?php echo $product->barcode; ?></td>
+		<td><?php echo $product->code; ?></td>
 		<td>
 			<?php if($product->image!=""):?>
 				<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
@@ -61,7 +63,7 @@ if(count($products)>0){
 		<td><?php echo strtoupper($product->name); ?></td>
 		<td>$ <?php echo number_format($product->price_in,2,'.',','); ?></td>
 		<td>$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
-		<td><?php if($product->category_id!=null){echo $product->getCategory()->name;}else{ echo "<center>----</center>"; }  ?></td>
+		<td class="center"><?php echo $product->unit; ?>G</td>
 		<td><?php if($product->brand_id!=null){echo $product->getBrand()->name;}else{ echo "<center>----</center>"; }  ?></td>
 <td>
   <?php
@@ -78,11 +80,13 @@ if($product->kind==1){
 		
 		
 
-		<td style="width:90px;">
-		<a target="_blank" href="index.php?action=productqr&id=<?php echo $product->id; ?>" class="btn btn-xs btn-default"><i class="fa fa-qrcode"></i></a>
-		<a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
-		<a href="index.php?view=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE PRODUCTO');"><i class="fa fa-trash"></i></a>
-		</td>
+      <td style="width:90px;">
+		<?php if (Core::$user->kind == 1): ?>
+      <a target="_blank" href="index.php?action=productqr&id=<?php echo $product->id; ?>" class="btn btn-xs btn-default"><i class="fa fa-qrcode"></i></a>
+      <a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+      <a href="index.php?view=delproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE PRODUCTO');"><i class="fa fa-trash"></i></a>
+    <?php endif ?>
+      </td>
 	</tr>
 	<?php endforeach;?>
 </table>

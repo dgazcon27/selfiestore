@@ -25,7 +25,7 @@ $products = null;
 // print_r(Core::$user);
 if(isset($_SESSION["user_id"])){
 	if(Core::$user->kind==3){
-		$products = SellData::getAllBySQL(" where user_id=".Core::$user->id." and operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 order by created_at desc");
+		$products = SellData::getSellsForManager();
 
 	} elseif(Core::$user->kind==2){
 		$products = SellData::getAllBySQL(" where operation_type_id=2 and p_id=1 and d_id=1 and is_draft=0 and stock_to_id=".Core::$user->stock_id." order by created_at desc");
