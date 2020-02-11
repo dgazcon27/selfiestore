@@ -7,7 +7,9 @@
 <div class="box box-primary" style="height: 350px;"><br>
 
 		<form class="form-horizontal" method="post" id="addproduct" action="index.php?view=addclient" role="form">
-
+      <?php if (isset($_GET['from'])): ?>
+        <input type="hidden" name="from" value="<?php echo $_GET['from']; ?>">
+      <?php endif ?>
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">IDENTIFICACION*</label>
     <div class="col-md-6">

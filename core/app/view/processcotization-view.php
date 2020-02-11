@@ -29,6 +29,12 @@ foreach($operations as $operation){
     ?></h4>
     </div>
   </div>
+  <div class="col-md-3">
+    <label class="control-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUEVO CLIENTE</label>
+    <div class="col-lg-12">
+      <a href="index.php?view=newclient2&from=<?php echo $_GET['id'] ?>" class="form-control"><i class='fa fa-smile-o'></i>&nbsp;&nbsp;&nbsp;&nbsp;AGREGAR</a>
+    </div>
+  </div>
 
 <div class="col-md-3">
     <label class="control-label">Cliente</label>
@@ -54,7 +60,7 @@ foreach($operations as $operation){
     </div>
 
   </div>
-<div class="col-md-4">
+<div class="col-md-3">
     <label class="control-label">&nbsp;</label>
 <div class="col-lg-12">
     <button class="btn btn-primary btn-block"><i class="glyphicon glyphicon-usd"></i><i class="glyphicon glyphicon-usd"></i> Procesar</button>
@@ -151,32 +157,37 @@ $clients = PData::getAll();
     })
 
     $("#processcotization").submit(function(e){
-        discount = $("#discount").val();
-        money = $("#money").val();
-        client_id = $("#client_id").val();
-        let inputs = $('.inputs-type');
-        obj = [];
-        for (var i = 0; i < inputs.length; i++) {
-            let elem = inputs[i];
-            obj.push({
-                id:$(elem).data('id'),
-                q_ap:$(elem).data('q'),
+        if ($("#client_id").val() != undefined) {
+            discount = $("#discount").val();
+            money = $("#money").val();
+            client_id = $("#client_id").val();
+            let inputs = $('.inputs-type');
+            obj = [];
+            for (var i = 0; i < inputs.length; i++) {
+                let elem = inputs[i];
+                obj.push({
+                    id:$(elem).data('id'),
+                    q_ap:$(elem).data('q'),
 
-            })
-        }
-        $('#op-q').val(JSON.stringify(obj));
+                })
+            }
+            $('#op-q').val(JSON.stringify(obj));
 
-        if(money<(<?php echo $total;?>-discount)){
-            alert("Efectivo insificiente!");
+            if(money<(<?php echo $total;?>-discount)){
+                alert("Efectivo insificiente!");
+                e.preventDefault();
+            }else if (client_id == "") {
+                alert("Debe seleccionar un cliente");
+                e.preventDefault();
+            }else{
+                if(discount==""){ discount=0;}
+                go = confirm("Cambio: $"+(money-(<?php echo $total;?>-discount ) ) );
+                if(go){}
+                    else{e.preventDefault();}
+            }
+        } else {
             e.preventDefault();
-        }else if (client_id == "") {
-            alert("Debe seleccionar un cliente");
-            e.preventDefault();
-        }else{
-            if(discount==""){ discount=0;}
-            go = confirm("Cambio: $"+(money-(<?php echo $total;?>-discount ) ) );
-            if(go){}
-                else{e.preventDefault();}
+            alert("Debes seleccionar un cliente o agregar uno nuevo.")
         }
     });
 </script>

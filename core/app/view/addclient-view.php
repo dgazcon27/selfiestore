@@ -12,10 +12,12 @@ if(count($_POST)>0){
 	$user->has_credit = isset($_POST["has_credit"])?1:0;
 	$user->add_solo_client();
 
-print "<script>window.location='index.php?view=clients';</script>";
-
-
-header('Location: ./?view=sell');
+	if (isset($_POST['from'])) {
+		print "<script>window.location='index.php?view=processcotization&id=".$_POST['from']."';</script>";
+	} else {
+		print "<script>window.location='index.php?view=clients';</script>";
+		header('Location: ./?view=sell');
+	}
 
 
 }

@@ -13,7 +13,7 @@ if(!empty($_POST)){
 	$sell->ref_id = $xx[1];
 	$sell->d_id = $_POST["d_id"];
 	$sell->f_id = 1;
-	$sell->person_id = $_POST["client_id"];
+	$sell->person_id = isset($_POST["client_id"]) ? $_POST["client_id"] : "NULL";
 	$sell->iva=  $iva_val;
 	$sell->total = $_POST["total"];
 	$sell->stock_to_id = StockData::getPrincipal()->id;

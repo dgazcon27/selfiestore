@@ -144,7 +144,7 @@
 											$i = 0;
 											while (!$is_imeis && $i < count($products_sell)) {
 												$p = ProductData::getById($products_sell[$i]->product_id);
-												if ($p->category_id == 47) {
+												if ($p->category_id == 1) {
 													$is_imeis = true;
 												}
 												$i = $i+1;
@@ -161,9 +161,17 @@
 												</a>
 												
 											<?php
+											} elseif(!$is_imeis) {
+											?>
+												<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
+													<span> ARMAR PEDIDO</span>
+												</a>
+											<?php
 											}
+
 											  
 										?>
+											
 									<?php endif ?>
 
 									<?php 
