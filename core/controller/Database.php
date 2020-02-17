@@ -6,7 +6,7 @@ class Database
 
 	function Database()
 	{
-		$this->user="root";$this->pass="";$this->host="localhost";$this->ddbb="distribuidora";
+		$this->user="root";$this->pass="";$this->host="localhost";$this->ddbb="inventiomax";
 	}
 
 	function connect()

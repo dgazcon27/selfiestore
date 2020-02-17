@@ -62,7 +62,7 @@ if (isset($_SESSION['is_client'])) {
 $(document).ready(function(){
 	$("#searchp").on("submit",function(e){
 		e.preventDefault();
-		
+		console.log("adssadsa");
 		$.get("./?action=searchproduct2",$("#searchp").serialize(),function(data){
 			$("#show_search_results").html(data);
 		});

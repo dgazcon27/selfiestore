@@ -241,9 +241,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
       <li class="treeview">
               <a href="#"><i class='fa fa-shopping-cart'></i> <span>COTIZACIONES Y PEDIDOS</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <?php if (Core::$user->kind != 2): ?>
-                  <li><a href="./?view=cotizations">Cotizaciones</a></li>
-                <?php endif ?>
+                <li><a href="./?view=cotizations">Cotizaciones</a></li>
                 <li><a href="./?view=orders-approved">Pedidos</a></li>
                 <?php if (Core::$user->kind != 2): ?>
                  <li><a href="./?view=cotizationscancel">Cotizaciones Canceladas</a></li>

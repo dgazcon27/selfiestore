@@ -32,7 +32,7 @@ $products_in_cero=0;
 	 foreach($products as $product):
 	 	$stock = StockData::getPrincipal()->id;
 		$q = OperationData::getQByStock($product->id, $stock);
-		if ($q <= 0 && Core::$user->kind == 8) {
+		if ($q <= 0 && (Core::$user->kind == 8 || Core::$user->kind == 2)) {
 			$stock = Core::$user->stock_id;
 			$q = OperationData::getQByStock($product->id,$stock);
 		}
@@ -103,7 +103,7 @@ $products_in_cero=0;
 	 		foreach($products_resp as $product):
 				$stock = StockData::getPrincipal()->id;
 				$q = OperationData::getQByStock($product->id, $stock);
-				if ($q <= 0 && Core::$user->kind == 8) {
+				if ($q <= 0 && (Core::$user->kind == 8 || Core::$user->kind == 2)) {
 					$stock = Core::$user->stock_id;
 					$q = OperationData::getQByStock($product->id,$stock);
 				}
