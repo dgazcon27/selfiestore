@@ -79,11 +79,11 @@ $products = ProductData::getAll();
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE ENTRADA*</label>
-      <input type="number" name="price_in" value="0" required class="form-control" id="price_in" placeholder="INGRESAR EL PRECIO DE ENTRADA">
+      <input type="text" name="price_in" value="0" required class="form-control" id="price_in" placeholder="INGRESAR EL PRECIO DE ENTRADA">
     </div>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE SALIDA*</label>
-      <input type="number" name="price_out" value="0" required class="form-control" id="price_out" placeholder="INGRESAR EL PRECIO DE SALIDA">
+      <input type="text" name="price_out" value="0" required class="form-control" id="price_out" placeholder="INGRESAR EL PRECIO DE SALIDA">
     </div>
   </div>
 			
@@ -91,13 +91,17 @@ $products = ProductData::getAll();
 			
 <div class="form-group">
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
-    <div class="col-md-3">
+    <div class="col-md-2">
     <label class="control-label">MINIMA EN INVENTARIO:</label>
       <input type="number" name="inventary_min" value="0" class="form-control" id="inputEmail1" placeholder="INGRESAR EL MINIMO EN EL INVENTARIO(DEFAULT 10)">
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
     <label class="control-label">INVENTARIO INICIAL*</label>
       <input type="number" name="q" class="form-control" id="inputEmail1" placeholder="INGRESAR EL INVENTARIO INICIAL" required>
+    </div>
+    <div class="col-md-2">
+    <label class="control-label">PESO*</label>
+      <input type="text" name="unit" class="form-control" id="unit" placeholder="PESO" required>
     </div>
   </div>
   <div class="form-group">

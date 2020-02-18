@@ -35,7 +35,7 @@ class ProductData {
 
 // partiendo de que ya tenemos creado un objecto ProductData previamente utilizamos el contexto
 	public function update(){
-		$sql = "update ".self::$tablename." set barcode=\"$this->barcode\",name=\"$this->name\",price_in=\"$this->price_in\",price_out=\"$this->price_out\",category_id=$this->category_id,inventary_min=\"$this->inventary_min\",is_active=\"$this->is_active\",code=\"$this->code\",brand_id=$this->brand_id where id=$this->id";
+		$sql = "update ".self::$tablename." set barcode=\"$this->barcode\",name=\"$this->name\",price_in=\"$this->price_in\",price_out=\"$this->price_out\",category_id=$this->category_id,inventary_min=\"$this->inventary_min\",is_active=\"$this->is_active\",code=\"$this->code\",brand_id=$this->brand_id, unit=\"$this->unit\" where id=$this->id";
 		Executor::doit($sql);
 	}
 

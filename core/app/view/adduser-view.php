@@ -27,7 +27,7 @@ if(count($_POST)>0){
 	$user->password = sha1(md5($_POST["password"]));
 	$u = $user->add();
 
-	if ($_POST['kind'] == 4 || $_POST['kind'] == 8 || $_POST['kind'] == 5) {
+	if ($_POST['kind'] == 4 || $_POST['kind'] == 8 || $_POST['kind'] == 5 || $_POST['kind'] == 2) {
 		$person = new PersonData();
 		$person->no = "";
 
@@ -50,6 +50,7 @@ if(count($_POST)>0){
 		$person->has_credit = 0;
 		$person->created_at = "NOW()";
 		$person->user_id = $u[1];
+
 		$person->add_client();
 	}
 

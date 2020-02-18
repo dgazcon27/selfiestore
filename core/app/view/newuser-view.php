@@ -27,7 +27,7 @@
         <input type="hidden" name="kind" value="<?php echo $_GET["kind"];?>">
         <!--  BEGIN SECTION CLIENTS DATA -->
         <p class="alert alert-info">* Campos obligatorios</p>
-        <?php if (isset($_GET['kind']) && ($_GET['kind'] == 4 || $_GET['kind'] == 8 || $_GET['kind'] == 5)): ?>
+        <?php if (isset($_GET['kind']) && ($_GET['kind'] == 4 || $_GET['kind'] == 8 || $_GET['kind'] == 5) || $_GET['kind'] == 2): ?>
           <div class="col-lg-12">
             <div class="col-lg-12">
               <?php if ($_GET['kind'] == 5): ?>

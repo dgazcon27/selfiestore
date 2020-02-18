@@ -55,18 +55,18 @@ if($_POST["q"]!="" || $_POST["q"]>"0"){
       $s = $sell->add_re();
 
 
- $op = new OperationData();
- $op->sell_id = $s[1] ;
- $op->product_id = $prod[1] ;
- $op->stock_id = StockData::getPrincipal()->id;
- $op->operation_type_id=OperationTypeData::getByName("entrada")->id;
- $op->price_in =$_POST["price_in"];
- $op->price_out= $_POST["price_out"];
- $op->q= $_POST["q"];
- $op->sell_id="NULL";
-$op->is_oficial=1;
-$op->add();
-}
+   $op = new OperationData();
+   $op->sell_id = $s[1] ;
+   $op->product_id = $prod[1] ;
+   $op->stock_id = StockData::getPrincipal()->id;
+   $op->operation_type_id=OperationTypeData::getByName("entrada")->id;
+   $op->price_in =$_POST["price_in"];
+   $op->price_out= $_POST["price_out"];
+   $op->q= $_POST["q"];
+   $op->sell_id="NULL";
+  $op->is_oficial=1;
+  $op->add();
+  }
 }
 
 print "<script>window.location='index.php?view=products';</script>";

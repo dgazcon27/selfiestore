@@ -86,9 +86,14 @@ if($product!=null):
 
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
-    <div class="col-md-6">
+    
+    <div class="col-md-3">
     <label class="control-label">MINIMA EN INVENTARIO</label>
       <input type="number" name="inventary_min" class="form-control" value="<?php echo $product->inventary_min;?>" id="inputEmail1" placeholder="INGRESAR EL MINIMO EN EL INVENTARIO(DEFAULT 10)">
+    </div>
+    <div class="col-md-3">
+    <label class="control-label">PESO*</label>
+      <input type="text" name="unit" class="form-control" id="unit" placeholder="PESO" required>
     </div>
   </div>
 
