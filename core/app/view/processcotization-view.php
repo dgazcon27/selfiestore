@@ -43,7 +43,7 @@ foreach($operations as $operation){
         $clients = [];
         if (isset($sell->person_id)) {
             $person = PersonData::getById($sell->person_id);
-            echo '<input type="hidden" name="client_id" value="'.$sell->person_id.'">';
+            echo '<input type="hidden" id="client_id" name="client_id" value="'.$sell->person_id.'">';
             echo '<h4>'.$person->name." ".$person->lastname.'</h4>';
         } else {
             $clients = PersonData::getClients();
