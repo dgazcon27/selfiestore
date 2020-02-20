@@ -195,7 +195,12 @@
 									<?php endif ?>
 									<?php if ((isset($_SESSION['is_admin']) || Core::$user->kind == 2)): ?>
 										<a onclick="thePDF(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
-											<i class="fa fa-file"></i>
+											<i class="fa fa-file"></i> PDF ALMACEN
+										</a>
+									<?php endif ?>
+									<?php if (isset($_SESSION['is_admin']) && $sell->user_id): ?>
+										<a onclick="report(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
+											<i class="fa fa-file"></i> PDF GUIA
 										</a>
 									<?php endif ?>
 								</td>
@@ -239,6 +244,7 @@
 		var columns = [
 	        {title: "CODIGOS DE BARRAS", dataKey: "id"}, 
 		    {title: "PRODUCTO", dataKey: "product"}, 
+		    {title: "PESO", dataKey: "unit"}, 
 		    {title: "CANTIDAD", dataKey: "q"}, 
 		];
 		var rows = [];
@@ -257,6 +263,7 @@
 				data = {
 					"id" : products[i].barcode,
 					"product": products[i].name,
+					"unit": products[i].unit,
 					"q": products[i].q
 				}
 				rows.push(data)
@@ -278,7 +285,76 @@
 			doc.text("                       _____________________                     _____________________",40, doc.autoTableEndPosY()+200);
 			doc.text("                          AlMACEN DE ORIGEN                           ALMACEN DESTINO",40, doc.autoTableEndPosY()+215);
 			doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+600);
-			doc.save('movimiento-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+			doc.save('pdf_almacen-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+		});
+
+		
+	}
+</script>
+
+
+<script type="text/javascript">
+    function report(id, order, date) {
+    	newdate = new Date(date);
+    	month = parseInt(newdate.getMonth())+1;
+    	month_ = month < 10 ? "0"+month : month;
+    	printdate = newdate.getDate()+"/"+month_+"/"+newdate.getFullYear();
+		var doc = new jsPDF('p', 'pt');
+        doc.setFontSize(26);
+        doc.text("PEDIDO #"+order+" - FECHA "+printdate+" ", 100, 65);
+		var columns = [
+	        {title: "CODIGOS DE BARRAS", dataKey: "id"}, 
+		    {title: "PRODUCTO", dataKey: "product"}, 
+		    {title: "PESO", dataKey: "unit"}, 
+		    {title: "CANTIDAD", dataKey: "q"}, 
+		];
+
+		var rows = [];
+		$.get("./?action=movetransferdocument&id="+id+"&seller=1 ",function(data2){
+			let response = JSON.parse(data2);
+			let sell = response.sell;
+			let person = response.person;
+			let products = response.products;
+			let seller = response.seller ? response.seller : {'name':'', 'lastname':''};
+			doc.setFontSize(12);
+    		doc.text("_____________________________________________________________________________", 40, 90);
+    		doc.text("NOMBRE DEL ENCARGADO: "+person.name+" "+person.lastname+"             TELÉFONO ENCARGADO: "+person.phone2+" ", 40, 105);
+    		doc.text("_____________________________________________________________________________", 40, 108);
+    		doc.text("EMPRESA: "+person.company+"        TELÉFONO: "+person.phone1+"           RIF: "+person.rif+"", 40, 125);
+    		doc.text("_____________________________________________________________________________", 40, 130);
+    		doc.text("DIRECCION DE ENTREGA: "+person.address2+" ", 40, 145);
+    		doc.text("_____________________________________________________________________________", 40, 150);
+    		doc.text("ATENTIDO POR: "+seller.name+" "+seller.lastname+" ", 40, 165);
+			doc.text("_____________________________________________________________________________", 40, 170);
+
+			doc.setFontSize(14);
+			for (var i = 0; i < products.length; i++) {
+				data = {
+					"id" : products[i].barcode,
+					"product": products[i].name,
+					"unit": products[i].unit,
+					"q": products[i].q
+				}
+				rows.push(data)
+			}
+			doc.autoTable(columns, rows, {
+			    theme: 'grid',
+			    overflow:'linebreak',
+			    styles: { 
+			        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+			    },
+			    columnStyles: {
+			        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+			    },
+			    margin: {top: 200},
+			    afterPageContent: function(data) {
+			    }
+			});
+			doc.setFontSize(12);
+			doc.text("__________________  __________________  __________________  __________________",40, doc.autoTableEndPosY()+200);
+			doc.text("           ENTREGA               TRANSPORTA                    RECIBE                       AUDITA",40, doc.autoTableEndPosY()+215);
+			doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+603);
+			doc.save('pdg_guia-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 		});
 
 		

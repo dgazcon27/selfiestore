@@ -140,7 +140,7 @@ elseif($sell->f_id == 5)
 		<?php endif ?>
 		<?php if (isset($_SESSION['is_admin']) && $sell->user_id): ?>
 			<a onclick="report(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
-				<i class="fa fa-file"></i>
+				<i class="fa fa-file"></i> PDF GUIA
 			</a>
 		<?php endif ?>
 		</td>
