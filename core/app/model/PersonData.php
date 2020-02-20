@@ -19,9 +19,9 @@ class PersonData {
 	}
 
 	function add_solo_client()	{
-		$sql = "insert into person (no,ci,name,lastname,address1,phone1,is_active_access,kind,created_at)";
+		$sql = "insert into person (no,ci,name,lastname,address1,phone1,is_active_access,kind,created_at, credit_limit)";
 
-		$sql .= "value (\"$this->no\",\"$this->ci\",\"$this->name\",\"$this->lastname\",\"$this->address1\",\"$this->phone1\",$this->is_active_access,4,NOW())";
+		$sql .= "value (\"$this->no\",\"$this->ci\",\"$this->name\",\"$this->lastname\",\"$this->address1\",\"$this->phone1\",$this->is_active_access,4,NOW(), $this->credit_limit)";
 		Executor::doit($sql);
 	}
 

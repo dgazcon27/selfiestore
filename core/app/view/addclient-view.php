@@ -10,6 +10,7 @@ if(count($_POST)>0){
 	$user->phone1 = $_POST["phone1"];
 	$user->is_active_access = 0;
 	$user->has_credit = isset($_POST["has_credit"])?1:0;
+	$user->credit_limit = 0;
 	$user->add_solo_client();
 
 	if (isset($_POST['from'])) {
