@@ -17,7 +17,7 @@
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">NOMBRE COMPLETO*</label>
     <div class="col-md-6">
-      <input type="text" name="name" value="<?php echo $user->name." ".$user->lastname;?>" class="form-control" id="name" placeholder="INGRESAR EL NOMBRE COMPLETO">
+      <input type="text" name="name" value="<?php echo $user->name?>" class="form-control" id="name" placeholder="INGRESAR EL NOMBRE COMPLETO">
     </div>
   </div>
   <div class="form-group">
@@ -39,11 +39,11 @@
 <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label" >ACTIVAR CREDITO</label>
     <div class="col-md-6">
-<div class="checkbox">
-    <label>
-      <input type="checkbox" name="has_credit" <?php if($user->has_credit){ echo "checked";}?>>
-    </label>
-  </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="has_credit" <?php if($user->has_credit){ echo "checked";}?>>
+        </label>
+      </div>
     </div>
   </div>
 

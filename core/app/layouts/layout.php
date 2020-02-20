@@ -335,7 +335,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=products">Productos</a></li>
                 <li><a href="./?view=categories&opt=all">Categorias</a></li>
                 <li><a href="./?view=brands&opt=all">Marcas</a></li>
-                <li><a href="./?view=branch">Clientes</a></li>
+                <li><a href="./?view=clients">Clientes</a></li>
                 <li><a href="./?view=providers">Proveedores</a></li>
               </ul>
             </li>

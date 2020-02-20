@@ -62,7 +62,6 @@ if (isset($_SESSION['is_client'])) {
 $(document).ready(function(){
 	$("#searchp").on("submit",function(e){
 		e.preventDefault();
-		console.log("adssadsa");
 		$.get("./?action=searchproduct2",$("#searchp").serialize(),function(data){
 			$("#show_search_results").html(data);
 		});
@@ -215,12 +214,12 @@ $total_products += $p['q'];
 
 <script>
 	let is_admin = $("#is_admin").val();
-	$("#processsell").submit(function (e) {
-		let total = $("#total_products").val();
-		if (is_admin == "0" && parseInt(total) <= 5) {
-			alert("NO ES POSIBLE COTIZAR MENOS DE 6 PRODUCTOS")
-			e.preventDefault();
-		}
+	// $("#processsell").submit(function (e) {
+	// 	let total = $("#total_products").val();
+	// 	if (is_admin == "0" && parseInt(total) <= 5) {
+	// 		alert("NO ES POSIBLE COTIZAR MENOS DE 6 PRODUCTOS")
+	// 		e.preventDefault();
+	// 	}
 
-	})
+	// })
 </script>

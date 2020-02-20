@@ -11,7 +11,7 @@ if(count($_POST)>0){
 	$user->is_active_access = isset($_POST["is_active_access"])?1:0;
 	$user->has_credit = isset($_POST["has_credit"])?1:0;
 
-	$user->update_client();
+	$user->update_solo_client();
 
 
 print "<script>window.location='index.php?view=clients';</script>";

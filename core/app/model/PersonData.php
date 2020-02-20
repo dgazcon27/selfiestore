@@ -53,6 +53,11 @@ class PersonData {
 		Executor::doit($sql);
 	}
 
+	public function update_solo_client(){
+		$sql = "update ".self::$tablename." set no=\"$this->no\", name=\"$this->name\",address1=\"$this->address1\",phone1=\"$this->phone1\", credit_limit=$this->credit_limit, is_active_access=$this->is_active_access, has_credit=$this->has_credit where id=$this->id";
+		Executor::doit($sql);
+	}
+
 	public function update_client(){
 		$sql = "update ".self::$tablename." set rif=\"$this->rif\", ci=\"$this->ci\", company=\"$this->company\", name=\"$this->name\",email1=\"$this->email1\",address2=\"$this->address2\", lastname=\"$this->lastname\",phone1=\"$this->phone1\" where id=$this->id";
 		Executor::doit($sql);
@@ -130,6 +135,12 @@ class PersonData {
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new PersonData());
 
+	}
+
+	public static function getBranchs() {
+		$sql = "select * from ".self::$tablename." where kind = 4 or kind = 8";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new PersonData());
 	}
 
 

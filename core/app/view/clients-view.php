@@ -36,14 +36,42 @@
 			foreach($users as $user){
 				?>
 				<tr>
-				<td><?php echo $user->no; ?></td>
+				<td><?php 
+					if(isset($user->no)) {
+						echo $user->no;
+					} else if (isset($user->ci)) {
+						echo $user->ci;
+					}
+				?>
+					
+				</td>
 				<td><?php echo strtoupper($user->name." ".$user->lastname); ?></td>
-				<td><?php echo strtoupper($user->address1); ?></td>
-				<td><?php echo $user->phone1; ?></td>
+				<td>
+					<?php
+						if (isset($user->address1)) {
+							echo strtoupper($user->address1);
+						} elseif (isset($user->address2)) {
+							echo strtoupper($user->address2);
+						}
+					?>
+						
+				</td>
+				<td>
+					<?php
+						if (isset($user->phone1)) {
+							echo $user->phone1;
+						} elseif($user->phone2) {
+							echo $user->phone2;
+						}
+					?>
+						
+				</td>
 				<td><?php if($user->has_credit): ?><i class="fa fa-check"></i><?php endif;?></td>
 				<td style="width:130px;">
-				<a href="index.php?view=editclient&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">EDITAR</a>
-				<a href="index.php?view=delclient&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE CLIENTE');">ELIMINAR</a>
+					<?php if (Core::$user->kind == 1): ?>
+						<a href="index.php?view=editclient&id=<?php echo $user->id;?>" class="btn btn-warning btn-xs">EDITAR</a>
+						<a href="index.php?view=delclient&id=<?php echo $user->id;?>" class="btn btn-danger btn-xs" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTE CLIENTE');">ELIMINAR</a>
+					<?php endif ?>
 				</td>
 				</tr>
 				<?php
