@@ -286,11 +286,49 @@ $total_dual = 0;
 									?>
 								</table>
 							</div>
+
 							<h1>TOTAL DE OPERACIONES DE CREDITO: $ <?php echo number_format($supertotal_credito,2,'.',','); ?></h1>
+							<hr style="border: solid 1px #3c8dbc;">
 							<h4><?php echo "&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL DE INVERSION EN CREDITO: $",number_format($supergasto_credito,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOTAL DE DESCUENTO EN CREDITO: $",number_format($superdescuento_credito,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$estado_t,number_format($superganancia_credito-$superdescuento_credito,2,'.',','),"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |"; ?> </h4>
 								
 							<h4>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL PUNTO DE CREDITO: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|"; ?></h4>		
-							<br><br>
+							<br>
+							<h3>CORRELATIVO GASTOS DEL MES</h3>
+							<div class="box box-primary">
+								<table class="table table-bordered">
+									<thead>
+										<th>ID</th>
+										<th>MONTO</th>
+										<th>DESCRIPCION</th>
+										<th>FECHA</th>
+									</thead>
+										<?php 
+											$spend_total = 0;
+											if ($_GET['sd'] != "" && $_GET['ed'] != "") {
+												$spend = SpendData::getGroupByDateOp($_GET['sd'], $_GET['ed']);
+											} else {
+												$start = date("d-m-Y h:i:s",time());
+												$end = date("d-m-Y",strtotime($start."+ 7 days")); 
+												$spend = SpendData::getGroupByDateOp($start, $end);
+											}
+											if (count($spend) >0) {
+												foreach ($spend as $value) {
+													?>
+													<tr>
+														<td><?php echo $value->id ?></td>
+														<td><?php echo $value->price ?></td>
+														<td><?php echo $value->name ?></td>
+														<td><?php echo date("d-m-Y",strtotime($value->created_at)) ?></td>
+													</tr>
+													<?php
+													$spend_total += $value->price;
+												}
+											}
+										?>
+								</table>
+							</div>
+							<h1>TOTAL DE GASTOS DEL MES: $ <?php echo number_format($spend_total,2,'.',','); ?></h1>
+							<hr style="border: solid 1px #3c8dbc;">
 							<?php 
 							if($superganancia-$superdescuento < 0)
 							{
@@ -307,18 +345,23 @@ $total_dual = 0;
 							}
 							else
 							{
-								$com = ($superganancia+$superganancia_credito)-$superdescuento;
-								$ceo = ($com)*0.47;
-								$car = ($com)*0.16;	
-								$egl = ($com)*0.16;	
-								$adm = ($com)*0.10;		
-								$mar = ($com)*0.10;		
-								$ven = ($com)*0.06;		
-								$ofi = ($com)*0.05;		
+								$com = ($superganancia+$superganancia_credito)-$superdescuento-$superdescuento_credito-$spend_total;
+								$ceo = ($com)*0.65;
+								$car = ($com)*0.05;	
+								$cob = ($com)*0.30;		
 							}
 							?>
 							<h1>COMISIONES: $ <?php echo number_format($com,2,'.',','); ?></h1>
-							<h4>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; CEO [47%] : $ <?php echo number_format($ceo,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; GERENTE [16%] : $ <?php echo number_format($car,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; EGLE [16%] : $ <?php echo number_format($egl,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; VENDEDORA [6%] : $ <?php echo number_format($ven,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;</br></br>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;OFFICE BOY [5%] : $ <?php echo number_format($ofi,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;ADMINISTRATIVO [10%] : $ <?php echo number_format($adm,2,'.',','); ?>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+							<h4>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; CEO [65%] : $ <?php echo number_format($ceo,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; MARKETING [5%] : $ <?php echo number_format($car,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; UTILIDAD DE DIRECTIVA [30%] $ <?php echo number_format($cob,2,'.',','); ?></h4>
+							<?php 
+								$client = $_GET['client_id'] ? $_GET['client_id'] : "";
+								$user = $_GET['user_id'] ? $_GET['user_id'] : "";
+								$start = $_GET['sd'] ? $_GET['sd'] : "";
+								$end = $_GET['ed'] ? $_GET['ed'] : "";
+							?>
+
+							<a onclick="report('<?php echo $user;?>','<?php echo $client;?>','<?php echo $start;?>','<?php echo $end;?>')" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
+
 <script type="text/javascript">
         function thePDF() {
 var doc = new jsPDF('p', 'pt');
@@ -488,3 +531,91 @@ var doc = new jsPDF('p', 'pt');
 
 <br><br><br><br>
 </section>
+
+<script type="text/javascript">
+    function report(user, client, start, end) {
+
+    	newdate = new Date(start);
+    	newdate2 = new Date(end);
+
+    	month = parseInt(newdate.getMonth())+1;
+    	month_ = month < 10 ? "0"+month : month;
+    	month2 = parseInt(newdate2.getMonth())+1;
+    	month_2 = month < 10 ? "0"+month : month;
+
+    	printdate = newdate.getDate()+"/"+month_+"/"+newdate.getFullYear();
+    	printdate2 = newdate2.getDate()+"/"+month_2+"/"+newdate2.getFullYear();
+		var doc = new jsPDF('p', 'pt');
+        doc.setFontSize(16);
+        doc.text("SELFIE", 160, 30);
+        doc.text("REPORTE DE VENTAS", 140, 50)
+        doc.setFontSize(12);
+        doc.text(printdate+" AL "+printdate, 160, 70);
+		var columns = [
+	        {title: "", dataKey: "name"}, 
+		    {title: "", dataKey: "amount"}, 
+		];
+
+		var rows = [];
+		$.get(`./?action=reportglobal&client=${client}&user=${user}&start=${start}&end=${end}`,function(data2){
+			let response = JSON.parse(data2);
+			rows = [
+				{"name": "TOTAL INGRESOS DE CONTADO","amount":response.selled},
+				{"name": "TOTAL ABONOS DE CRÉDITO","amount":response.payments},
+				{"name": "TOTAL INGRESOS DE CRÉDITO CERRADOS","amount":response.closed_credit},
+				{"name": "TOTAL INGRESOS GLOBALES","amount":response.global_total},
+				{"name": "TOTAL INVERSIÓN","amount":response.invested},
+				{"name": "TOTAL GASTOS","amount":response.spend},
+				{"name": "TOTAL DE GANANCIAS","amount":response.gain},
+				{"name": "UTILIDAD CEO 65%","amount":response.ceo},
+				{"name": "PRESUPUESTO PARA MARKETING 5%","amount":response.markenting},
+				{"name": "UTILIDAD PARA DIRECTIVA 30%","amount":response.manager},
+				{"name": "TOTAL CUENTAS POR COBRAR","amount":response.to_get},
+			];	
+		// 	let sell = response.sell;
+		// 	let person = response.person;
+		// 	let products = response.products;
+		// 	let seller = response.seller ? response.seller : {'name':'', 'lastname':''};
+		// 	doc.setFontSize(12);
+  //   		doc.text("_____________________________________________________________________________", 40, 90);
+  //   		doc.text("NOMBRE DEL ENCARGADO: "+person.name+" "+person.lastname+"             TELÉFONO ENCARGADO: "+person.phone2+" ", 40, 105);
+  //   		doc.text("_____________________________________________________________________________", 40, 108);
+  //   		doc.text("EMPRESA: "+person.company+"        TELÉFONO: "+person.phone1+"           RIF: "+person.rif+"", 40, 125);
+  //   		doc.text("_____________________________________________________________________________", 40, 130);
+  //   		doc.text("DIRECCION DE ENTREGA: "+person.address2+" ", 40, 145);
+  //   		doc.text("_____________________________________________________________________________", 40, 150);
+  //   		doc.text("ATENTIDO POR: "+seller.name+" "+seller.lastname+" ", 40, 165);
+		// 	doc.text("_____________________________________________________________________________", 40, 170);
+
+		// 	doc.setFontSize(14);
+		// 	for (var i = 0; i < products.length; i++) {
+		// 		data = {
+		// 			"id" : products[i].barcode,
+		// 			"product": products[i].name,
+		// 			"q": products[i].q
+		// 		}
+		// 		rows.push(data)
+		// 	}
+			doc.autoTable(columns, rows, {
+			    theme: 'grid',
+			    overflow:'linebreak',
+			    styles: { 
+			        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+			    },
+			    columnStyles: {
+			        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+			    },
+			    margin: {top: 100},
+			    afterPageContent: function(data) {
+			    }
+			});
+		// 	doc.setFontSize(12);
+		// 	doc.text("__________________  __________________  __________________  __________________",40, doc.autoTableEndPosY()+200);
+		// 	doc.text("           ENTREGA               TRANSPORTA                    RECIBE                       AUDITA",40, doc.autoTableEndPosY()+215);
+		// 	doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+603);
+			doc.save('reporte_de_ventas-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+		});
+
+		
+	}
+</script>
