@@ -81,10 +81,18 @@ $total_dual = 0;
 						$operations = SellData::getAllByDateBCOpByUserId($_GET["user_id"],$_GET["client_id"],$_GET["sd"],$_GET["ed"],2);
 						} 
 					 	?>
+					 	<?php 
+								$client = $_GET['client_id'] ? $_GET['client_id'] : "";
+								$user = $_GET['user_id'] ? $_GET['user_id'] : "";
+								$start = $_GET['sd'] ? $_GET['sd'] : "";
+								$end = $_GET['ed'] ? $_GET['ed'] : "";
+							?>
 			 			<?php if(count($operations)>0):?>
 			 			<?php $supertotal = 0; $supergasto = 0; $superganancia = 0; $superdescuento = 0; $ganancia = 0; ?>
 							<a onclick="thePDF()" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a>
-							<a href="./report/sellreports-xlsx.php?client_id=<?php echo $_GET["client_id"]; ?>&sd=<?php echo $_GET["sd"]; ?>&ed=<?php echo $_GET["ed"]; ?>" class="btn btn-default">Excel (.xlsx)</a><br><br>
+							<a href="./report/sellreports-xlsx.php?client_id=<?php echo $_GET["client_id"]; ?>&sd=<?php echo $_GET["sd"]; ?>&ed=<?php echo $_GET["ed"]; ?>" class="btn btn-default">Excel (.xlsx)</a>
+							<a onclick="report('<?php echo $user;?>','<?php echo $client;?>','<?php echo $start;?>','<?php echo $end;?>')" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
+							<br><br>
 							<h3>OPERACIONES DE CONTADO</h3>
 							<div class="box box-primary">
 								<table class="table table-bordered">
@@ -224,39 +232,8 @@ $total_dual = 0;
 												</td>
 												<td> 
 													<?php
-
-													if($operation->f_id == 1 && $operation->total-$operation->payments == 0){
-														
-													$variable = "EFECTIVO";
-													$total_efectivo = $total_efectivo + ($operation->total-$operation->discount);
-
-													}
-													elseif($operation->f_id == 2 && $operation->total-$operation->payments == 0)
-													{
-														$variable = "TRANFERENCIA";
-														$total_transferencia = $total_transferencia + ($operation->total-$operation->discount);
-													}
-													elseif($operation->f_id == 3 && $operation->total-$operation->payments == 0)
-													{
-														$variable = "ZELLE";
-														$total_zelle = $total_zelle + ($operation->total-$operation->discount);
-													}
-													elseif($operation->f_id == 4 && $operation->total-$operation->payments == 0)
-													{
-														$variable = "DUAL";
-														$total_efectivo = $total_efectivo + $operation->efe;
-											        	$total_punto = $total_punto + $operation->pun;
-											        	$total_transferencia = $total_transferencia + $operation->tra;	
-											        	$total_zelle = $total_zelle + $operation->zel;
-													}
-													elseif($operation->f_id == 5 && $operation->total-$operation->payments == 0)
-													{
-														$variable = "PUNTO DE VENTA";
-														$total_punto = $total_punto + ($operation->total-$operation->discount);
-													} else {
-														$variable = "<label class='label label-warning'>POR PAGAR</label>";
-													}
-													echo $variable; ?>
+														echo "EFECTIVO"; 
+													?>
 												</td>
 												<td> <?php if($operation->person_id!=null){$c= $operation->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
 												<td> <?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo strtoupper($c->name." ".$c->lastname);} ?> </td>
@@ -353,14 +330,9 @@ $total_dual = 0;
 							?>
 							<h1>COMISIONES: $ <?php echo number_format($com,2,'.',','); ?></h1>
 							<h4>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; CEO [65%] : $ <?php echo number_format($ceo,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; MARKETING [5%] : $ <?php echo number_format($car,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; UTILIDAD DE DIRECTIVA [30%] $ <?php echo number_format($cob,2,'.',','); ?></h4>
-							<?php 
-								$client = $_GET['client_id'] ? $_GET['client_id'] : "";
-								$user = $_GET['user_id'] ? $_GET['user_id'] : "";
-								$start = $_GET['sd'] ? $_GET['sd'] : "";
-								$end = $_GET['ed'] ? $_GET['ed'] : "";
-							?>
+							
 
-							<a onclick="report('<?php echo $user;?>','<?php echo $client;?>','<?php echo $start;?>','<?php echo $end;?>')" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
+							
 
 <script type="text/javascript">
         function thePDF() {
@@ -547,10 +519,10 @@ var doc = new jsPDF('p', 'pt');
     	printdate2 = newdate2.getDate()+"/"+month_2+"/"+newdate2.getFullYear();
 		var doc = new jsPDF('p', 'pt');
         doc.setFontSize(16);
-        doc.text("SELFIE", 160, 30);
-        doc.text("REPORTE DE VENTAS", 140, 50)
+        doc.text("SELFIE", 280, 30);
+        doc.text("REPORTE DE VENTAS", 225, 50)
         doc.setFontSize(12);
-        doc.text(printdate+" AL "+printdate, 160, 70);
+        doc.text(printdate+" AL "+printdate, 240, 70);
 		var columns = [
 	        {title: "", dataKey: "name"}, 
 		    {title: "", dataKey: "amount"}, 
@@ -572,30 +544,6 @@ var doc = new jsPDF('p', 'pt');
 				{"name": "UTILIDAD PARA DIRECTIVA 30%","amount":response.manager},
 				{"name": "TOTAL CUENTAS POR COBRAR","amount":response.to_get},
 			];	
-		// 	let sell = response.sell;
-		// 	let person = response.person;
-		// 	let products = response.products;
-		// 	let seller = response.seller ? response.seller : {'name':'', 'lastname':''};
-		// 	doc.setFontSize(12);
-  //   		doc.text("_____________________________________________________________________________", 40, 90);
-  //   		doc.text("NOMBRE DEL ENCARGADO: "+person.name+" "+person.lastname+"             TELÉFONO ENCARGADO: "+person.phone2+" ", 40, 105);
-  //   		doc.text("_____________________________________________________________________________", 40, 108);
-  //   		doc.text("EMPRESA: "+person.company+"        TELÉFONO: "+person.phone1+"           RIF: "+person.rif+"", 40, 125);
-  //   		doc.text("_____________________________________________________________________________", 40, 130);
-  //   		doc.text("DIRECCION DE ENTREGA: "+person.address2+" ", 40, 145);
-  //   		doc.text("_____________________________________________________________________________", 40, 150);
-  //   		doc.text("ATENTIDO POR: "+seller.name+" "+seller.lastname+" ", 40, 165);
-		// 	doc.text("_____________________________________________________________________________", 40, 170);
-
-		// 	doc.setFontSize(14);
-		// 	for (var i = 0; i < products.length; i++) {
-		// 		data = {
-		// 			"id" : products[i].barcode,
-		// 			"product": products[i].name,
-		// 			"q": products[i].q
-		// 		}
-		// 		rows.push(data)
-		// 	}
 			doc.autoTable(columns, rows, {
 			    theme: 'grid',
 			    overflow:'linebreak',
@@ -609,10 +557,6 @@ var doc = new jsPDF('p', 'pt');
 			    afterPageContent: function(data) {
 			    }
 			});
-		// 	doc.setFontSize(12);
-		// 	doc.text("__________________  __________________  __________________  __________________",40, doc.autoTableEndPosY()+200);
-		// 	doc.text("           ENTREGA               TRANSPORTA                    RECIBE                       AUDITA",40, doc.autoTableEndPosY()+215);
-		// 	doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+603);
 			doc.save('reporte_de_ventas-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 		});
 
