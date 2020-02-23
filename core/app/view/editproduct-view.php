@@ -74,11 +74,11 @@ if($product!=null):
     <label for="inputEmail1" class="col-lg-3 control-label"></label>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE ENTRADA*</label>
-      <input type="number" name="price_in" class="form-control" value="<?php echo $product->price_in; ?>" id="price_in" placeholder="INGRESAR EL PRECIO DE ENTRADA">
+      <input type="text" name="price_in" class="form-control" value="<?php echo $product->price_in; ?>" id="price_in" placeholder="INGRESAR EL PRECIO DE ENTRADA">
     </div>
     <div class="col-md-3">
     <label class="control-label">PRECIO DE SALIDA*</label>
-      <input type="number" name="price_out" class="form-control" id="price_out" value="<?php echo $product->price_out; ?>" placeholder="INGRESAR EL PRECIO DE SALIDA">
+      <input type="text" name="price_out" class="form-control" id="price_out" value="<?php echo $product->price_out; ?>" placeholder="INGRESAR EL PRECIO DE SALIDA">
     </div>
   </div>		
 			

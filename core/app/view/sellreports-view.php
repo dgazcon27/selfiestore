@@ -282,11 +282,11 @@ $total_dual = 0;
 										<?php 
 											$spend_total = 0;
 											if ($_GET['sd'] != "" && $_GET['ed'] != "") {
-												$spend = SpendData::getGroupByDateOp($_GET['sd'], $_GET['ed']);
+												$spend = SpendData::getGroupByDateOpReport($_GET['sd'], $_GET['ed']);
 											} else {
 												$start = date("d-m-Y h:i:s",time());
 												$end = date("d-m-Y",strtotime($start."+ 7 days")); 
-												$spend = SpendData::getGroupByDateOp($start, $end);
+												$spend = SpendData::getGroupByDateOpReport($start, $end);
 											}
 											if (count($spend) >0) {
 												foreach ($spend as $value) {
