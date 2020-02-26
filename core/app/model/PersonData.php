@@ -117,6 +117,12 @@ class PersonData {
 		return Model::many($query[0],new PersonData());
 	}
 
+	public static function getClientsWithCreditByName($q){
+		$sql = "select * from ".self::$tablename." where kind=4 and has_credit=1 and (name like '%$q%' or lastname like '%$q%') order by name,lastname";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new PersonData());
+	}
+
 	public static function getContacts(){
 		$sql = "select * from ".self::$tablename." where kind=3 order by name,lastname";
 		$query = Executor::doit($sql);

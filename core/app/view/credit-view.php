@@ -11,8 +11,22 @@
       ?>
     <a href="./report/credit-word.php" class="btn btn-default"> <i class="fa fa-file-text"></i> Descargar Word (.docx)</a>
     <a href="./report/credit-excel.php" class="btn btn-default"> <i class="fa fa-file-text"></i> Descargar Excel (.xlsx)</a>
+    <div class="row" style="float: right;margin-right: 20px;">
+      <div class="col-md-1" style="margin-right: 10px;">
+        <img class="hidden" id="loader" src="res/images/loader.gif" width="37px" height="auto">
+      </div>
+      <div class="col-md-8">
+      
+        <input type="text" id="product_name" name="product_name" class="form-control" placeholder="NOMBRE DEL CLIENTE">
+      </div>
+
+      <div class="col-md-1">
+      <button id="search" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> BUSCAR</button>
+      </div>
+
+    </div>
     <br><br>
-    <div class="box box-primary">
+    <div id="search-div" class="box box-primary">
       <table class="table table-bordered table-hover">
       <thead>
       <th style="text-align: center;">NOMBRE COMPLETO CLIENTE</th>
@@ -106,3 +120,16 @@
   </div>
 </div>
 </section>
+<script type="text/javascript">
+  $("#search").click(function (a) {
+    $("#loader").removeClass("hidden");
+
+    let search = $("#product_name").val();
+    $("#search-div").empty();
+    $.get("./?action=getPersonWithCredit&q="+search,null,function(response){
+      $("#loader").addClass("hidden")
+      $("#search-div").append(response);
+    });
+
+  })
+</script>
