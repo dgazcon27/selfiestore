@@ -285,7 +285,6 @@ $total_dual = 0;
 										<br><br><br>	
 									</div>
 
-
     							</div>
     						</div>
 

@@ -104,7 +104,7 @@ $ototal = -1*OperationData::GetOutputQYesF($product->id);
   <div class="box-body no-padding">
 			<table class="table table-bordered table-hover">
 			<thead>
-			<th></th>
+			<th>Ref ID</th>
 			<th>Cantidad</th>
 			<th>Tipo</th>
 			<th>Fecha</th>
@@ -112,7 +112,7 @@ $ototal = -1*OperationData::GetOutputQYesF($product->id);
 			</thead>
 			<?php foreach($operations as $operation):?>
 			<tr>
-			<td></td>
+			<td><?php echo $operation->sell_id; ?></td>
 			<td><?php echo $operation->q; ?></td>
 			<td><?php echo $operation->getOperationType()->name; ?></td>
 			<td><?php echo $operation->created_at; ?></td>

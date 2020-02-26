@@ -54,7 +54,7 @@ if(count($products)>0){
 	</thead>
 	<?php foreach($products as $product):?>
 	<tr>
-		<td><?php echo $product->code; ?></td>
+		<td><?php echo $product->barcode; ?></td>
 		<td>
 			<?php if($product->image!=""):?>
 				<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
@@ -132,7 +132,7 @@ var rows = [
   <?php foreach($products as $product):
   ?>
     {
-      "id": "<?php echo $product->id; ?>",
+      "id": "<?php echo $product->barcode; ?>",
       "name": "<?php echo $product->name; ?>",
       "price_in": "$ <?php echo number_format($product->price_in,2,'.',',');?>",
       "price_out": "$ <?php echo number_format($product->price_out,2,'.',',');?>",
