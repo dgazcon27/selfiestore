@@ -216,7 +216,37 @@ if(count($products)>0){
 	</div>
 
 <?php } ?>
-<br><br><br><br><br><br><br><br><br><br>
 	</div>
 </div>
+<br>
+<?php 
+	$spends = SpendData::getBoxedSpend($_GET["id"]);
+	$spend_total = 0;
+?>
+<h2>GASTOS</h2>
+<div class="box box-primary">
+	<table class="table table-bordered table-hover	">
+		<thead>
+			<th style="text-align: center;">FACTURA</th>
+			<th style="text-align: center;">CONCEPTO</th>
+			<th style="text-align: center;">MONTO</th>
+			<th style="text-align: center;">FECHA</th>
+		</thead>
+		<?php foreach ($spends as $spend): ?>
+		<tr>
+			<td style="text-align: center;"><?php echo $spend->id ?></td>
+			<td style="text-align: center;"><?php echo $spend->price ?></td>
+			<td style="text-align: center;"><?php echo $spend->name ?></td>
+			<td style="text-align: center;"><?php echo date("d-m-Y",strtotime($spend->created_at)) ?></td>
+		</tr>
+		<?php
+			$spend_total += $spend->price;
+		?>
+		<?php endforeach ?>
+	</table>
+</div>
+<h2>TOTAL DE GASTOS: <?php echo "$ ".number_format($spend_total,2,".",","); ?></h2>
+<h1 style="float:right;">TOTAL: <?php echo "$ ".number_format($total_total-$spend_total,2,".",","); ?></h1>
+<br><br><br><br><br><br><br><br><br><br>
+
 </section></section>

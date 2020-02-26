@@ -53,35 +53,40 @@
 			if ($key->p_id == 4) {
 				$total_credit += ($key->total-$key->discount);
 				$total_payments += (float)$key->cash+(float)$key->payments;
-				$total_credit_invested += (float)$key->invoice_code;
+				// $total_credit_invested += (float)$key->invoice_code;
 				$person_total = 0;
 				$person_paid = 0;
 				$person_invested = 0;
-				// if (isset($key->person_id) && !isset($clients[$key->person_id])) {
-				// 	$person = SellData::getCreditsByClientId($key->person_id);
-				// 	if (count($person) > 0) {
-				// 		foreach ($person as $bill) {
-				// 			$person_total += $bill->total-$bill->discount;
-				// 			$person_paid += $bill->cash+$bill->payments;
-				// 			$person_invested += $bill->invoice_code;
-				// 		}
+				if (isset($key->person_id) && !isset($clients[$key->person_id])) {
+					$person = SellData::getCreditsByClientId($key->person_id);
+					if (count($person) > 0) {
+						foreach ($person as $bill) {
+							$x = $bill->total-$bill->discount;
+							$s = $bill->cash+$bill->payments;
+							if ($x-$s == 0) {
+								// $person_total += $bill->total-$bill->discount;
+								$total_credit_closed += $bill->cash+$bill->payments;
+								$total_credit_invested += $bill->invoice_code;
+							}
+						}
 				// 		// PAGO TOTAL DE CUENTA DE CREDITO
-				// 		if ($person_total-$person_paid <= 0) {
-				// 			array_push($credit_array,array("invested" => $person_invested, "closed" => $person_paid));
-				// 		}
-				// 	}
-				// 	$clients[$key->person_id] = $key->person_id;
-				// }
+						// if ($person_total-$person_paid == 0) {
+						// 	array_push($credit_array,array("invested" => $person_invested, "closed" => $person_paid));
+						// }
+					}
+					$clients[$key->person_id] = $key->person_id;
+				}
 			}
 		}
 	}
+	// $total_credit_invested = 0;
+	// $total_credit_closed = 0;
 	// if (count($credit_array) > 0) {
 	// 	foreach ($credit_array as $key) {
 	// 		$total_credit_invested += $key['invested'];
 	// 		$total_credit_closed += $key['closed'];
 	// 	}
 	// }
-	$total_credit_closed = $total_payments;
 	$gain = ($total+$total_credit_closed)-($total_invested+$total_credit_invested+$spend_total);
 	$response = array(
 

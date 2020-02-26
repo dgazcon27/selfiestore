@@ -93,92 +93,100 @@ $total_dual = 0;
 							<a href="./report/sellreports-xlsx.php?client_id=<?php echo $_GET["client_id"]; ?>&sd=<?php echo $_GET["sd"]; ?>&ed=<?php echo $_GET["ed"]; ?>" class="btn btn-default">Excel (.xlsx)</a>
 							<a onclick="report('<?php echo $user;?>','<?php echo $client;?>','<?php echo $start;?>','<?php echo $end;?>')" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
 							<br><br>
-							<h3>OPERACIONES DE CONTADO</h3>
-							<div class="box box-primary">
-								<table class="table table-bordered">
-									<thead>
-										<th>FACTURA</th>
-										<th>GASTO</th>
-										<th>GANANCIA/PERDIDA</th>
-										<th>SUBTOTAL</th>
-										<th>DESCUENTO</th>
-										<th>TOTAL</th>
-										<th>METODO DE PAGO</th>
-										<th>CLIENTE</th>
-										<th>VENDEDOR</th>
-										<th>FECHA</th>
-									</thead>
-									<?php foreach($operations as $operation):?>
-										<tr>	
-											<?php if ($operation->p_id == 1): ?>
-												<td><?php echo "#",$operation->ref_id; ?></td>
-											<td>$ <?php echo number_format($operation->invoice_code,2,'.',','); ?></td>
-											<td>$ <?php echo number_format($ganancia = $operation->total-$operation->discount-$operation->invoice_code,2,'.',','); ?></td>
-											<td>$ <?php echo number_format($operation->total,2,'.',','); ?></td>
-											<td>$ <?php echo number_format($operation->discount,2,'.',','); ?></td>
-											<td>$ <?php echo number_format($operation->total-$operation->discount,2,'.',','); ?></td>
-											<td> 
-												<?php 
-												if($operation->f_id == 1){
-													
-												$variable = "EFECTIVO";
-												$total_efectivo = $total_efectivo + ($operation->total-$operation->discount);
+							<div class="panel panel-default">
+    							<div class="panel-heading">
+								<h3>OPERACIONES DE CONTADO <a id="selled" class="arrow-close" data-status="true" data-toggle="collapse" data-target="#demo">
+									<i style="float: right;" class="fa fa-chevron-down"></i>
+								</a></h3>
+									<div class="box box-primary collapse in" id="demo">
+										<table class="table table-bordered">
+											<thead>
+												<th>FACTURA</th>
+												<th>GASTO</th>
+												<th>GANANCIA/PERDIDA</th>
+												<th>SUBTOTAL</th>
+												<th>DESCUENTO</th>
+												<th>TOTAL</th>
+												<th>METODO DE PAGO</th>
+												<th>CLIENTE</th>
+												<th>VENDEDOR</th>
+												<th>FECHA</th>
+											</thead>
+											<?php foreach($operations as $operation):?>
+												<tr>	
+													<?php if ($operation->p_id == 1): ?>
+														<td><?php echo "#",$operation->ref_id; ?></td>
+													<td>$ <?php echo number_format($operation->invoice_code,2,'.',','); ?></td>
+													<td>$ <?php echo number_format($ganancia = $operation->total-$operation->discount-$operation->invoice_code,2,'.',','); ?></td>
+													<td>$ <?php echo number_format($operation->total,2,'.',','); ?></td>
+													<td>$ <?php echo number_format($operation->discount,2,'.',','); ?></td>
+													<td>$ <?php echo number_format($operation->total-$operation->discount,2,'.',','); ?></td>
+													<td> 
+														<?php 
+														if($operation->f_id == 1){
+															
+														$variable = "EFECTIVO";
+														$total_efectivo = $total_efectivo + ($operation->total-$operation->discount);
 
-												}
-												elseif($operation->f_id == 2)
-												{
-													$variable = "TRANFERENCIA";
-													$total_transferencia = $total_transferencia + ($operation->total-$operation->discount);
-												}
-												elseif($operation->f_id == 3)
-												{
-													$variable = "ZELLE";
-													$total_zelle = $total_zelle + ($operation->total-$operation->discount);
-												}
-												elseif($operation->f_id == 4)
-												{
-													$variable = "DUAL";
-													$total_efectivo = $total_efectivo + $operation->efe;
-										        	$total_punto = $total_punto + $operation->pun;
-										        	$total_transferencia = $total_transferencia + $operation->tra;	
-										        	$total_zelle = $total_zelle + $operation->zel;
-												}
-												elseif($operation->f_id == 5)
-												{
-													$variable = "PUNTO DE VENTA";
-													$total_punto = $total_punto + ($operation->total-$operation->discount);
-												}
-												echo $variable; ?>
-											</td>
-											<td> <?php if($operation->person_id!=null){$c= $operation->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
-											<td> <?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo strtoupper($c->name." ".$c->lastname);} ?> </td>
-											<td><?php echo $operation->created_at; ?></td>
-											<?php 
-												$supertotal+= ($operation->total-$operation->discount);
-												$supergasto+= ($operation->invoice_code);
-												$superganancia+= ($operation->total-$operation->invoice_code);
-												$superdescuento+= ($operation->discount);
+														}
+														elseif($operation->f_id == 2)
+														{
+															$variable = "TRANFERENCIA";
+															$total_transferencia = $total_transferencia + ($operation->total-$operation->discount);
+														}
+														elseif($operation->f_id == 3)
+														{
+															$variable = "ZELLE";
+															$total_zelle = $total_zelle + ($operation->total-$operation->discount);
+														}
+														elseif($operation->f_id == 4)
+														{
+															$variable = "DUAL";
+															$total_efectivo = $total_efectivo + $operation->efe;
+												        	$total_punto = $total_punto + $operation->pun;
+												        	$total_transferencia = $total_transferencia + $operation->tra;	
+												        	$total_zelle = $total_zelle + $operation->zel;
+														}
+														elseif($operation->f_id == 5)
+														{
+															$variable = "PUNTO DE VENTA";
+															$total_punto = $total_punto + ($operation->total-$operation->discount);
+														}
+														echo $variable; ?>
+													</td>
+													<td> <?php if($operation->person_id!=null){$c= $operation->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
+													<td> <?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo strtoupper($c->name." ".$c->lastname);} ?> </td>
+													<td><?php echo $operation->created_at; ?></td>
+													<?php 
+														$supertotal+= ($operation->total-$operation->discount);
+														$supergasto+= ($operation->invoice_code);
+														$superganancia+= ($operation->total-$operation->invoice_code);
+														$superdescuento+= ($operation->discount);
+													?>
+													<?php endif ?>
+												</tr>
+												<?php
+											endforeach; 
+											if($superganancia-$superdescuento < 0)
+											{
+												$estado_t = " TOTAL DE PERDIDAS EN CONTADO: $ ";
+											}
+											else
+											{
+												$estado_t = " TOTAL DE GANANCIAS EN CONTADO: $ ";
+											}
 											?>
-											<?php endif ?>
-										</tr>
-										<?php
-									endforeach; 
-									if($superganancia-$superdescuento < 0)
-									{
-										$estado_t = " TOTAL DE PERDIDAS EN CONTADO: $ ";
-									}
-									else
-									{
-										$estado_t = " TOTAL DE GANANCIAS EN CONTADO: $ ";
-									}
-									?>
-								</table>
-							</div>
-							<h1>TOTAL DE OPERACIONES DE CONTADO: $ <?php echo number_format($supertotal,2,'.',','); ?></h1>
-							<h4><?php echo "&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL DE INVERSION EN CONTADO: $",number_format($supergasto,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOTAL DE DESCUENTO EN CONTADO: $",number_format($superdescuento,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$estado_t,number_format($superganancia-$superdescuento,2,'.',','),"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |"; ?> </h4>
-								
-							<h4>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL PUNTO DE CONTADO: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|"; ?></h4>		
-							<br><br>
+										</table>
+										<h1>TOTAL DE OPERACIONES DE CONTADO: $ <?php echo number_format($supertotal,2,'.',','); ?></h1>
+										<h4><?php echo "&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL DE INVERSION EN CONTADO: $",number_format($supergasto,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOTAL DE DESCUENTO EN CONTADO: $",number_format($superdescuento,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$estado_t,number_format($superganancia-$superdescuento,2,'.',','),"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |"; ?> </h4>
+											
+										<h4>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL PUNTO DE CONTADO: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|"; ?></h4>	
+										<br><br><br>	
+									</div>
+
+    							</div>
+    						</div>
+							<br>
 
 							<?php 
 								$supertotal_credito = 0;
@@ -197,114 +205,133 @@ $total_dual = 0;
 					        	$total_zelle = 0;
 							?>
 
-							<h3>OPERACIONES DE CREDITO</h3>
-							<div class="box box-primary">
-								<table class="table table-bordered">
-									<thead>
-										<th>FACTURA</th>
-										<th>GASTO</th>
-										<th>GANANCIA/PERDIDA</th>
-										<th>SUBTOTAL</th>
-										<th>DESCUENTO</th>
-										<th>TOTAL ABONADO</th>
-										<th>ESTATUS</th>
-										<th>CLIENTE</th>
-										<th>VENDEDOR</th>
-										<th>FECHA</th>
-									</thead>
-									<?php foreach($operations as $operation):?>
-										<tr>	
-											<?php if ($operation->p_id == 4 && $operation->payments > 0 ): ?>
-												<td><?php echo "#",$operation->ref_id; ?></td>
-												<td>$ <?php echo number_format($operation->invoice_code,2,'.',','); ?></td>
-												<td>$ <?php echo number_format($ganancia = $operation->total-$operation->discount-$operation->invoice_code,2,'.',','); ?></td>
-												<td>$ <?php echo number_format($operation->total,2,'.',','); ?></td>
-												<td>$ <?php echo number_format($operation->discount,2,'.',','); ?></td>
-												<td>
-													<?php if ($operation->total != $operation->payments): ?>
-													$ <?php echo number_format($operation->payments-$operation->discount,2,'.',','); ?>
-														
-													<?php else: ?>
-													$ <?php echo number_format($operation->total-$operation->discount,2,'.',','); ?>
-														
+							<div class="panel panel-default">
+    							<div class="panel-heading">
+									<h3>
+										OPERACIONES DE CREDITO
+										<a class="arrow-close" data-status="true" data-toggle="collapse" data-target="#demo2">
+											<i style="float: right;" class="fa fa-chevron-down"></i>
+										</a>
+									</h3>
+									<div class="box box-primary collapse in" id="demo2">
+										<table class="table table-bordered">
+											<thead>
+												<th>FACTURA</th>
+												<th>GASTO</th>
+												<th>GANANCIA/PERDIDA</th>
+												<th>SUBTOTAL</th>
+												<th>DESCUENTO</th>
+												<th>TOTAL ABONADO</th>
+												<th>ESTATUS</th>
+												<th>CLIENTE</th>
+												<th>VENDEDOR</th>
+												<th>FECHA</th>
+											</thead>
+											<?php foreach($operations as $operation):?>
+												<tr>	
+													<?php if ($operation->p_id == 4 && $operation->payments > 0 ): ?>
+														<td><?php echo "#",$operation->ref_id; ?></td>
+														<td>$ <?php echo number_format($operation->invoice_code,2,'.',','); ?></td>
+														<td>$ <?php echo number_format($ganancia = $operation->total-$operation->discount-$operation->invoice_code,2,'.',','); ?></td>
+														<td>$ <?php echo number_format($operation->total,2,'.',','); ?></td>
+														<td>$ <?php echo number_format($operation->discount,2,'.',','); ?></td>
+														<td>
+															<?php if ($operation->total != $operation->payments): ?>
+															$ <?php echo number_format($operation->payments-$operation->discount,2,'.',','); ?>
+																
+															<?php else: ?>
+															$ <?php echo number_format($operation->total-$operation->discount,2,'.',','); ?>
+																
+															<?php endif ?>
+																
+														</td>
+														<td> 
+															<?php
+																echo "EFECTIVO"; 
+															?>
+														</td>
+														<td> <?php if($operation->person_id!=null){$c= $operation->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
+														<td> <?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo strtoupper($c->name." ".$c->lastname);} ?> </td>
+														<td><?php echo $operation->created_at; ?></td>
+														<?php
+															if ($operation->total-$operation->payments == 0) {
+																$supertotal_credito += ($operation->total-$operation->discount);
+																$supergasto_credito += ($operation->invoice_code);
+																$superganancia_credito += ($operation->total-$operation->invoice_code);
+																$superdescuento_credito += ($operation->discount);
+															} else {
+																$supertotal_credito += $operation->payments;
+															}
+														?>
 													<?php endif ?>
-														
-												</td>
-												<td> 
-													<?php
-														echo "EFECTIVO"; 
-													?>
-												</td>
-												<td> <?php if($operation->person_id!=null){$c= $operation->getPerson();echo strtoupper($c->name." ".$c->lastname);} ?> </td>
-												<td> <?php if($operation->receive_by!=null){$c= SellData::getSellUser($operation->receive_by);echo strtoupper($c->name." ".$c->lastname);} ?> </td>
-												<td><?php echo $operation->created_at; ?></td>
+												</tr>
 												<?php
-													if ($operation->total-$operation->payments == 0) {
-														$supertotal_credito += ($operation->total-$operation->discount);
-														$supergasto_credito += ($operation->invoice_code);
-														$superganancia_credito += ($operation->total-$operation->invoice_code);
-														$superdescuento_credito += ($operation->discount);
+											endforeach; 
+											if($superganancia_credito-$superdescuento_credito < 0)
+											{
+												$estado_t = " TOTAL DE PERDIDAS EN CREDITO: $ ";
+											}
+											else
+											{
+												$estado_t = " TOTAL DE GANANCIAS EN CREDITO: $ ";
+											}
+											?>
+										</table>
+										<h1>TOTAL DE OPERACIONES DE CREDITO: $ <?php echo number_format($supertotal_credito,2,'.',','); ?></h1>
+										<hr style="border: solid 1px #3c8dbc;">
+										<h4><?php echo "&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL DE INVERSION EN CREDITO: $",number_format($supergasto_credito,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOTAL DE DESCUENTO EN CREDITO: $",number_format($superdescuento_credito,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$estado_t,number_format($superganancia_credito-$superdescuento_credito,2,'.',','),"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |"; ?> </h4>
+											
+										<h4>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL PUNTO DE CREDITO: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|"; ?></h4>
+										<br><br><br>	
+									</div>
+
+
+    							</div>
+    						</div>
+
+							<br>
+							<div class="panel panel-default">
+    							<div class="panel-heading">
+									<h3>CORRELATIVO GASTOS DEL MES<a class="arrow-close" data-status="true" data-toggle="collapse" data-target="#demo3">
+											<i style="float: right;" class="fa fa-chevron-down"></i>
+										</a></h3>
+									<div class="box box-primary collapse in" id="demo3" >
+										<table class="table table-bordered">
+											<thead>
+												<th>ID</th>
+												<th>MONTO</th>
+												<th>DESCRIPCION</th>
+												<th>FECHA</th>
+											</thead>
+												<?php 
+													$spend_total = 0;
+													if ($_GET['sd'] != "" && $_GET['ed'] != "") {
+														$spend = SpendData::getGroupByDateOpReport($_GET['sd'], $_GET['ed']);
 													} else {
-														$supertotal_credito += $operation->payments;
+														$start = date("d-m-Y h:i:s",time());
+														$end = date("d-m-Y",strtotime($start."+ 7 days")); 
+														$spend = SpendData::getGroupByDateOpReport($start, $end);
+													}
+													if (count($spend) >0) {
+														foreach ($spend as $value) {
+															?>
+															<tr>
+																<td><?php echo $value->id ?></td>
+																<td><?php echo $value->price ?></td>
+																<td><?php echo $value->name ?></td>
+																<td><?php echo date("d-m-Y",strtotime($value->created_at)) ?></td>
+															</tr>
+															<?php
+															$spend_total += $value->price;
+														}
 													}
 												?>
-											<?php endif ?>
-										</tr>
-										<?php
-									endforeach; 
-									if($superganancia_credito-$superdescuento_credito < 0)
-									{
-										$estado_t = " TOTAL DE PERDIDAS EN CREDITO: $ ";
-									}
-									else
-									{
-										$estado_t = " TOTAL DE GANANCIAS EN CREDITO: $ ";
-									}
-									?>
-								</table>
-							</div>
+										</table>
+										<h1>TOTAL DE GASTOS DEL MES: $ <?php echo number_format($spend_total,2,'.',','); ?></h1>
+									</div>
 
-							<h1>TOTAL DE OPERACIONES DE CREDITO: $ <?php echo number_format($supertotal_credito,2,'.',','); ?></h1>
-							<hr style="border: solid 1px #3c8dbc;">
-							<h4><?php echo "&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL DE INVERSION EN CREDITO: $",number_format($supergasto_credito,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOTAL DE DESCUENTO EN CREDITO: $",number_format($superdescuento_credito,2,'.',','); ?><?php echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",$estado_t,number_format($superganancia_credito-$superdescuento_credito,2,'.',','),"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  |"; ?> </h4>
-								
-							<h4>&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL PUNTO DE CREDITO: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;&nbsp;&nbsp;|"; ?></h4>		
-							<br>
-							<h3>CORRELATIVO GASTOS DEL MES</h3>
-							<div class="box box-primary">
-								<table class="table table-bordered">
-									<thead>
-										<th>ID</th>
-										<th>MONTO</th>
-										<th>DESCRIPCION</th>
-										<th>FECHA</th>
-									</thead>
-										<?php 
-											$spend_total = 0;
-											if ($_GET['sd'] != "" && $_GET['ed'] != "") {
-												$spend = SpendData::getGroupByDateOpReport($_GET['sd'], $_GET['ed']);
-											} else {
-												$start = date("d-m-Y h:i:s",time());
-												$end = date("d-m-Y",strtotime($start."+ 7 days")); 
-												$spend = SpendData::getGroupByDateOpReport($start, $end);
-											}
-											if (count($spend) >0) {
-												foreach ($spend as $value) {
-													?>
-													<tr>
-														<td><?php echo $value->id ?></td>
-														<td><?php echo $value->price ?></td>
-														<td><?php echo $value->name ?></td>
-														<td><?php echo date("d-m-Y",strtotime($value->created_at)) ?></td>
-													</tr>
-													<?php
-													$spend_total += $value->price;
-												}
-											}
-										?>
-								</table>
-							</div>
-							<h1>TOTAL DE GASTOS DEL MES: $ <?php echo number_format($spend_total,2,'.',','); ?></h1>
+    							</div>
+    						</div>
 							<hr style="border: solid 1px #3c8dbc;">
 							<?php 
 							if($superganancia-$superdescuento < 0)
@@ -323,20 +350,31 @@ $total_dual = 0;
 							else
 							{
 								$com = ($superganancia+$superganancia_credito)-$superdescuento-$superdescuento_credito-$spend_total;
-								$ceo = ($com)*0.65;
+								$ceo = ($com)*0.75;
 								$car = ($com)*0.05;	
-								$cob = ($com)*0.30;		
+								$cob = ($com)*0.25;		
 							}
 							?>
 							<h1>COMISIONES: $ <?php echo number_format($com,2,'.',','); ?></h1>
-							<h4>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; CEO [65%] : $ <?php echo number_format($ceo,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; MARKETING [5%] : $ <?php echo number_format($car,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; UTILIDAD DE DIRECTIVA [30%] $ <?php echo number_format($cob,2,'.',','); ?></h4>
+							<h4>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; CEO [70%] : $ <?php echo number_format($ceo,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; MARKETING [5%] : $ <?php echo number_format($car,2,'.',','); ?> &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; UTILIDAD DE DIRECTIVA [25%] $ <?php echo number_format($cob,2,'.',','); ?></h4>
 							
 
 							
 
 <script type="text/javascript">
-        function thePDF() {
-var doc = new jsPDF('p', 'pt');
+	$(".arrow-close").click(function (a) {
+		if (a.currentTarget.dataset.status == 'true') {
+			console.log('close')
+			a.target.className = "fa fa-chevron-left";
+			a.currentTarget.dataset.status = 'false';
+		} else {
+			a.target.className = "fa fa-chevron-down";
+			a.currentTarget.dataset.status = 'true';
+		}
+	});
+
+    function thePDF() {
+		var doc = new jsPDF('p', 'pt');
         doc.setFontSize(26);
         doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 170, 65);
         doc.setFontSize(18);
@@ -539,9 +577,9 @@ var doc = new jsPDF('p', 'pt');
 				{"name": "TOTAL INVERSIÓN","amount":response.invested},
 				{"name": "TOTAL GASTOS","amount":response.spend},
 				{"name": "TOTAL DE GANANCIAS","amount":response.gain},
-				{"name": "UTILIDAD CEO 65%","amount":response.ceo},
+				{"name": "UTILIDAD CEO 70%","amount":response.ceo},
 				{"name": "PRESUPUESTO PARA MARKETING 5%","amount":response.markenting},
-				{"name": "UTILIDAD PARA DIRECTIVA 30%","amount":response.manager},
+				{"name": "UTILIDAD PARA DIRECTIVA 25%","amount":response.manager},
 				{"name": "TOTAL CUENTAS POR COBRAR","amount":response.to_get},
 			];	
 			doc.autoTable(columns, rows, {

@@ -73,6 +73,12 @@ class SpendData {
 		return Model::many($query[0],new SpendData());
 	}
 
+	public function getBoxedSpend($id){
+		$sql = "select * from ".self::$tablename." where box_id=$id order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SpendData());
+	}
+
 
 	public static function getAllByPage($start_from,$limit){
 		$sql = "select * from ".self::$tablename." where id>=$start_from limit $limit";

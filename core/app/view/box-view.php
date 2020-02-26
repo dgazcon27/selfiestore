@@ -19,8 +19,8 @@ if(isset($products[0]->created_at) && ($products[0]->created_at != ""))
 
 
 <?php
-if(count($products)>0){
 	$total_total = 0;
+if(count($products)>0){
 	$efectivo = 1;
 	$transferencia = 2;
 	$zelle = 3;
@@ -226,10 +226,12 @@ if(count($products)>0){
 		?>
 	</table>
 </div>
-<h1>TOTAL: <?php echo "$ ".number_format($total_total,2,".",","); ?></h1>
+
+
+<h2>TOTAL DE VENTAS: <?php echo "$ ".number_format($total_total,2,".",","); ?></h2>
 
 <h4>TOTAL EFECTIVO: <?php echo "$ ".number_format($total_efectivo,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL PUNTO DE VENTA: $ ".number_format($total_punto,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL TRANSFERENCIA: $ ".number_format($total_transferencia,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL ZELLE: $ ".number_format($total_zelle,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp; TOTAL DESCUENTO: $ ".number_format($total_descuento,2,".",","); ?></h4>
-<h1>TOTAL VUELTO: <?php echo "$ ".number_format($total_vuelto,2,".",","); ?></h1>
+<h2>TOTAL VUELTO: <?php echo "$ ".number_format($total_vuelto,2,".",","); ?></h2>
 <h4>TOTAL EFECTIVO: <?php echo "$ ".number_format($total_vuelto_efectivo,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp;TOTAL PUNTO DE VENTA: $ ".number_format($total_vuelto_punto,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbsp;TOTAL TRANSFERENCIA: $ ".number_format($total_vuelto_trans,2,".",",")."&nbsp;&nbsp;|&nbsp;&nbspTOTAL ZELLE: $ ".number_format($total_vuelto_zelle,2,".",",")."&nbsp;&nbsp;";
 ?></h4>
 	<?php
@@ -242,6 +244,44 @@ if(count($products)>0){
 	</div>
 
 <?php } ?>
+<br>
+<?php 
+	$spends = SpendData::getAllUnBoxed();
+	$spend_total = 0;
+?>
+<?php if (count($spends) > 0): ?>
+	<div class="box box-primary">
+		<table class="table table-bordered table-hover	">
+			<thead>
+				<th style="text-align: center;">FACTURA</th>
+				<th style="text-align: center;">CONCEPTO</th>
+				<th style="text-align: center;">MONTO</th>
+				<th style="text-align: center;">FECHA</th>
+			</thead>
+			<?php foreach ($spends as $spend): ?>
+			<tr>
+				<td style="text-align: center;"><?php echo $spend->id ?></td>
+				<td style="text-align: center;"><?php echo $spend->price ?></td>
+				<td style="text-align: center;"><?php echo $spend->name ?></td>
+				<td style="text-align: center;"><?php echo date("d-m-Y",strtotime($spend->created_at)) ?></td>
+			</tr>
+			<?php
+				$spend_total += $spend->price;
+			?>
+			<?php endforeach ?>
+		</table>
+	</div>
+	<h2>TOTAL DE GASTOS: <?php echo "$ ".number_format($spend_total,2,".",","); ?></h2>
+
+<?php else: ?>
+	<div class="jumbotron">
+		<h2>No hay gastos</h2>
+		<p>No se ha realizado ningun gastos.</p>
+	</div>
+<?php endif ?>
+<hr style="border: solid 1px #3c8dbc">
+
+<h1 style="float:right;">TOTAL: <?php echo "$ ".number_format($total_total-$spend_total,2,".",","); ?></h1>
 <br><br><br><br><br><br><br><br><br><br>
 	</div>
 </div>

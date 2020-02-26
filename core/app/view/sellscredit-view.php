@@ -38,7 +38,7 @@
 					<div class="box-header">
 						<h3 class="box-title">VENTAS</h3>
 					</div>
-					<table class="table table-bordered table-hover	">
+					<table class="table table-bordered datatable table-hover	">
 						<thead>
 							<th></th>
 							<th>FACTURA</th>
