@@ -120,6 +120,7 @@
 							</td>
 							<?php if (isset($_SESSION['is_admin']) || Core::$user->kind == 5 || Core::$user->kind == 2): ?>
 								<td style="width:200px;text-align: center;">
+									<a  target="_blank" href="ticket.php?id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class='fa fa-ticket'></i> TICKET</a>
 									<?php if ($sell->d_id >= 5 && (isset($_SESSION['is_admin']) || Core::$user->kind == 5) && $sell->is_official == 1): ?>
 										<a href="index.php?view=processsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary">
 											<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>

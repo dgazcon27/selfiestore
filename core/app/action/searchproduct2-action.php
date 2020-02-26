@@ -24,6 +24,7 @@
 	<thead>
 		<th>IMAGEN</th>
 		<th>NOMBRE</th>
+		<th>MEDIDA</th>
 		<th style="width: 150px;">PRECIO UNITARIO</th>
 		<th style="width: 100px;text-align: center;">STOCK</th>
 	</thead>
@@ -43,6 +44,7 @@ $products_in_cero=0;
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
 		<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 		<td><?php echo $product->name; ?></td>
+		<td><?php echo $product->unit; ?></td>
 		<td style="text-align: center;"><b>$<?php echo $product->price_out; ?></b></td>
 		<td style="text-align: center;"><b><?php echo $q; ?></b></td>
 		<td style="width:250px;">

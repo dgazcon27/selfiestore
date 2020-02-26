@@ -84,6 +84,7 @@ $user = $sell->getUser();
 		<th class="hidden-xs">Cantidad</th>
 		<th class="visible-xs">N°</th>
 		<th><span class="hidden-xs">Nombre del</span> Producto</th>
+		<th><span>Medida</th>
 		<?php if (isset($_SESSION['is_admin'])): ?>
 		<th>Precio</th>
 		<?php endif ?>
@@ -99,6 +100,7 @@ $user = $sell->getUser();
 	<td style="text-align: center;"><img src="storage/products/<?php echo $product->image;?>" style="width:50px;"></td>
 	<td><?php echo $operation->q ;?></td>
 	<td><?php echo $product->name ;?></td>
+	<td><?php echo $product->unit ;?></td>
 	<?php if (isset($_SESSION['is_admin'])): ?>
 	<td>$ <?php echo number_format($product->price_in,2,".",",") ;?></td>
 	<?php endif ?>

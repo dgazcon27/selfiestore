@@ -101,6 +101,7 @@ $total = 0;
 <thead>
 	<th style="width:30px;">IMAGEN</th>
 	<th style="width:270px;">NOMBRE</th>
+	<th style="width:270px;">MEDIDA</th>
 	<th style="width:110px;">PRECIO <span class="hidden-xs">UNITARIO</span></th>
 	<th style="width:30px;"><span class="hidden-xs">CANTIDAD</span><span class="visible-xs">C.</span></th>
 	<th style="width:100px;"><span class="hidden-xs">PRECIO</span> TOTAL</th>
@@ -116,6 +117,7 @@ $total_products += $p['q'];
 <tr >
 	<td><img src="storage/products/<?php echo $product->image;?>" style="width:80px;"></td>
 	<td><?php echo $product->name; ?></td>
+	<td><?php echo $product->unit; ?></td>
 	<td><b>$<?php echo number_format($product->price_out,2,".",","); ?></b></td>
 	<td style="text-align: center;"><?php echo $p["q"];?></td>
 	<td><b>$<?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt,2,".",","); ?></b></td>
