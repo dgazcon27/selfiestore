@@ -556,7 +556,7 @@ $total_dual = 0;
     	printdate2 = newdate2.getDate()+"/"+month_2+"/"+newdate2.getFullYear();
 		var doc = new jsPDF('p', 'pt');
         doc.setFontSize(16);
-        doc.text("SELFIE", 280, 30);
+        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 170, 65);
         doc.text("REPORTE DE VENTAS", 225, 50)
         doc.setFontSize(12);
         doc.text(printdate+" AL "+printdate, 240, 70);

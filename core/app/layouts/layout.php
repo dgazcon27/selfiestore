@@ -272,7 +272,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <a href="#"><i class='fa fa-area-chart'></i> <span>INVENTARIO</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li><a href="./?view=inventary2&stock=<?php echo StockData::getPrincipal()->id;?>">Inventario Principal</a></li>
-                 
+                  <li><a href="./?view=re">Abastecer</a></li>
                   <li><a href="./?view=search">Buscar Productos</a></li>
                   <li><a href="./?view=dev">Devolucion</a></li>
                 </ul>

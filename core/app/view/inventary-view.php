@@ -49,7 +49,7 @@ if(count($products)>0){
 	$d=OperationData::getDByStock($product->id,$_GET["stock"]);
 	?>
 	<tr class="<?php if($q<=$product->inventary_min/2){ echo "danger";}else if($q<=$product->inventary_min){ echo "warning";}?>">
-		<td><?php echo $product->id; ?></td>
+		<td><?php echo $product->barcode; ?></td>
 		<td><?php echo $product->name; ?></td>
 		<td>
 			<?php echo $r; ?>
@@ -124,7 +124,7 @@ var rows = [
 	$d=OperationData::getDByStock($product->id,$_GET["stock"]);
   ?>
     {
-      "code": "<?php echo $product->id; ?>",
+      "code": "<?php echo $product->barcode; ?>",
       "product": "<?php echo $product->name; ?>",
       "pr": "<?php echo $r;?>",
       "disponible": "<?php echo $q;?>",

@@ -15,7 +15,7 @@ class Core {
 	public static $pdf_footer = "Generado por el Sistema de Inventario";
 	public static $email_footer = "Correo generado Automaticamente por el Sistema de Inventario";
 
-	public static $pdf_table_fillcolor = "[100, 100, 100]";
+	public static $pdf_table_fillcolor = "[60, 141, 188]";
 	public static $pdf_table_column_fillcolor = "255";
 	public static $send_alert_emails = true; // enviar correos de alerta (ventas,abastecimientos, etc) -> MailData->send()
 

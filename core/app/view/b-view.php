@@ -1,6 +1,9 @@
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
+<?php
+$products = SellData::getByBoxId($_GET["id"]);
+?>
 
 <!-- Single button -->
 <div class="btn-group pull-right">
@@ -11,12 +14,11 @@
   </button>
   <ul class="dropdown-menu pull-right" role="menu">
     <li><a href="report/box-word.php?id=<?php echo $_GET["id"];?>">Word 2007 (.docx)</a></li>
+    <li><a onclick="thePDF('<?php echo
+date("Y-m-d", strtotime($products[0]->created_at)); ?>')" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a></li>
   </ul>
 </div>
 </div>
-<?php
-$products = SellData::getByBoxId($_GET["id"]);
-?>
 		<h1><i class='fa fa-archive'></i> Corte de Caja #<?php echo $_GET["id"]." - Día: ".date("d/m/Y", strtotime($products[0]->created_at)); ?></h1>
 		<div class="clearfix"></div>
 
@@ -235,8 +237,8 @@ if(count($products)>0){
 		<?php foreach ($spends as $spend): ?>
 		<tr>
 			<td style="text-align: center;"><?php echo $spend->id ?></td>
-			<td style="text-align: center;"><?php echo $spend->price ?></td>
 			<td style="text-align: center;"><?php echo $spend->name ?></td>
+			<td style="text-align: center;"><?php echo $spend->price ?></td>
 			<td style="text-align: center;"><?php echo date("d-m-Y",strtotime($spend->created_at)) ?></td>
 		</tr>
 		<?php
@@ -250,3 +252,143 @@ if(count($products)>0){
 <br><br><br><br><br><br><br><br><br><br>
 
 </section></section>
+<script type="text/javascript">
+	function thePDF(start) {
+		var doc = new jsPDF('p', 'pt');
+        doc.setFontSize(26);
+        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 180, 65);
+    	newdate = new Date(start);
+
+    	month = parseInt(newdate.getMonth())+1;
+    	month_ = month < 10 ? "0"+month : month;
+
+    	printdate2 = newdate.getDate()+"/"+month_+"/"+newdate.getFullYear();
+		doc.setFontSize(18);
+        doc.text("REPORTE DE CAJA "+printdate2, 150, 90);
+		var columns = [
+		    {title: "Factura", dataKey: "id"},
+			{title: "Metodo de pago", dataKey: "gasto"}, 
+			{title: "Referencia", dataKey: "ganacia"}, 
+		    {title: "Total", dataKey: "subtotal"}, 
+		];
+
+		var rows = [
+		  <?php foreach($products as $operation):
+
+		  	$variable = "";
+		  	if($operation->f_id == 1){
+        		$variable = "EFECTIVO";
+	        }elseif($operation->f_id == 2){
+				$variable = "TRANSFERENCIA";
+			}
+	        elseif($operation->f_id == 3){
+				$variable = "ZELLE";
+			}
+	    	elseif($operation->f_id == 4){
+	        	$variable = "DUAL";
+			}
+	    	elseif($operation->f_id == 5){
+	        	$variable = "PUNTO DE VENTA";
+			} else {
+				$variable = "N/A";
+			}
+
+		  ?>
+		    {
+		      "id": "#<?php echo $operation->ref_id; ?>",
+			  "gasto": "<?php echo $variable; ?>",
+			  "ganacia": "<?php echo isset($operation->refe)? $operation->refe: 'N/A'; ?>",
+		      "subtotal": "$ <?php echo number_format($operation->total,2,'.',','); ?>",
+		      },
+		 <?php
+
+			endforeach; 
+		  ?>
+		];
+
+		var resumen = [
+		    {title: "", dataKey: "id"},
+			{title: "", dataKey: "gasto"}, 
+		];
+
+		var resumenCaja = [
+			{"id":"TOTAL EN EFECTIVO","gasto":"TOTAL EN TRANSFERENCIA"},
+			{"id":"$ <?php echo number_format($total_efectivo,2,".",",");?>","gasto":"$ <?php echo number_format($total_transferencia,2,".",",");?>"},
+			{"id":"TOTAL EN ZELLE", "gasto":"TOTAL EN PUNTO DE VENTA"},
+			{"id":"$ <?php echo number_format($total_zelle,2,".",",");?>","gasto":"$ <?php echo number_format($total_punto,2,".",",");?>"},
+		];
+
+		doc.autoTable(columns, rows, {
+		    theme: 'grid',
+		    overflow:'linebreak',
+		    styles: { 
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		    },
+		    columnStyles: {
+		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+		    },
+		    margin: {top: 120},
+		    afterPageContent: function(data) {
+		    }
+		});
+
+		doc.autoTable(resumen, resumenCaja, {
+		    theme: 'grid',
+		    overflow:'linebreak',
+		    styles: { 
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		    },
+		    columnStyles: {
+		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+		    },
+		    margin: {top: doc.autoTableEndPosY()+20},
+		    afterPageContent: function(data) {
+		    }
+		});
+
+		doc.setFontSize(16);
+    	doc.text("GASTOS ", 40, doc.autoTableEndPosY()+20);
+    	var columns2 = [
+		    {title: "Factura", dataKey: "id"},
+			{title: "Concepto", dataKey: "gasto"}, 
+			{title: "Monto", dataKey: "ganacia"}, 
+		    {title: "Fecha", dataKey: "subtotal"}, 
+		];
+
+
+
+		var rows2 = [
+	 		<?php foreach($spends as $spend):?>
+  		 	{
+				"id": "#<?php echo $spend->id ?>",
+				"gasto": "<?php echo $spend->name ?>",
+				"ganacia": "<?php echo $spend->price ?>",
+				"subtotal": "$ <?php echo date("d-m-Y",strtotime($spend->created_at)) ?>",
+	      	},
+			<?php
+				endforeach; 
+			?>
+		];
+		doc.autoTable(columns2, rows2, {
+		    theme: 'grid',
+		    overflow:'linebreak',
+		    styles: { 
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		    },
+		    columnStyles: {
+		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+		    },
+		    margin: {top: doc.autoTableEndPosY()+40},
+		    afterPageContent: function(data) {
+		    }
+		});
+
+		doc.setFontSize(16);
+		doc.text('TOTAL DE GASTOS: <?php echo "$ ".number_format($spend_total,2,".",","); ?>',40, doc.autoTableEndPosY()+40);
+		doc.text('TOTAL: <?php echo "$ ".number_format($total_total-$spend_total,2,".",","); ?>',40, doc.autoTableEndPosY()+60);
+		doc.save('boxreport-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+	}
+</script>
+
+
+</script>
