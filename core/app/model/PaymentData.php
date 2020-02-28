@@ -17,6 +17,10 @@ class PaymentData {
 		Executor::doit($sql);
 	}
 
+	public function update_box(){
+		$sql = "update ".self::$tablename." set box_id=$this->box_id where id=$this->id";
+		Executor::doit($sql);
+	}
 
 	public function add_payment(){
 		$sql = "insert into ".self::$tablename." (person_id,val,payment_type_id,sell_id,created_at) ";
@@ -78,6 +82,17 @@ class PaymentData {
 		return Model::one($query[0],new PaymentData());	
 	}
 
+	public function getAllUnBoxed(){
+		$sql = "select * from ".self::$tablename." where box_id is NULL and payment_type_id = 2 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new PaymentData());	
+	}
+
+	public function getBoxedPayments($id){
+		$sql = "select * from ".self::$tablename." where box_id=$id order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SpendData());
+	}
 
 }
 

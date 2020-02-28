@@ -279,9 +279,55 @@ if(count($products)>0){
 		<p>No se ha realizado ningun gastos.</p>
 	</div>
 <?php endif ?>
+<br>
+<?php 
+	$payments = PaymentData::getAllUnBoxed();
+	$payments_total = 0;
+?>
+<?php if ($payments): ?>
+	<h2>ABONOS DEL DIA</h2>
+	<div class="box box-primary">
+		<table class="table table-bordered table-hover	">
+			<thead>
+				<th style="text-align: center;">FACTURA</th>
+				<th style="text-align: center;">CLIENTE</th>
+				<th style="text-align: center;">MONTO</th>
+				<th style="text-align: center;">FECHA</th>
+			</thead>
+			<?php foreach ($payments as $pay): 
+				$sell = SellData::getById($pay->sell_id);
+				$person = PersonData::getById($pay->person_id);
+				$paym = $pay->val;
+				if ($paym < 0) {
+					$paym = $paym*-1;
+				}
+			?>
+			<tr>
+				<td style="text-align: center;"><?php echo "#".$sell->ref_id;?></td>
+				<td style="text-align: center;"><?php echo $person->name." ".$person->lastname;?></td>
+				<td style="text-align: center;"><?php echo $paym;?></td>
+				<td style="text-align: center;"><?php echo date("d-m-Y",strtotime($pay->created_at));?></td>
+			</tr>
+			<?php 
+				$payments_total += $paym;
+			?>
+			<?php endforeach ?>
+		</table>
+	</div>
+	<h2>TOTAL DE ABONOS: <?php echo "$ ".number_format($payments_total,2,".",","); ?></h2>
+<?php else: ?>
+	<div class="jumbotron">
+		<h2>No hay abonos</h2>
+		<p>No se ha realizado ningun abono.</p>
+	</div>
+<?php endif ?>
+
+
+
+
 <hr style="border: solid 1px #3c8dbc">
 
-<h1 style="float:right;">TOTAL: <?php echo "$ ".number_format($total_total-$spend_total,2,".",","); ?></h1>
+<h1 style="float:right;">TOTAL: <?php echo "$ ".number_format($total_total+$payments_total-$spend_total,2,".",","); ?></h1>
 <br><br><br><br><br><br><br><br><br><br>
 	</div>
 </div>

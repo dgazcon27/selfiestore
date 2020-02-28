@@ -248,7 +248,54 @@ if(count($products)>0){
 	</table>
 </div>
 <h2>TOTAL DE GASTOS: <?php echo "$ ".number_format($spend_total,2,".",","); ?></h2>
-<h1 style="float:right;">TOTAL: <?php echo "$ ".number_format($total_total-$spend_total,2,".",","); ?></h1>
+<br>
+<br>
+<?php 
+	$payments = PaymentData::getBoxedPayments($_GET["id"]);
+	$payments_total = 0;
+?>
+<?php if ($payments): ?>
+	<h2>ABONOS DEL DIA</h2>
+	<div class="box box-primary">
+		<table class="table table-bordered table-hover	">
+			<thead>
+				<th style="text-align: center;">FACTURA</th>
+				<th style="text-align: center;">CLIENTE</th>
+				<th style="text-align: center;">MONTO</th>
+				<th style="text-align: center;">FECHA</th>
+			</thead>
+			<?php foreach ($payments as $pay): 
+				$sell = SellData::getById($pay->sell_id);
+				$person = PersonData::getById($pay->person_id);
+				$paym = $pay->val;
+				if ($paym < 0) {
+					$paym = $paym*-1;
+				}
+			?>
+			<tr>
+				<td style="text-align: center;"><?php echo "#".$sell->ref_id;?></td>
+				<td style="text-align: center;"><?php echo $person->name." ".$person->lastname;?></td>
+				<td style="text-align: center;"><?php echo $paym;?></td>
+				<td style="text-align: center;"><?php echo date("d-m-Y",strtotime($pay->created_at));?></td>
+			</tr>
+			<?php 
+				$payments_total += $paym;
+			?>
+			<?php endforeach ?>
+		</table>
+	</div>
+	<h2>TOTAL DE ABONOS: <?php echo "$ ".number_format($payments_total,2,".",","); ?></h2>
+<?php else: ?>
+	<div class="jumbotron">
+		<h2>No hay abonos</h2>
+		<p>No se ha realizado ningun abono.</p>
+	</div>
+<?php endif ?>
+
+
+
+<h1 style="float:right;">TOTAL: <?php echo "$ ".number_format($total_total+$payments_total-$spend_total,2,".",","); ?></h1>
+
 <br><br><br><br><br><br><br><br><br><br>
 
 </section></section>
@@ -306,6 +353,9 @@ if(count($products)>0){
 		  ?>
 		];
 
+		doc.setFontSize(14);
+		doc.text("VENTAS DEL DIA ", 40, 140);
+		doc.text("_______________", 40, 145);
 		var resumen = [
 		    {title: "", dataKey: "id"},
 			{title: "", dataKey: "gasto"}, 
@@ -327,10 +377,14 @@ if(count($products)>0){
 		    columnStyles: {
 		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
 		    },
-		    margin: {top: 120},
+		    margin: {top: 170},
 		    afterPageContent: function(data) {
 		    }
 		});
+
+		
+
+
 
 		doc.autoTable(resumen, resumenCaja, {
 		    theme: 'grid',
@@ -346,8 +400,11 @@ if(count($products)>0){
 		    }
 		});
 
-		doc.setFontSize(16);
-    	doc.text("GASTOS ", 40, doc.autoTableEndPosY()+20);
+		doc.text('TOTAL DE VENTAS: <?php echo "$ ".number_format($total_total,2,".",","); ?>', 350, doc.autoTableEndPosY()+20);
+
+		
+    	doc.text("GASTOS ", 40, doc.autoTableEndPosY()+70);
+    	doc.text("________", 40, doc.autoTableEndPosY()+75);
     	var columns2 = [
 		    {title: "Factura", dataKey: "id"},
 			{title: "Concepto", dataKey: "gasto"}, 
@@ -362,7 +419,7 @@ if(count($products)>0){
   		 	{
 				"id": "#<?php echo $spend->id ?>",
 				"gasto": "<?php echo $spend->name ?>",
-				"ganacia": "<?php echo $spend->price ?>",
+				"ganacia": "$ <?php echo number_format($spend->price,2,".",",") ?>",
 				"subtotal": "$ <?php echo date("d-m-Y",strtotime($spend->created_at)) ?>",
 	      	},
 			<?php
@@ -378,14 +435,58 @@ if(count($products)>0){
 		    columnStyles: {
 		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
 		    },
-		    margin: {top: doc.autoTableEndPosY()+40},
+		    margin: {top: doc.autoTableEndPosY()+100},
 		    afterPageContent: function(data) {
 		    }
 		});
 
-		doc.setFontSize(16);
-		doc.text('TOTAL DE GASTOS: <?php echo "$ ".number_format($spend_total,2,".",","); ?>',40, doc.autoTableEndPosY()+40);
-		doc.text('TOTAL: <?php echo "$ ".number_format($total_total-$spend_total,2,".",","); ?>',40, doc.autoTableEndPosY()+60);
+		doc.text('TOTAL DE GASTOS: <?php echo "$ ".number_format($spend_total,2,".",","); ?>',365, doc.autoTableEndPosY()+30);
+
+		var abonos = [
+		    {title: "Factura", dataKey: "id"},
+			{title: "Cliente", dataKey: "client"}, 
+			{title: "Monto", dataKey: "ganacia"}, 
+		    {title: "Fecha", dataKey: "subtotal"}, 
+		];
+
+		var rowsAbonos = [
+			<?php foreach ($payments as $pay): 
+				$sell = SellData::getById($pay->sell_id);
+				$person = PersonData::getById($pay->person_id);
+				$paym = $pay->val; 
+				if ($paym < 0) {
+					$paym = $paym*-1;
+				}
+			?>
+				{
+					"id":"#<?php echo $sell->ref_id;?>",
+					"client": "<?php echo $person->name." ".$person->lastname;?>",
+					"ganacia": "$ <?php echo number_format($paym,2,".",",");?>",
+					"subtotal": "<?php echo date("d-m-Y",strtotime($pay->created_at));?>"
+				},
+			<?php endforeach ?>
+
+		];
+    	doc.text("ABONOS ", 40, doc.autoTableEndPosY()+60);
+    	doc.text("________ ", 40, doc.autoTableEndPosY()+65);
+
+    	doc.autoTable(abonos, rowsAbonos, {
+		    theme: 'grid',
+		    overflow:'linebreak',
+		    styles: { 
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		    },
+		    columnStyles: {
+		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+		    },
+		    margin: {top: doc.autoTableEndPosY()+90},
+		    afterPageContent: function(data) {
+		    }
+		});
+    	doc.text('ABONOS DEL DIA: <?php echo "$ ".number_format($payments_total,2,".",","); ?>', 380, doc.autoTableEndPosY()+30);
+
+    	doc.setFontSize(16);
+		doc.text('TOTAL: <?php echo "$ ".number_format($total_total+$payments_total-$spend_total,2,".",","); ?>',415, doc.autoTableEndPosY()+80);
 		doc.save('boxreport-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 	}
 </script>
