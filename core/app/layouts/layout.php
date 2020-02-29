@@ -34,6 +34,7 @@
 <script type="text/javascript" src="res/js/mousetrap.min.js"></script>
 <script type="text/javascript" src="res/js/jszip.js"></script>
 <script type="text/javascript" src="res/js/xlsx.js"></script>
+<script type="text/javascript" src="res/js/html2canvas.min.js"></script>
 
   </head>
 

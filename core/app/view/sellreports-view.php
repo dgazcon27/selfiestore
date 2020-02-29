@@ -91,7 +91,7 @@ $total_dual = 0;
 			 			<?php $supertotal = 0; $supergasto = 0; $superganancia = 0; $superdescuento = 0; $ganancia = 0; ?>
 							<a onclick="thePDF()" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a>
 							<a href="./report/sellreports-xlsx.php?client_id=<?php echo $_GET["client_id"]; ?>&sd=<?php echo $_GET["sd"]; ?>&ed=<?php echo $_GET["ed"]; ?>" class="btn btn-default">Excel (.xlsx)</a>
-							<a onclick="report('<?php echo $user;?>','<?php echo $client;?>','<?php echo $start;?>','<?php echo $end;?>')" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
+							<a onclick="generalReport('<?php echo $user;?>','<?php echo $client;?>','<?php echo $start;?>','<?php echo $end;?>')" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
 							<br><br>
 							<div class="panel panel-default">
     							<div class="panel-heading">
@@ -599,4 +599,37 @@ $total_dual = 0;
 
 		
 	}
+</script>
+
+<script type="text/javascript">
+	function generalReport(user, client, start, end) {
+		var doc = new jsPDF('p', 'pt');
+		 margins = {
+            top: 80,
+            bottom: 60,
+            left: 40,
+            width: 522
+        };
+        doc.setFont("courier");
+		$.get(`./?action=reporteGeneral&client=${client}&user=${user}&start=${start}&end=${end}`,function(
+			data2){
+			html2canvas(data2).then(function (canvas) {
+				doc.fromHTML(
+		            canvas, 
+		            margins.left, // x coord
+		            margins.top, { // y coord
+		                'width': margins.width, 
+		            },
+
+		            function (dispose) {
+						doc.save('reporte_de_ventas-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+		            }, margins
+		        );
+				
+			})
+
+		});
+
+	}
+
 </script>

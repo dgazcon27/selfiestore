@@ -27,10 +27,11 @@ if (count($products) > 0) {
   <ul class="dropdown-menu pull-right" role="menu">
     <li><a href="report/box-word.php?id=<?php echo $_GET["id"];?>">Word 2007 (.docx)</a></li>
     <li><a onclick="thePDF('<?php echo
-date("Y-m-d", strtotime($box_day)); ?>')" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a></li>
+date("Y/m/d", strtotime($box_day)); ?>')" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a></li>
   </ul>
 </div>
 </div>
+
 		<h1><i class='fa fa-archive'></i> Corte de Caja #<?php echo $_GET["id"]." - Día: ".date("d/m/Y", strtotime($box_day)); ?></h1>
 		<div class="clearfix"></div>
 
@@ -320,6 +321,8 @@ if(count($products)>0){
     	<?php $lines += 1;?>
 
     	newdate = new Date(start);
+		console.log(newdate);
+
     	month = parseInt(newdate.getMonth())+1;
     	month_ = month < 10 ? "0"+month : month;
 
