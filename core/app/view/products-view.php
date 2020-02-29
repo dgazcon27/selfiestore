@@ -63,7 +63,7 @@ if(count($products)>0){
 		<td><?php echo strtoupper($product->name); ?></td>
 		<td>$ <?php echo number_format($product->price_in,2,'.',','); ?></td>
 		<td>$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
-		<td class="center"><?php echo $product->unit; ?>G</td>
+		<td class="center"><?php echo $product->unit; ?></td>
 		<td><?php if($product->brand_id!=null){echo $product->getBrand()->name;}else{ echo "<center>----</center>"; }  ?></td>
 <td>
   <?php

@@ -93,7 +93,7 @@ if($product!=null):
     </div>
     <div class="col-md-3">
     <label class="control-label">PESO*</label>
-      <input type="text" name="unit" class="form-control" id="unit" placeholder="PESO" required>
+      <input type="text" name="unit" class="form-control" id="unit" placeholder="PESO" value="<?php echo $product->unit;?>" required>
     </div>
   </div>
 

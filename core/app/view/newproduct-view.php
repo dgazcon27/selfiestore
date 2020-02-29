@@ -138,9 +138,6 @@ $products = ProductData::getAll();
     <div class="col-md-3">
       <input type="hidden" name="code" value="<?php echo $contad; ?>" id="product_code" class="form-control" id="barcode" placeholder="Codigo Interno" required>
     </div>
-	<div class="col-md-3">
-      <input type="hidden" name="unit" class="form-control" id="unit" placeholder="Unidad del Producto">
-    </div>
   </div>	
 			
 

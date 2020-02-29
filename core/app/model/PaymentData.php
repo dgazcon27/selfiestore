@@ -88,6 +88,12 @@ class PaymentData {
 		return Model::many($query[0],new PaymentData());	
 	}
 
+	public static function getByBoxId($id){
+		$sql = "select * from ".self::$tablename." where box_id=$id and payment_type_id = 2 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
 	public function getBoxedPayments($id){
 		$sql = "select * from ".self::$tablename." where box_id=$id order by created_at desc";
 		$query = Executor::doit($sql);

@@ -2,8 +2,8 @@
 $sells = SellData::getSellsUnBoxed();
 
 $box = new BoxData();
-if(count($sells)){
-	$box->stock_id = StockData::getPrincipal()->id;
+$box->stock_id = StockData::getPrincipal()->id;
+if(count($sells) > 0){
 	$b = $box->add();
 	foreach($sells as $sell){
 		$sell->box_id = $b[1];
@@ -14,7 +14,7 @@ if(count($sells)){
 $spends = SpendData::getAllUnBoxed();
 
 if (count($spends) > 0) {
-	if (!isset($b)) {
+	if (!isset($b[1])) {
 		$b = $box->add();
 	}
 	foreach ($spends as $spend) {
@@ -24,8 +24,8 @@ if (count($spends) > 0) {
 }
 
 $payments = PaymentData::getAllUnBoxed();
-if (count($spends) > 0) {
-	if (!isset($b)) {
+if (count($payments) > 0) {
+	if (!isset($b[1])) {
 		$b = $box->add();
 	}
 	foreach ($payments as $pay) {

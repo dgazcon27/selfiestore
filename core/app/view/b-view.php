@@ -3,6 +3,18 @@
 	<div class="col-md-12">
 <?php
 $products = SellData::getByBoxId($_GET["id"]);
+$box_day = "";
+if (count($products) > 0) {
+	$box_day = $products[0]->created_at;
+} else {
+	$spend = SpendData::getByBoxId($_GET["id"]);
+	if (count($spend) > 0) {
+		$box_day = $spend[0]->created_at;
+	} else {
+		$payt = PaymentData::getByBoxId($_GET["id"]);
+		$box_day = $payt[0]->created_at;
+	}
+}
 ?>
 
 <!-- Single button -->
@@ -15,28 +27,28 @@ $products = SellData::getByBoxId($_GET["id"]);
   <ul class="dropdown-menu pull-right" role="menu">
     <li><a href="report/box-word.php?id=<?php echo $_GET["id"];?>">Word 2007 (.docx)</a></li>
     <li><a onclick="thePDF('<?php echo
-date("Y-m-d", strtotime($products[0]->created_at)); ?>')" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a></li>
+date("Y-m-d", strtotime($box_day)); ?>')" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a></li>
   </ul>
 </div>
 </div>
-		<h1><i class='fa fa-archive'></i> Corte de Caja #<?php echo $_GET["id"]." - Día: ".date("d/m/Y", strtotime($products[0]->created_at)); ?></h1>
+		<h1><i class='fa fa-archive'></i> Corte de Caja #<?php echo $_GET["id"]." - Día: ".date("d/m/Y", strtotime($box_day)); ?></h1>
 		<div class="clearfix"></div>
 
 
 <?php
+$total_total = 0;
+$efectivo = 1;
+$transferencia = 2;
+$zelle = 3;
+$dual = 4;
+$punto = 5;
+$total_efectivo = 0;
+$total_transferencia = 0;
+$total_zelle = 0;
+$total_punto = 0;
+$total_dual = 0;
+$total_descuento = 0;	
 if(count($products)>0){
-    $total_total = 0;
-	$efectivo = 1;
-	$transferencia = 2;
-	$zelle = 3;
-	$dual = 4;
-	$punto = 5;
-	$total_efectivo = 0;
-	$total_transferencia = 0;
-	$total_zelle = 0;
-	$total_punto = 0;
-	$total_dual = 0;
-	$total_descuento = 0;	
 ?>
 <br>
 <div class="box box-primary">
@@ -302,10 +314,12 @@ if(count($products)>0){
 <script type="text/javascript">
 	function thePDF(start) {
 		var doc = new jsPDF('p', 'pt');
+    	<?php $lines = 0;?>
         doc.setFontSize(26);
         doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 180, 65);
-    	newdate = new Date(start);
+    	<?php $lines += 1;?>
 
+    	newdate = new Date(start);
     	month = parseInt(newdate.getMonth())+1;
     	month_ = month < 10 ? "0"+month : month;
 
@@ -318,28 +332,28 @@ if(count($products)>0){
 			{title: "Referencia", dataKey: "ganacia"}, 
 		    {title: "Total", dataKey: "subtotal"}, 
 		];
-
+		;
 		var rows = [
-		  <?php foreach($products as $operation):
-
-		  	$variable = "";
-		  	if($operation->f_id == 1){
-        		$variable = "EFECTIVO";
-	        }elseif($operation->f_id == 2){
-				$variable = "TRANSFERENCIA";
-			}
-	        elseif($operation->f_id == 3){
-				$variable = "ZELLE";
-			}
-	    	elseif($operation->f_id == 4){
-	        	$variable = "DUAL";
-			}
-	    	elseif($operation->f_id == 5){
-	        	$variable = "PUNTO DE VENTA";
-			} else {
-				$variable = "N/A";
-			}
-
+		  <?php 
+		  	foreach($products as $operation):
+		  		$lines +=1;
+			  	$variable = "";
+			  	if($operation->f_id == 1){
+	        		$variable = "EFECTIVO";
+		        }elseif($operation->f_id == 2){
+					$variable = "TRANSFERENCIA";
+				}
+		        elseif($operation->f_id == 3){
+					$variable = "ZELLE";
+				}
+		    	elseif($operation->f_id == 4){
+		        	$variable = "DUAL";
+				}
+		    	elseif($operation->f_id == 5){
+		        	$variable = "PUNTO DE VENTA";
+				} else {
+					$variable = "N/A";
+				}
 		  ?>
 		    {
 		      "id": "#<?php echo $operation->ref_id; ?>",
@@ -352,10 +366,11 @@ if(count($products)>0){
 			endforeach; 
 		  ?>
 		];
-
 		doc.setFontSize(14);
 		doc.text("VENTAS DEL DIA ", 40, 140);
+		<?php $lines +=1; ?>
 		doc.text("_______________", 40, 145);
+		<?php $lines +=1; ?>
 		var resumen = [
 		    {title: "", dataKey: "id"},
 			{title: "", dataKey: "gasto"}, 
@@ -367,23 +382,23 @@ if(count($products)>0){
 			{"id":"TOTAL EN ZELLE", "gasto":"TOTAL EN PUNTO DE VENTA"},
 			{"id":"$ <?php echo number_format($total_zelle,2,".",",");?>","gasto":"$ <?php echo number_format($total_punto,2,".",",");?>"},
 		];
+		<?php $lines +=4; ?>
+
 
 		doc.autoTable(columns, rows, {
 		    theme: 'grid',
 		    overflow:'linebreak',
 		    styles: { 
-		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>,
+		        overflow: 'ellipsize'
 		    },
 		    columnStyles: {
 		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
 		    },
-		    margin: {top: 170},
-		    afterPageContent: function(data) {
-		    }
+		    startY: 170,
 		});
 
 		
-
 
 
 		doc.autoTable(resumen, resumenCaja, {
@@ -401,10 +416,11 @@ if(count($products)>0){
 		});
 
 		doc.text('TOTAL DE VENTAS: <?php echo "$ ".number_format($total_total,2,".",","); ?>', 350, doc.autoTableEndPosY()+20);
+		doc.addPage();
 
-		
-    	doc.text("GASTOS ", 40, doc.autoTableEndPosY()+70);
-    	doc.text("________", 40, doc.autoTableEndPosY()+75);
+    	doc.text("GASTOS ", 40, 70);
+    	doc.text("________", 40, 75);
+		<?php $lines = 2; ?>
     	var columns2 = [
 		    {title: "Factura", dataKey: "id"},
 			{title: "Concepto", dataKey: "gasto"}, 
@@ -413,9 +429,9 @@ if(count($products)>0){
 		];
 
 
-
 		var rows2 = [
 	 		<?php foreach($spends as $spend):?>
+				<?php $lines += 1; ?>
   		 	{
 				"id": "#<?php echo $spend->id ?>",
 				"gasto": "<?php echo $spend->name ?>",
@@ -426,6 +442,7 @@ if(count($products)>0){
 				endforeach; 
 			?>
 		];
+
 		doc.autoTable(columns2, rows2, {
 		    theme: 'grid',
 		    overflow:'linebreak',
@@ -435,13 +452,12 @@ if(count($products)>0){
 		    columnStyles: {
 		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
 		    },
-		    margin: {top: doc.autoTableEndPosY()+100},
+		    margin: {top: 100},
 		    afterPageContent: function(data) {
 		    }
 		});
 
 		doc.text('TOTAL DE GASTOS: <?php echo "$ ".number_format($spend_total,2,".",","); ?>',365, doc.autoTableEndPosY()+30);
-
 		var abonos = [
 		    {title: "Factura", dataKey: "id"},
 			{title: "Cliente", dataKey: "client"}, 
@@ -450,7 +466,7 @@ if(count($products)>0){
 		];
 
 		var rowsAbonos = [
-			<?php foreach ($payments as $pay): 
+			<?php foreach ($payments as $pay):
 				$sell = SellData::getById($pay->sell_id);
 				$person = PersonData::getById($pay->person_id);
 				$paym = $pay->val; 
@@ -472,9 +488,9 @@ if(count($products)>0){
 
     	doc.autoTable(abonos, rowsAbonos, {
 		    theme: 'grid',
-		    overflow:'linebreak',
 		    styles: { 
-		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
+		        fillColor: <?php echo Core::$pdf_table_fillcolor;?>,
+		    	overflow:'linebreak',
 		    },
 		    columnStyles: {
 		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
@@ -483,10 +499,15 @@ if(count($products)>0){
 		    afterPageContent: function(data) {
 		    }
 		});
+
     	doc.text('ABONOS DEL DIA: <?php echo "$ ".number_format($payments_total,2,".",","); ?>', 380, doc.autoTableEndPosY()+30);
 
     	doc.setFontSize(16);
 		doc.text('TOTAL: <?php echo "$ ".number_format($total_total+$payments_total-$spend_total,2,".",","); ?>',415, doc.autoTableEndPosY()+80);
+
+		doc.text('______________           ______________           ______________',60, doc.autoTableEndPosY()+200);
+    	doc.setFontSize(12);
+		doc.text('ENTREGA                                   AUDITA                                      RECIBE',100, doc.autoTableEndPosY()+230);
 		doc.save('boxreport-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
 	}
 </script>

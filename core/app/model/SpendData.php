@@ -29,6 +29,13 @@ class SpendData {
 		Executor::doit($sql);
 	}
 
+	public static function getByBoxId($id){
+		$sql = "select * from ".self::$tablename." where box_id=$id order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+
 // partiendo de que ya tenemos creado un objecto CategoryData previamente utilizamos el contexto
 	public function update(){
 		$sql = "update ".self::$tablename." set name=\"$this->name\",price=$this->price where id=$this->id";
