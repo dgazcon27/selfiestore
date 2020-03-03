@@ -64,6 +64,12 @@ class PaymentData {
 		return Model::many($query[0],new PaymentData());	
 	}
 
+	public static function getAllByDateReport($start,$end){
+		$sql = "select * from ".self::$tablename." where (date(created_at)>=\"$start\" and date(created_at)<=\"$end\") and payment_type_id=2 and box_id != 0 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new PaymentData());	
+	}
+
 	public static function getAllByDateAndClient($start,$end,$id){
 		$sql = "select * from ".self::$tablename." where (date(created_at)>=\"$start\" and date(created_at)<=\"$end\") and payment_type_id=2 and person_id=$id order by created_at desc";
 		$query = Executor::doit($sql);

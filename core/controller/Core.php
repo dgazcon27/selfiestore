@@ -16,8 +16,42 @@ class Core {
 	public static $email_footer = "Correo generado Automaticamente por el Sistema de Inventario";
 
 	public static $pdf_table_fillcolor = "[60, 141, 188]";
+	public static $black_color = "[0,0,0]";
+	public static $blue_sky = "[60,170,188]";
 	public static $pdf_table_column_fillcolor = "255";
 	public static $send_alert_emails = true; // enviar correos de alerta (ventas,abastecimientos, etc) -> MailData->send()
+	public $base_cell_report_global = 58;
+	public $current_cell_position = 0;
+	public $space_cell = 0;
+
+
+
+	function setSpaceCell($space){
+		$this->space_cell=$space;
+	}
+
+	function getSpaceCell()
+	{
+		return $this->space_cell;
+	}
+
+	function setCurrentCellPosition($position){
+		$this->current_cell_position = $position;
+	}
+
+	function getCurrentCellPosition(){
+		return $this->current_cell_position;
+	}
+
+	function getNextSpaceCell($space = 0){
+		if ($space != 0) {
+			$this->setCurrentCellPosition($this->current_cell_position+$space);	
+		} else {
+			$this->setCurrentCellPosition($this->current_cell_position+$this->space_cell);
+		}
+		return $this->getCurrentCellPosition();
+	}
+
 
 	public static function includeCSS(){
 		$path = "res/css/";

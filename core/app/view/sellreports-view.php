@@ -91,7 +91,7 @@ $total_dual = 0;
 			 			<?php $supertotal = 0; $supergasto = 0; $superganancia = 0; $superdescuento = 0; $ganancia = 0; ?>
 							<a onclick="thePDF()" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a>
 							<a href="./report/sellreports-xlsx.php?client_id=<?php echo $_GET["client_id"]; ?>&sd=<?php echo $_GET["sd"]; ?>&ed=<?php echo $_GET["ed"]; ?>" class="btn btn-default">Excel (.xlsx)</a>
-							<a onclick="generalReport('<?php echo $user;?>','<?php echo $client;?>','<?php echo $start;?>','<?php echo $end;?>')" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
+							<a href="index.php?action=reporteGeneral&client=<?php echo $client;?>&user=<?php echo $user;?>&start=<?php echo $start;?>&end=<?php echo $end;?>" target="_blank" id="makepdf" class="btn btn-primary" class="" style="float:right;">Exportar reporte global</a>
 							<br><br>
 							<div class="panel panel-default">
     							<div class="panel-heading">
@@ -539,97 +539,5 @@ $total_dual = 0;
 </div>
 
 <br><br><br><br>
+	
 </section>
-
-<script type="text/javascript">
-    function report(user, client, start, end) {
-
-    	newdate = new Date(start);
-    	newdate2 = new Date(end);
-
-    	month = parseInt(newdate.getMonth())+1;
-    	month_ = month < 10 ? "0"+month : month;
-    	month2 = parseInt(newdate2.getMonth())+1;
-    	month_2 = month < 10 ? "0"+month : month;
-
-    	printdate = newdate.getDate()+"/"+month_+"/"+newdate.getFullYear();
-    	printdate2 = newdate2.getDate()+"/"+month_2+"/"+newdate2.getFullYear();
-		var doc = new jsPDF('p', 'pt');
-        doc.setFontSize(16);
-        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 170, 65);
-        doc.text("REPORTE DE VENTAS", 225, 50)
-        doc.setFontSize(12);
-        doc.text(printdate+" AL "+printdate, 240, 70);
-		var columns = [
-	        {title: "", dataKey: "name"}, 
-		    {title: "", dataKey: "amount"}, 
-		];
-
-		var rows = [];
-		$.get(`./?action=reportglobal&client=${client}&user=${user}&start=${start}&end=${end}`,function(data2){
-			let response = JSON.parse(data2);
-			rows = [
-				{"name": "TOTAL INGRESOS DE CONTADO","amount":response.selled},
-				{"name": "TOTAL ABONOS DE CRÉDITO","amount":response.payments},
-				{"name": "TOTAL INGRESOS DE CRÉDITO CERRADOS","amount":response.closed_credit},
-				{"name": "TOTAL INGRESOS GLOBALES","amount":response.global_total},
-				{"name": "TOTAL INVERSIÓN","amount":response.invested},
-				{"name": "TOTAL GASTOS","amount":response.spend},
-				{"name": "TOTAL DE GANANCIAS","amount":response.gain},
-				{"name": "UTILIDAD CEO 70%","amount":response.ceo},
-				{"name": "PRESUPUESTO PARA MARKETING 5%","amount":response.markenting},
-				{"name": "UTILIDAD PARA DIRECTIVA 25%","amount":response.manager},
-				{"name": "TOTAL CUENTAS POR COBRAR","amount":response.to_get},
-			];	
-			doc.autoTable(columns, rows, {
-			    theme: 'grid',
-			    overflow:'linebreak',
-			    styles: { 
-			        fillColor: <?php echo Core::$pdf_table_fillcolor;?>
-			    },
-			    columnStyles: {
-			        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
-			    },
-			    margin: {top: 100},
-			    afterPageContent: function(data) {
-			    }
-			});
-			doc.save('reporte_de_ventas-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
-		});
-
-		
-	}
-</script>
-
-<script type="text/javascript">
-	function generalReport(user, client, start, end) {
-		var doc = new jsPDF('p', 'pt');
-		 margins = {
-            top: 80,
-            bottom: 60,
-            left: 40,
-            width: 522
-        };
-        doc.setFont("courier");
-		$.get(`./?action=reporteGeneral&client=${client}&user=${user}&start=${start}&end=${end}`,function(
-			data2){
-			html2canvas(data2).then(function (canvas) {
-				doc.fromHTML(
-		            canvas, 
-		            margins.left, // x coord
-		            margins.top, { // y coord
-		                'width': margins.width, 
-		            },
-
-		            function (dispose) {
-						doc.save('reporte_de_ventas-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
-		            }, margins
-		        );
-				
-			})
-
-		});
-
-	}
-
-</script>

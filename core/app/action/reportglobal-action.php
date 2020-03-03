@@ -50,7 +50,7 @@
 				$total_invested += $key->invoice_code;
 				# code...
 			}
-			if ($key->p_id == 4) {
+			if ($key->p_id == 4 && $key->payments > 0) {
 				$total_credit += ($key->total-$key->discount);
 				$total_payments += (float)$key->cash+(float)$key->payments;
 				// $total_credit_invested += (float)$key->invoice_code;
@@ -69,10 +69,7 @@
 								$total_credit_invested += $bill->invoice_code;
 							}
 						}
-				// 		// PAGO TOTAL DE CUENTA DE CREDITO
-						// if ($person_total-$person_paid == 0) {
-						// 	array_push($credit_array,array("invested" => $person_invested, "closed" => $person_paid));
-						// }
+
 					}
 					$clients[$key->person_id] = $key->person_id;
 				}
