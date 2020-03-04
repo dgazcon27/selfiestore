@@ -158,14 +158,14 @@
 											if ($is_imeis && $sell->comment != "") {
 											?>
 												<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
-													<span> ARMAR PEDIDO</span>
+													<span> PEDIDO ARMANDO</span>
 												</a>
 												
 											<?php
 											} elseif(!$is_imeis) {
 											?>
 												<a href="index.php?action=setorder&status=9&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('CONFIRMAS QUE QUIERES ARMAR ESTE PEDIDO');">
-													<span> ARMAR PEDIDO</span>
+													<span> PEDIDO ARMANDO</span>
 												</a>
 											<?php
 											}
@@ -192,11 +192,6 @@
 										<?php endif ?>
 										<a href="index.php?view=delcotization&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger" onclick="return confirm('CONFIRMAS QUE QUIERES ELIMINAR ESTA COTIZACION');">
 											<i class="fa fa-trash"></i>
-										</a>
-									<?php endif ?>
-									<?php if ((isset($_SESSION['is_admin']) || Core::$user->kind == 2)): ?>
-										<a onclick="thePDF(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
-											<i class="fa fa-file"></i> PDF ALMACEN
 										</a>
 									<?php endif ?>
 									<?php if ((isset($_SESSION['is_admin']) && $sell->user_id) || Core::$user->kind == 2 || Core::$user->kind == 5): ?>
@@ -328,7 +323,7 @@
 
 			doc.setFontSize(10);
     		doc.text("____________________________________________________________________________________________", 40, 110);
-    		doc.text("NOMBRE DEL ENCARGADO: "+person.name+" "+person.lastname+"             TELÉFONO ENCARGADO: "+telefono+" ", 40, 125);
+    		doc.text("NOMBRE DEL CLIENTE: "+person.name+" "+person.lastname+"             TELÉFONO CLIENTE: "+telefono+" ", 40, 125);
     		doc.text("____________________________________________________________________________________________", 40, 128);
     		doc.text("EMPRESA: "+company+"        TELÉFONO: "+telefono2+"           RIF: "+rif+"", 40, 145);
     		doc.text("____________________________________________________________________________________________", 40, 150);
@@ -364,6 +359,8 @@
 			doc.setFontSize(12);
 			doc.text("__________________  __________________  __________________  __________________",40, doc.autoTableEndPosY()+160);
 			doc.text("           ENTREGA               TRANSPORTA                    RECIBE                       AUDITA",40, doc.autoTableEndPosY()+175);
+			doc.setFontSize(9);
+			doc.text("*Al firmar este documento acepto que recibí los productos listados en perfectas condiciones.",40, doc.autoTableEndPosY()+225);
 
 			doc.addPage();
 			doc.setFontSize(24);
@@ -374,14 +371,12 @@
 			doc.setFontSize(10);
 
     		doc.text("____________________________________________________________________________________________", 40, 110);
-    		doc.text("NOMBRE DEL ENCARGADO: "+person.name+" "+person.lastname+"             TELÉFONO ENCARGADO: "+telefono+" ", 40, 125);
-    		doc.text("____________________________________________________________________________________________", 40, 128);
-    		doc.text("EMPRESA: "+company+"        TELÉFONO: "+telefono2+"           RIF: "+rif+"", 40, 145);
+    		doc.text("NOMBRE DEL CLIENTE: "+person.name+" "+person.lastname+"             TELÉFONO CLIENTE: "+telefono+" ", 40, 125);
+    		doc.text("____________________________________________________________________________________________", 40, 130);
+    		doc.text("DIRECCION DE ENTREGA: "+direccion+" ", 40, 145);
     		doc.text("____________________________________________________________________________________________", 40, 150);
-    		doc.text("DIRECCION DE ENTREGA: "+direccion+" ", 40, 165);
-    		doc.text("____________________________________________________________________________________________", 40, 170);
-    		doc.text("ATENTIDO POR: "+seller.name+" "+seller.lastname+" ", 40, 185);
-			doc.text("____________________________________________________________________________________________", 40, 190);
+    		doc.text("ATENTIDO POR: "+seller.name+" "+seller.lastname+" ", 40, 175);
+			doc.text("____________________________________________________________________________________________", 40, 180);
 
 			doc.setFontSize(14);
 			doc.autoTable(columns, rows, {
@@ -393,13 +388,16 @@
 			    columnStyles: {
 			        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
 			    },
-			    margin: {top: 220},
+			    margin: {top: 190},
 			    afterPageContent: function(data) {
 			    }
 			});
 			doc.setFontSize(12);
 			doc.text("______________________    ______________________    ______________________  ",60, doc.autoTableEndPosY()+160);
 			doc.text("ENTREGA                               TRANSPORTA                              AUDITA",95, doc.autoTableEndPosY()+175);
+
+			doc.setFontSize(9);
+			doc.text("*Al firmar este documento acepto que recibí los productos listados en perfectas condiciones.",40, doc.autoTableEndPosY()+225);
 
 
 			doc.save('pdg_guia-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
