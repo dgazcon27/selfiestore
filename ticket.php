@@ -17,6 +17,7 @@ include "core/app/model/ProductData.php";
 include "core/app/model/PersonData.php";
 include "core/app/model/StockData.php";
 include "core/app/model/ConfigurationData.php";
+include "core/app/model/ExchangeData.php";
 include "fpdf/fpdf.php";
 
 include 'barcode.php';
@@ -105,17 +106,9 @@ else{
 }
 
 
-if($sell->invoice_file == 0)
-{
-	$simbolo = "$  ";
-	$tasa = $sell->invoice_file;
-	$tasa = 1;
-}
-elseif($sell->invoice_file > 0)
-{
-	$simbolo = "Bs.  ";
-	$tasa = $sell->invoice_file;
-}
+$exchange = ExchangeData::getById(1);
+$simbolo = "Bs.  ";
+$tasa = $exchange->value;
 	
 
 
@@ -207,7 +200,7 @@ $pdf->Cell(5,5,'.............................................');
 $pdf->SetFont('Arial','B',6);
 $pdf->setY(49.20);
 $pdf->setX(3.50);
-$pdf->Cell(5,5,"NUMERO DE FACTURA:");
+$pdf->Cell(5,5,"No DE COMPROBANTE:");
 $pdf->SetFont('Arial','',6);
 $pdf->setY(49.30);
 $pdf->setX(28.20);
@@ -298,7 +291,7 @@ $pdf->Cell(5,5,'............................................');
 $pdf->SetFont('Arial','B',4);
 $pdf->setY(90);
 $pdf->setX(0.10);
-$pdf->Cell(5,5," ART.                  CANT.      PREC.                       TOTAL.");
+$pdf->Cell(5,5," ART.                                CANT.                                  TOTAL.");
 $pdf->setY(91);
 $pdf->setX(0.10);
 $pdf->SetFont('Arial','',10); 
@@ -313,15 +306,12 @@ foreach($operations as $op){
 $product = $op->getProduct();
 $pdf->setY(96);
 $pdf->setX(0.25);
-$pdf->Cell(5,$off,  strtoupper(substr($product->name, 0,9)));
+$pdf->Cell(5,$off,  strtoupper(substr($product->name, 0,12)));
 $pdf->setY(96);
-$pdf->setX(12.50);
-$pdf->Cell(35,$off,"$op->q");
+$pdf->setX(18.50);
+$pdf->Cell(33,$off,"$op->q");
 $pdf->setY(96);
-$pdf->setX(17.50);
-$pdf->Cell(11,$off,$simbolo.number_format(($product->price_out*$tasa),2,",","."));
-$pdf->setY(96);
-$pdf->setX(31);
+$pdf->setX(29);
 $pdf->Cell(11,$off,$simbolo.number_format(($op->q*$product->price_out*$tasa),2,",","."));
 	
 //    ".."  ".number_format($op->q*$product->price_out,2,"."."."));
@@ -345,13 +335,13 @@ $pdf->setY(98);
 $pdf->setX(0.10);
 $pdf->Cell(5,$off,"PAGO: " );
 $pdf->setY(98);
-$pdf->setX(28);
+$pdf->setX(22);
 $pdf->Cell(5,$off,$simbolo.number_format(($sell->cash*$tasa),2,",","."));
 $pdf->setY(101);
 $pdf->setX(0.10);
 $pdf->Cell(5,$off,"CAMBIO: " );
 $pdf->setY(101);
-$pdf->setX(28);
+$pdf->setX(22);
 $totalcambio= $total - $sell->discount;
 $totalcambio= $sell->cash - $totalcambio;
 $pdf->Cell(5,$off,$simbolo.number_format(($totalcambio*$tasa),2,",","."));
@@ -360,13 +350,13 @@ $pdf->setX(0.10);
 $pdf->SetFont('Arial','',6);
 $pdf->Cell(5,$off,"SUBTOTAL:  " );
 $pdf->setY(104);
-$pdf->setX(28);
+$pdf->setX(22);
 $pdf->Cell(5,$off,$simbolo.number_format(($total*$tasa),2,",","."));
 $pdf->setY(107);
 $pdf->setX(0.10);
 $pdf->Cell(5,$off,"DESCUENTO: " );
 $pdf->setY(107);
-$pdf->setX(28);
+$pdf->setX(22);
 $pdf->Cell(5,$off,$simbolo.number_format(($sell->discount*$tasa),2,",","."));
 
 
@@ -380,7 +370,7 @@ $pdf->setY(110);
 $pdf->setX(0.10);
 $pdf->Cell(5,$off,"TOTAL: " );
 $pdf->setY(110);
-$pdf->setX(28);
+$pdf->setX(22);
 $pdf->Cell(5,$off,$simbolo.number_format((($total - $sell->discount)*$tasa),2,".",","));
 
 

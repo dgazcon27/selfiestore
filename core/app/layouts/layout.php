@@ -357,6 +357,7 @@ if( $q==0 ||  $q<=$product->inventary_min){
                 <li><a href="./?view=spends">Gastos</a></li>
                 <li><a href="./?view=smallbox&opt=all">Caja Chica</a></li>
                 <li><a href="./?view=box">Caja</a></li>
+                <li><a href="./?view=exchanges">Tasa de Cambio</a></li>
               </ul>
             </li>
             
