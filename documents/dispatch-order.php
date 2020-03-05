@@ -240,7 +240,7 @@
 		foreach ($products as $product) {
 			$pdf->setY($core->getNextSpaceCell());
 			printTitleBlack($pdf, $core, $product['barcode'],35,6,1,1);
-			printTitleBlack($pdf, $core, utf8_decode($product['name']),118.5,6,1,1,45);
+			printTitleBlack($pdf, $core, substr(utf8_decode($product['name']), 0,63),118.5,6,1,1,45);
 			printTitleBlack($pdf, $core, $product['unit'],20.5,6,1,1,163.5);
 			printTitleBlack($pdf, $core, $product['q'],22,6,1,1,184);
 			checkPositionBreak($pdf, $core);
