@@ -133,7 +133,7 @@
 											<span> ENVIAR PEDIDO</span>
 										</a>
 									<?php endif ?>
-									<?php if (Core::$user->kind == 5 && $sell->d_id == 10): ?>
+									<?php if ((Core::$user->kind == 5 || Core::$user->kind == 2 || Core::$user->kind == 1) && $sell->d_id == 10): ?>
 										<a href="index.php?action=setorder&status=11&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-primary" onclick="return confirm('¿CORFIRMAR QUE EL PEDIDO ESTA DISPONIBLE?');">
 											<span> DISPONIBLE PARA RETIRO</span>
 										</a>
@@ -195,7 +195,7 @@
 										</a>
 									<?php endif ?>
 									<?php if ((isset($_SESSION['is_admin']) && $sell->user_id) || Core::$user->kind == 2 || Core::$user->kind == 5): ?>
-										<a onclick="report(<?php echo $sell->id;?>,<?php echo $sell->ref_id;?> ,'<?php echo $sell->created_at; ?>')" class="btn btn-xs btn-default">
+										<a href="documents/dispatch-order.php?id=<?php echo $sell->id; ?>" target="_blank" class="btn btn-xs btn-default">
 											<i class="fa fa-file"></i> PDF GUIA
 										</a>
 									<?php endif ?>

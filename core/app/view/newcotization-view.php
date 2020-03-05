@@ -1,3 +1,12 @@
+<style type="text/css">
+	#barcode {
+		width: 60px !important;
+	}
+
+	#name_product {
+		width: 250px !important;
+	}
+</style>
 <?php
 // $symbol = ConfigurationData::getByPreffix("currency")->val;
 $iva_name = ConfigurationData::getByPreffix("imp-name")->val;
@@ -14,80 +23,71 @@ if (isset($_SESSION['is_client'])) {
 	echo '<input type="hidden" id="is_client" value="0">';
 }
 ?>
-
+<?php 
+	$products = OperationData::getStockOfProductsAvailables();
+?>
 <section class="content">
-<div class="row">
-	<div class="col-md-12">
-	<h1>COTIZAR PEDIDO</h1>
-	<p><b>BUSCAR PRODUCTO POR NOMBRE O POR CODIGO:</b></p>
-		<form id="searchp">
+	<div class="box box-primary">
 		<div class="row">
-			<div class="col-md-6 input-search">
-				<input type="hidden" name="view" value="newcotization">
-				<input type="text" id="product_code" name="product" class="form-control">
-			</div>
-			<div class="col-md-3 button-search">
-			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> BUSCAR</button>
+			<div class="col-md-12">
+			<?php if (Core::$user->kind == 1): ?>
+				<div class="btn-group pull-right" style="margin-top: 12px;margin-right: 10px;">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-download"></i> Descargar <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a onclick="thePDF()" id="makepdf" class="">PDF (.pdf)</a>
+					</ul>
+				</div>
+			<?php endif ?>
+			<h1>COTIZAR PEDIDO</h1>
+				<div class="box-body no-padding">
+					<div class="box-body table-responsive" style="overflow: hidden !important;">
+						<table class="table table-bordered datatable table-hover" >
+							<thead>
+								<th id="barcode">CODIGO</th>
+								<th>IMAGEN</th>
+								<th id="name_product">NOMBRE</th>
+								<th>PRECIO</th>
+								<th>PESO</th>
+								<th>MARCA</th>
+								<th>DISPONIBLE</th>
+								<th></th>
+							</thead>
+							<?php foreach ($products as $product): ?>
+								<tr>
+									<td><?php echo $product->barcode; ?></td>
+									<td>
+										<?php if($product->image!=""):?>
+											<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
+										<?php endif;?>
+									</td>
+									<td><?php echo strtoupper($product->name); ?></td>
+									<td style="text-align: center">$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
+									<td style="text-align: center" class="center"><?php echo $product->unit; ?></td>
+									<td style="text-align: center"><?php if($product->brand_id!=null){echo $product->getBrand()->name;}else{ echo "<center>----</center>"; }  ?></td>
+									<td style="text-align: center"><?php echo strtoupper($product->q); ?></td>
+									<td >
+										<form method="post" action="index.php?view=addtocotization">
+											<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+											<input type="hidden" name="stock_id" value="<?php echo $product->stock; ?>">
+											<div class="input-group">
+												<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
+										      	<span class="input-group-btn">
+												<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus-sign"></i></button>
+										      </span>
+										    </div>
+										</form>
+									</td>
+								</tr>	
+							<?php endforeach ?>
+							
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
-		</form>
-		<?php if(isset($_SESSION["errors"])):?>
-		<h2>Error</h2>
-		<p></p>
-		<table class="table table-bordered table-hover">
-		<tr class="danger">
-			<th>Codigo</th>
-			<th>Producto</th>
-			<th>Mensaje</th>
-		</tr>
-		<?php foreach ($_SESSION["errors"]  as $error):
-		$product = ProductData::getById($error["product_id"]);
-		?>
-		<tr class="danger">
-			<td><?php echo $product->id; ?></td>
-			<td><?php echo $product->name; ?></td>
-			<td><b><?php echo $error["message"]; ?></b></td>
-		</tr>
-
-		<?php endforeach; ?>
-		</table>
-		<?php
-		unset($_SESSION["errors"]);
-		 endif; ?>
-<div id="show_search_results"></div>
-
-<script>
-//jQuery.noConflict();
-
-$(document).ready(function(){
-	$("#searchp").on("submit",function(e){
-		e.preventDefault();
-		$.get("./?action=searchproduct2",$("#searchp").serialize(),function(data){
-			$("#show_search_results").html(data);
-		});
-		$("#product_code").val("");
-
-	});
-
-	if ($("#is_client").val() == "1") {
-		$.get("./?action=searchproductmovil",$("#searchp").serialize(),function(data){
-			$("#show_search_results").html(data);
-		});
-	}
-});
-
-$(document).ready(function(){
-    $("#product_code").keydown(function(e){
-        if(e.which==17 || e.which==74){
-            e.preventDefault();
-        }else{
-            console.log(e.which);
-        }
-    })
-});
-</script>
-
-
+	</div>
 
 
 <!--- Carrito de compras :) -->
@@ -224,4 +224,65 @@ $total_products += $p['q'];
 	// 	}
 
 	// })
+</script>
+
+
+<script type="text/javascript">
+        function thePDF() {
+
+			var doc = new jsPDF('p', 'pt');
+	        doc.setFontSize(15);
+	        doc.text("<?php echo ConfigurationData::getByPreffix("company_name")->val;?>", 40, 65);
+	        doc.setFontSize(10);
+	        doc.text("PRODUCTOS", 40, 80);
+	        doc.setFontSize(12);
+	        
+			var columns = [
+			    {title: "", dataKey: "image"}, 
+			    {title: "NOMBRE DEL PRODUCTO", dataKey: "name"}, 
+			    {title: "PRECIO DE SALIDA", dataKey: "price_out"},
+				{title: "CATEGORIA", dataKey: "category_id"},
+				{title: "MARCA", dataKey: "brand_id"},
+			];
+			var rows = [
+			  <?php foreach($products as $product):
+			  ?>
+			    {
+			      "name": "<?php echo $product->name; ?>",
+			      "price_out": "$ <?php echo number_format($product->price_out,2,'.',',');?>",
+					"category_id": "<?php if($product->category_id!=null){echo $product->getCategory()->name;}else{ echo "<center>----</center>"; }  ?>",
+					"brand_id": "<?php if($product->brand_id!=null){echo $product->getBrand()->name;}else{ echo "<center>----</center>"; }  ?>",
+			      },
+			 <?php endforeach; ?>
+			];
+			doc.autoTable(columns, rows, {
+			    theme: 'grid',
+			    overflow:'linebreak',
+			    styles: { 
+			        fillColor: <?php echo Core::$pdf_table_fillcolor;?>,
+			        halign: 'center'
+			    },
+			    columnStyles: {
+			        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
+			    },
+			    margin: {top: 100},
+			    afterPageContent: function(data) {
+			    }
+			});
+			doc.setFontSize(12);
+			doc.text("<?php echo Core::$pdf_footer;?>", 40, doc.autoTableEndPosY()+25);
+			<?php 
+			$con = ConfigurationData::getByPreffix("report_image");
+			if($con!=null && $con->val!=""):
+			?>
+			var img = new Image();
+			img.src= "storage/configuration/<?php echo $con->val;?>";
+			img.onload = function(){
+			doc.addImage(img, 'PNG', 495, 20, 60, 60,'mon');	
+			doc.save('products-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+			}
+			<?php else:?>
+			doc.save('products-<?php echo date("d-m-Y h:i:s",time()); ?>.pdf');
+			<?php endif; ?>
+			}
 </script>

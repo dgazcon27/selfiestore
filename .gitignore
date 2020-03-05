@@ -1,2 +1,5 @@
 codigos/
 storage/
+core/app/view/*.php-tmp
+documents/*.php-tmp
+core/controller/Database.php

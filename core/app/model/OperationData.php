@@ -173,6 +173,29 @@ public static function getPPByDateOfficial($start,$end){
 		return $q;
 	}
 
+	public static function getStockOfProductsAvailables() {
+		$stock = StockData::getPrincipal()->id;
+		$products = ProductData::getAll();
+		$response = array();
+		if (count($products)>0) {
+			foreach ($products as $product) {
+				$ope = OperationData::getQByStock($product->id, $stock);
+				if ($ope > 0) {
+					$product->q = $ope;
+					$product->stock = $stock;
+					array_push($response,$product);
+				} elseif (Core::$user->kind == 8 || Core::$user->kind == 2) {
+					$stock = Core::$user->stock_id;
+					$ope = OperationData::getQByStock($product->id,$stock);
+					$product->q = $ope;
+					$product->stock = $stock;
+					array_push($response,$product);
+				}
+			}
+		}
+		return $response;
+	}
+
 	public function updateOrderToSell($id){		
 		$sql = "update ".self::$tablename." set operation_type_id=2 where sell_id=$id";
 		Executor::doit($sql);

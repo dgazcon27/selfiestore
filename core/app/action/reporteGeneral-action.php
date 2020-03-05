@@ -552,6 +552,32 @@
 	$pdf->setFillColor(255);
 	$pdf->SetTextColor(0);
 
+	if ($core->getCurrentCellPosition() >= 236) {
+		$pdf->AddPage();
+		$core->setCurrentCellPosition(7);					
+	}
+
+	$products = array();
+	foreach ($operations as $op) {
+		if ($op->operation_type_id == 2) {
+			
+		}
+	}
+	// BALANCE DE PRODUCTOS
+	// INICIO TITULO OPERACIONES DE CREDITO
+	$pdf->setY($core->getNextSpaceCell(14));
+	$pdf->SetFont('Arial','B',19); 
+	$pdf->setFillColor(180,198,232);
+	$pdf->Cell(0,20, "BALANCE DE PRODUCTOS", 1,0,'C',1);
+
+	$products = array();
+	foreach ($operations as $op) {
+		if ($op->operation_type_id == 2) {
+			
+		}
+	}
+
+
 	$pdf->Output();
 
 
