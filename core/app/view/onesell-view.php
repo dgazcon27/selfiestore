@@ -43,20 +43,22 @@ if(isset($_COOKIE["selled"]) && isset($_SESSION['is_admin'])){
 <div class="row">
   <?php
     $class = "col-md-8";
-    if (($sell->d_id == 3 || $sell->d_id == 8 || $sell->d_id == 1) && $sell->p_id == 1) {
+    if (($sell->d_id == 3 || $sell->d_id == 8 || $sell->d_id == 1 || $sell->d_id == 11) && $sell->p_id == 1) {
       $class = "col-md-12";
      } 
   ?>
 <div class="<?php echo $class;?>">
 <div class="box box-primary">
 <table class="table table-bordered">
-<?php if(isset($sell->user_id)) {
-  $client = UserData::getById($sell->user_id);
-} else if(isset($sell->person_id)){
+<?php 
+
+if(isset($sell->person_id)){
   $client = PersonData::getById($sell->person_id);
 } else {
   $client = null;
 }
+
+
 ?>
 
 <?php if (isset($client)): ?>
@@ -104,11 +106,11 @@ $seller = UserData::getById($sell->receive_by);
   <td><?php echo $operation->q ;?></td>
   
   
-  <td>$ <?php echo number_format($operation->price_out,2,".",",") ;?></td>
-  <td><b>$ <?php echo number_format($operation->q*$operation->price_out,2,".",",");$total+=$operation->q*$operation->price_out;
+  <td>$ <?php echo number_format($product->price_out,2,".",",") ;?></td>
+  <td><b>$ <?php echo number_format($operation->q*$product->price_out,2,".",",");$total+=$operation->q*$product->price_out;
 	  
 	  
-	$costo+=$operation->q*$operation->price_in;  
+	$costo+=$operation->q*$product->price_in;  
 	  
 	  
 	  ?></b></td>

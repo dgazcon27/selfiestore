@@ -1,3 +1,12 @@
+<style type="text/css">
+	#barcode {
+		width: 60px !important;
+	}
+
+	#name_product {
+		width: 250px !important;
+	}
+</style>
 <?php
 // $symbol = ConfigurationData::getByPreffix("currency")->val;
 $iva_name = ConfigurationData::getByPreffix("imp-name")->val;
@@ -23,51 +32,70 @@ if (isset($_GET['id'])) {
 		$_SESSION['cotization'] = $items;
 	}
 }
+	$products = OperationData::getStockOfProductsAvailables();
 ?>
 <section class="content">
-	<?php Core::back(); ?>
-<div class="row">
-	<div class="col-md-12">
-	<h1>COTIZAR PEDIDO</h1>
-	<p><b>BUSCAR PRODUCTO POR NOMBRE O POR CODIGO:</b></p>
-		<form id="searchp">
+	<div class="box box-primary">
 		<div class="row">
-			<div class="col-md-6 input-search">
-				<input type="hidden" name="view" value="newcotization">
-				<input type="text" id="product_code" name="product" class="form-control">
-			</div>
-			<div class="col-md-3 button-search">
-			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> BUSCAR</button>
+			<div class="col-md-12">
+			<?php if (Core::$user->kind == 1): ?>
+				<div class="btn-group pull-right" style="margin-top: 12px;margin-right: 10px;">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-download"></i> Descargar <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a onclick="thePDF()" id="makepdf" class="">PDF (.pdf)</a>
+					</ul>
+				</div>
+			<?php endif ?>
+			<h1>COTIZAR PEDIDO</h1>
+				<div class="box-body no-padding">
+					<div class="box-body table-responsive" style="overflow: hidden !important;">
+						<table class="table table-bordered datatable table-hover" >
+							<thead>
+								<th id="barcode">CODIGO</th>
+								<th>IMAGEN</th>
+								<th id="name_product">NOMBRE</th>
+								<th>PRECIO</th>
+								<th>PESO</th>
+								<th>MARCA</th>
+								<th>DISPONIBLE</th>
+								<th></th>
+							</thead>
+							<?php foreach ($products as $product): ?>
+								<tr>
+									<td><?php echo $product->barcode; ?></td>
+									<td>
+										<?php if($product->image!=""):?>
+											<img src="storage/products/<?php echo $product->image;?>" style="width:80px;">
+										<?php endif;?>
+									</td>
+									<td><?php echo strtoupper($product->name); ?></td>
+									<td style="text-align: center">$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
+									<td style="text-align: center" class="center"><?php echo $product->unit; ?></td>
+									<td style="text-align: center"><?php if($product->brand_id!=null){echo $product->getBrand()->name;}else{ echo "<center>----</center>"; }  ?></td>
+									<td style="text-align: center"><?php echo strtoupper($product->q); ?></td>
+									<td >
+										<form method="post" action="index.php?view=updateproductcotization&id=<?php echo $_GET['id']; ?>">
+											<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
+											<input type="hidden" name="stock_id" value="<?php echo $product->stock; ?>">
+											<div class="input-group">
+												<input type="" class="form-control" required name="q" placeholder="Cantidad ...">
+										      	<span class="input-group-btn">
+												<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus-sign"></i></button>
+										      </span>
+										    </div>
+										</form>
+									</td>
+								</tr>	
+							<?php endforeach ?>
+							
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
-		</form>
-<div id="show_search_results"></div>
-
-<script>
-//jQuery.noConflict();
-
-$(document).ready(function(){
-	$("#searchp").on("submit",function(e){
-		e.preventDefault();
-		
-		$.get("./?action=updatecotizationsearch&id=<?php echo $_GET['id'];?>",$("#searchp").serialize(),function(data){
-			$("#show_search_results").html(data);
-		});
-		$("#product_code").val("");
-
-	});
-	});
-
-$(document).ready(function(){
-    $("#product_code").keydown(function(e){
-        if(e.which==17 || e.which==74){
-            e.preventDefault();
-        }else{
-            console.log(e.which);
-        }
-    })
-});
-</script>
+	</div>
 
 <?php if(isset($_SESSION["errors"])):?>
 <h2>Errores</h2>

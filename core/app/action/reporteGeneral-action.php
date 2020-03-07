@@ -163,6 +163,9 @@
 		}
 	}
 
+	// LIST OF SPENDS
+	$spends = SpendData::getGroupByDateOpReport($_GET['start'], $_GET['end']);
+
 	// BEGIN GENERATE PDF
 	
 	$core = new Core();
@@ -362,10 +365,10 @@
 
 	// CELDA DE ESPACIO
 	$pdf->setY($core->getNextSpaceCell());
-	$pdf->Cell(0,21, '', 1,0,'C',0);
+	$pdf->Cell(0,14, '', 1,0,'C',0);
 
 	// TITULOS TIPOS DE ABONOS
-	$pdf->setY($core->getNextSpaceCell(14));
+	$pdf->setY($core->getNextSpaceCell(7));
 	$pdf->SetTextColor(255);
 	$pdf->setFillColor(0);
 	$pdf->setY($core->getNextSpaceCell());
@@ -549,34 +552,151 @@
 	$pdf->SetTextColor(255);
 	$pdf->setX(110);
 	$pdf->Cell(96,7, number_format($credit_efe_close,2,'.',',')." $", 1,0,'C',1);
-	$pdf->setFillColor(255);
-	$pdf->SetTextColor(0);
+	
 
 	if ($core->getCurrentCellPosition() >= 236) {
 		$pdf->AddPage();
 		$core->setCurrentCellPosition(7);					
+	} else {
+		$pdf->setY($core->getNextSpaceCell());
 	}
 
-	$products = array();
-	foreach ($operations as $op) {
-		if ($op->operation_type_id == 2) {
-			
+
+
+	// BALANCE DE PRODUCTOS
+	// INICIO TITULO OPERACIONES DE CREDITO
+	$pdf->setY($core->getNextSpaceCell(10));
+	$pdf->SetFont('Arial','B',19); 
+	$pdf->setFillColor(180,198,232);
+	$pdf->SetTextColor(0);
+	$pdf->Cell(0,20, "GASTOS", 1,0,'C',1);
+
+	$pdf->setFillColor(0);
+	$pdf->SetTextColor(255);
+	$pdf->SetFont('Arial','B',12); 
+	$pdf->setY($core->getNextSpaceCell(14));
+	$pdf->Cell(98,7, "DESCRIPCION", 1,0,'C',1);
+	$pdf->setX(108);
+	$pdf->Cell(98,7, "MONTO", 1,0,'C',1);
+	$pdf->setFillColor(255);
+	$pdf->SetTextColor(0);
+	$pdf->SetFont('Arial','',10); 
+	
+	$total_spends = 0;
+	foreach ($spends as $spend) {
+		$total_spends += $spend->price;
+		$pdf->setY($core->getNextSpaceCell(0));
+		$pdf->Cell(98,7, $spend->name, 1,0,'C',1);
+		$pdf->setX(108);
+		$pdf->Cell(98,7, $spend->price, 1,0,'C',1);
+		if ($core->getCurrentCellPosition() >= 236) {
+			$pdf->AddPage();
+			$core->setCurrentCellPosition(7);					
 		}
 	}
+
+	if ($core->getCurrentCellPosition() >= 228) {
+		$pdf->AddPage();
+		$core->setCurrentCellPosition(7);					
+	} else {
+		$pdf->setY($core->getNextSpaceCell());
+	}
+	
+	$pdf->setX(10);
+	$pdf->Cell(0,23, "", 1,0,'C',0);
+
+	// TITULO TOTAL
+	$pdf->SetFont('Arial','',14); 
+	$pdf->setY($core->getNextSpaceCell());
+	$pdf->setX(110);
+	$pdf->Cell(100,7, "TOTAL", 0,0,'C',0);
+
+	// VALOR TOTAL DE VENTAS DE CONTADO	
+	$pdf->setY($core->getNextSpaceCell());
+	$pdf->SetFont('Arial','B',13); 
+	$pdf->setFillColor(0);
+	$pdf->SetTextColor(255);
+	$pdf->setX(110);
+	$pdf->Cell(96,9, number_format($total_spends,2,'.',',')." $", 1,0,'C',1);
+
+	// if ($core->getCurrentCellPosition() >= 236) {
+		$pdf->AddPage();
+		$core->setCurrentCellPosition(7);					
+	// } else {
+	// 	$pdf->setY($core->getNextSpaceCell());
+	// }
+
 	// BALANCE DE PRODUCTOS
 	// INICIO TITULO OPERACIONES DE CREDITO
 	$pdf->setY($core->getNextSpaceCell(14));
 	$pdf->SetFont('Arial','B',19); 
 	$pdf->setFillColor(180,198,232);
-	$pdf->Cell(0,20, "BALANCE DE PRODUCTOS", 1,0,'C',1);
+	$pdf->SetTextColor(0);
+	$pdf->Cell(0,20, "GANANCIAS", 1,0,'C',1);
 
-	$products = array();
-	foreach ($operations as $op) {
-		if ($op->operation_type_id == 2) {
-			
-		}
-	}
+	$pdf->setY($core->getNextSpaceCell(20));
+	$pdf->setFillColor(0);
+	$pdf->SetTextColor(255);
+	$pdf->SetFont('Arial','B',10); 
+	$pdf->Cell(65,7, "TOTAL GANANCIAS DE CONTADO", 1,0,'C',1);
+	$pdf->setX(75.5);
+	$pdf->Cell(77,7, utf8_decode("TOTAL GANANCIAS DE CRÉDITO"), 1,0,'C',1);
+	$pdf->setX(153);
+	$pdf->Cell(53,7, "TOTAL GASTOS", 1,0,'C',1);
+	$pdf->setFillColor(255);
+	$pdf->SetTextColor(0);
 
+	
+	$pdf->setY($core->getNextSpaceCell());
+	$pdf->setX(10);
+	$pdf->Cell(0,30, "", 1,0,'C',0);
+	$pdf->SetFont('Arial','',10);
+	$pdf->setX(10);
+	$pdf->Cell(65,7, number_format($total_ganado_contado,2,'.',',')." $", 1,0,'C',1);
+	$pdf->setX(75.5);
+	$pdf->Cell(77,7, number_format($total_credit-$total_credit_invested,2,'.',',')." $", 1,0,'C',1);
+	$pdf->setX(153);
+	$pdf->Cell(53,7, number_format($total_spends,2,'.',',')." $", 1,0,'C',1);
+
+
+	$win_win = $total_ganado_contado+($total_credit-$total_credit_invested)-$total_spends;
+	// TITULO TOTAL
+	$pdf->SetFont('Arial','',14); 
+	$pdf->setY($core->getNextSpaceCell(14));
+	$pdf->setX(110);
+	$pdf->Cell(100,7, "TOTAL", 0,0,'C',0);
+
+	// VALOR TOTAL DE VENTAS DE CONTADO	
+	$pdf->setY($core->getNextSpaceCell());
+	$pdf->SetFont('Arial','B',13); 
+	$pdf->setFillColor(0);
+	$pdf->SetTextColor(255);
+	$pdf->setX(110);
+	$pdf->Cell(96,9, number_format($win_win,2,'.',',')." $", 1,0,'C',1);
+
+	$pdf->setY($core->getNextSpaceCell(14));
+
+	$pdf->setFillColor(0);
+	$pdf->SetTextColor(255);
+	$pdf->SetFont('Arial','B',10); 
+	$pdf->Cell(65,8, "CEO 70%", 1,0,'C',1);
+	$pdf->setX(75.5);
+	$pdf->Cell(77,8, utf8_decode("MARKETING 5%"), 1,0,'C',1);
+	$pdf->setX(153);
+	$pdf->Cell(53,8, "DIRECTIVA 25%", 1,0,'C',1);
+	$pdf->setFillColor(255);
+	$pdf->SetTextColor(0);
+
+
+	$pdf->setY($core->getNextSpaceCell(9));
+	$pdf->SetFont('Arial','',10);
+	$pdf->setX(10);
+	$pdf->Cell(65,7, number_format($win_win*0.7,2,'.',',')." $", 1,0,'C',1);
+	$pdf->setX(75.5);
+	$pdf->Cell(77,7, number_format($win_win*0.05,2,'.',',')." $", 1,0,'C',1);
+	$pdf->setX(153);
+	$pdf->Cell(53,7, number_format($win_win*0.25,2,'.',',')." $", 1,0,'C',1);
+	
 
 	$pdf->Output();
 
