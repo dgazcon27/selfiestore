@@ -40,6 +40,30 @@ if (isset($_SESSION['is_client'])) {
 					</ul>
 				</div>
 			<?php endif ?>
+			<?php if(isset($_SESSION["errors"])):?>
+				<h2>Producto insuficiente</h2>
+				<p></p>
+				<table class="table table-bordered table-hover">
+				<tr class="danger">
+					<th>Codigo</th>
+					<th>Producto</th>
+					<th>Mensaje</th>
+				</tr>
+				<?php foreach ($_SESSION["errors"]  as $error):
+				$product = ProductData::getById($error["product_id"]);
+				?>
+				<tr class="danger">
+					<td><?php echo $product->id; ?></td>
+					<td><?php echo $product->name; ?></td>
+					<td><b><?php echo $error["message"]; ?></b></td>
+				</tr>
+
+				<?php endforeach; ?>
+				</table>
+				<?php
+				unset($_SESSION["errors"]);
+			 endif; ?>
+
 			<h1>COTIZAR PEDIDO</h1>
 				<div class="box-body no-padding">
 					<div class="box-body table-responsive" style="overflow: hidden !important;">

@@ -61,8 +61,8 @@ if(count($products)>0){
 			<?php endif;?>
 		</td>
 		<td><?php echo strtoupper($product->name); ?></td>
-		<td>$ <?php echo number_format($product->price_in,2,'.',','); ?></td>
-		<td>$ <?php echo number_format($product->price_out,2,'.',','); ?></td>
+		<td>$ <?php echo number_format($product->price_in,3,'.',','); ?></td>
+		<td>$ <?php echo number_format($product->price_out,3,'.',','); ?></td>
 		<td class="center"><?php echo $product->unit; ?></td>
 		<td><?php if($product->brand_id!=null){echo $product->getBrand()->name;}else{ echo "<center>----</center>"; }  ?></td>
 <td>

@@ -26,8 +26,7 @@ if (count($products) > 0) {
   </button>
   <ul class="dropdown-menu pull-right" role="menu">
     <li><a href="report/box-word.php?id=<?php echo $_GET["id"];?>">Word 2007 (.docx)</a></li>
-    <li><a onclick="thePDF('<?php echo
-date("Y/m/d", strtotime($box_day)); ?>')" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a></li>
+    <li><a href="index.php?action=boxReport&id=<?php echo $_GET["id"];?>" target="_blank" id="makepdf" class="btn btn-default" class="">PDF (.pdf)</a></li>
   </ul>
 </div>
 </div>
@@ -379,6 +378,7 @@ if(count($products)>0){
 			{title: "", dataKey: "gasto"}, 
 		];
 
+
 		var resumenCaja = [
 			{"id":"TOTAL EN EFECTIVO","gasto":"TOTAL EN TRANSFERENCIA"},
 			{"id":"$ <?php echo number_format($total_efectivo,2,".",",");?>","gasto":"$ <?php echo number_format($total_transferencia,2,".",",");?>"},
@@ -400,6 +400,7 @@ if(count($products)>0){
 		    },
 		    startY: 170,
 		});
+		doc.addPage();
 
 		
 
@@ -413,7 +414,7 @@ if(count($products)>0){
 		    columnStyles: {
 		        id: {fillColor: <?php echo Core::$pdf_table_column_fillcolor;?>}
 		    },
-		    margin: {top: doc.autoTableEndPosY()+20},
+		    startY: 20,
 		    afterPageContent: function(data) {
 		    }
 		});

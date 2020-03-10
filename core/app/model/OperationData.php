@@ -174,11 +174,11 @@ public static function getPPByDateOfficial($start,$end){
 	}
 
 	public static function getStockOfProductsAvailables() {
-		$stock = StockData::getPrincipal()->id;
 		$products = ProductData::getAll();
 		$response = array();
 		if (count($products)>0) {
 			foreach ($products as $product) {
+				$stock = StockData::getPrincipal()->id;
 				$ope = OperationData::getQByStock($product->id, $stock);
 				if ($ope > 0) {
 					$product->q = $ope;
