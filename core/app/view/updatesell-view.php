@@ -326,6 +326,9 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
     }
     if (column.q) {
       text += '<th>CANTIDAD</th>';
+    } 
+    if (column.stock) {
+      text += '<th>STOCK</th>';
     }
     if (column.option) {
       text += '<th></th>';
@@ -353,16 +356,21 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
 
   function addSearchProducts(products, box) {
     box.empty()
-    text = getHeader({price: 1, option: 1});
+
+    text = getHeader({price: 1, option: 1, stock:1});
     for (var i = 0; i < products.length; i++) {
+      readonly = products[i].stock > 0 ? '': 'readonly';
+      disabled = products[i].stock > 0 ? '': 'disabled';
+      console.log(readonly)
       text += `<tr>
                 <td><img src="storage/products/${products[i].image}" style="width:40px;"></td>
                 <td>${products[i].name}</td>
                 <td>${products[i].price}</td>
+                <td>${products[i].stock}</td>
                 <td><div class="input-group">
-                    <input type="text" class="form-control" required name="q" id="quantity${products[i].id}" placeholder="Cantidad ...">
+                    <input type="text" class="form-control" required name="q" id="quantity${products[i].id}" ${readonly} placeholder="Cantidad ...">
                     <span class="input-group-btn add-product">
-                        <a class="btn btn-primary" onClick="addProduct(${products[i].id})">
+                        <a ${disabled} class="btn btn-primary" onClick="addProduct(${products[i].id})">
                             <i class="glyphicon glyphicon-plus-sign"></i>
                         </a>
                     </span>
@@ -433,11 +441,11 @@ $credit=PaymentData::sumByClientId($sell->person_id)->total;
                 i++;
             }
             if (find) {
+                products[i-1].q = parseInt(products[i-1].q, 10) + parseInt(q,10);
                 total = new Intl.NumberFormat("de-DE", {
                     maximumSignificantDigits: 3
                 })
                 .format(parseInt(products[i-1].q*products[i-1].price, 10))
-                products[i-1].q = parseInt(products[i-1].q, 10) + parseInt(q,10);
                 products[i-1].total = total;
             } else {
                 list_products = products.concat(JSON.parse(data).products[0])

@@ -4,7 +4,8 @@
 	if (isset($_GET['q'])) {
 		$prd = ProductData::getLike($_GET['q']);
 		foreach ($prd as $value) {
-			array_push($products, array('id' => $value->id,'name' => $value->name, 'image' => $value->image, 'price'=> number_format($value->price_out,2,".",",") )); 
+			$stock = OperationData::getQByStock($value->id, Core::$user->stock_id);
+			array_push($products, array('id' => $value->id,'name' => $value->name, 'image' => $value->image, 'price'=> number_format($value->price_out,2,".",","), 'stock' => $stock )); 
 
 		}
 	} elseif (isset($_GET['id'])) {
@@ -27,4 +28,5 @@
 	$response = array('products' => $products);
 
 	echo json_encode($response);
+
 ?>
