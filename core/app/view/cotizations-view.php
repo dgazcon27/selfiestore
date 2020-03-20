@@ -7,6 +7,7 @@
 </style>
 <section class="content"> 
 	<div class="row">
+		<input type="hidden" name="kind_user" id="kind_user" value="<?php echo Core::$user->kind;?>">
 		<div class="col-md-12">
 			<a href="./?view=newcotization" class="btn btn-default pull-right">
 				<i class="fa fa-asterisk"></i> COTIZAR PEDIDO
@@ -153,12 +154,17 @@
 <script>
 	$(".confirm_button").click(function (e) {
 		id = e.currentTarget.dataset.id;
+		kind_user = $("#kind_user").val();
 		let go = confirm("¿DESEA CONFIRMAR ESTA COTIZACION?")
 		if (go) {
 			$.get("./?action=inprocesscotization&id="+id,function(data){
 				alert("SU COTIZACION ESTA EN PROCESO, NUESTROS VENDEDORES SE COMUNICARAN CON USTED PARA VERIFICAR EL PEDIDO")
 				setTimeout(function (argument) {
-					window.location.href = window.location.href;
+					if (kind_user != "8") {
+						window.location.href = window.location.href;
+					} else {
+						window.location.href = "./?view=orders-approved";
+					}
 				}, 1000)
 			});
 		}

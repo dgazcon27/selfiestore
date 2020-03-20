@@ -143,6 +143,11 @@ elseif($sell->f_id == 5)
 				<i class="fa fa-file"></i> PDF GUIA
 			</a>
 		<?php endif ?>
+		<?php if (Core::$user->kind == 5 || Core::$user->kind == 1): ?>
+			<a style="margin-bottom: 2px;" href="index.php?view=updatesell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-warning">
+				<i class="fa fa-pencil"></i> <span class="hidden-xs">EDITAR</span>
+			</a>
+		<?php endif ?>
 		</td>
 	</tr>
 	

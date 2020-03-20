@@ -39,6 +39,11 @@ class SellData {
 		return Executor::doit($sql);
 	}
 
+	function changeSell(){
+		$sql = "update ".self::$tablename." set person_id=$this->person_id, f_id=$this->f_id, refe=\"$this->refe\" where id = $this->id";
+		return Executor::doit($sql);
+	}
+
 	public function update_cotization($id)	{
 		$sql = "update ".self::$tablename." set total=$this->total where id=$id";
 		Executor::doit($sql);

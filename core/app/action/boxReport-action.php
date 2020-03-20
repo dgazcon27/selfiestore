@@ -115,24 +115,28 @@
 			}
 		}
 
-		if ($core->getCurrentCellPosition() >= 236) {
+		$space = 7;
+		if ($core->getCurrentCellPosition()+30 >= 236) {
 			$pdf->AddPage();
-			$core->setCurrentCellPosition(7);					
+			$core->setCurrentCellPosition(7);
+			$space = 10;				
+		}else {
+			$pdf->setY($core->getNextSpaceCell(7));
 		}
+
 		$pdf->SetFont('Arial','B',10); 
 		$pdf->SetTextColor(255);
 		$pdf->setX(10);
-		$pdf->setY($core->getNextSpaceCell(7));
 		$pdf->Cell(97,7, "TOTAL EN EFECTIVO", 1,0,'C',1);
 		$pdf->setX(107.5);
 		$pdf->Cell(98.5,7, "TOTAL EN TRANSFERENCIA", 1,0,'C',1);
 		$pdf->SetTextColor(0);
-		$pdf->setY($core->getNextSpaceCell());
+		$pdf->setY($core->getNextSpaceCell($space));
 		$pdf->setX(10);
 		$pdf->Cell(97,7, number_format($total_efe,2,'.',',')." $" , 1,0,'C',0);
 		$pdf->setX(107.5);
 		$pdf->Cell(98.5,7, number_format($total_trans,2,'.',',')." $", 1,0,'C',0);
-		$pdf->setY($core->getNextSpaceCell());
+		$pdf->setY($core->getNextSpaceCell($space));
 		$pdf->SetTextColor(255);
 		$pdf->setX(10);
 		$pdf->Cell(97,7, "TOTAL EN ZELLE", 1,0,'C',1);
@@ -145,10 +149,23 @@
 		$pdf->setX(107.5);
 		$pdf->Cell(98.5,7, number_format($total_pt,2,'.',',')." $", 1,0,'C',0);
 
+		$jumped = false;
+		if ($core->getCurrentCellPosition()+21 >= 236) {
+			$pdf->AddPage();
+			$core->setCurrentCellPosition(7);
+			$jumped = !$jumped;					
+		} else {
+			$pdf->setY($core->getNextSpaceCell());
+		}
+
 		$pdf->SetFont('Arial','B',13); 
-		$pdf->setY($core->getNextSpaceCell());
 		$pdf->Cell(0,21, '', 1,0,'C',0);
-		$pdf->setY($core->getNextSpaceCell());
+		$space = 7;
+		if ($jumped) {
+			$space = 10;
+		}
+
+		$pdf->setY($core->getNextSpaceCell($space));
 		$pdf->setX(107.5);
 		$pdf->Cell(98,7, "TOTAL EN VENTAS", 0,0,'C',0);
 		$pdf->setY($core->getNextSpaceCell());
@@ -156,17 +173,23 @@
 		$pdf->SetTextColor(255);
 		$pdf->Cell(98.5,7, number_format($total_sells,2,'.',',')." $", 1,0,'C',1);
 
-		if ($core->getCurrentCellPosition() >= 236) {
-			$pdf->AddPage();
-			$core->setCurrentCellPosition(7);					
-		}
-		$pdf->setY($core->getNextSpaceCell());
-
+		
 		// INICIO TITULO OPERACIONES DE CONTADO
 		$pdf->SetTextColor(0);
-		$pdf->setY($core->getNextSpaceCell(5));
+
+		$space = 18;
+		if ($jumped) {
+			$space = 14;
+		}
+
+		$pdf->setY($core->getNextSpaceCell($space));
 		$pdf->SetFont('Arial','B',19); 
 		$pdf->setFillColor(180,198,232);
+		if ($core->getCurrentCellPosition()+20 >= 236) {
+			$pdf->AddPage();
+			$core->setCurrentCellPosition(7);
+		}
+
 		$pdf->Cell(0,20, "ABONOS DEL DIA", 1,0,'C',1);
 		$pdf->setY($core->getNextSpaceCell(20));
 		$pdf->SetFont('Arial','B',10); 

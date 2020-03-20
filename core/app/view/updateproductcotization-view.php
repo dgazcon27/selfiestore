@@ -72,6 +72,11 @@ if(!isset($_SESSION["cotization"])){
 
 	}
 }
+if (isset($_GET['sell'])) {
  print "<script>window.location='index.php?view=updatecotization&id=".$_GET['id']."&set=update';</script>";
+	
+} else {
+ print "<script>window.location='index.php?view=updatecotization&id=".$_GET['id']."&set=update';</script>";
+}
 
 ?>

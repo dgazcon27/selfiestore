@@ -126,6 +126,12 @@
 											<i class="fa fa-send"></i><span class="hidden-xs hidden-sm"> CONVERTIR EN VENTA</span>
 										</a>
 									<?php endif ?>
+
+									<?php if ((Core::$user->kind == 5 || Core::$user->kind == 1) && $sell->d_id == 11): ?>
+										<a href="index.php?action=setorder&status=1&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-success" onclick="return confirm('¿CORFIRMAR QUE EL PEDIDO FUE ENTREGADO?');">
+											<span> ENTREGADO AL CLIENTE</span>
+										</a>
+									<?php endif ?>
 									
 
 									<?php if (Core::$user->kind == 2 && $sell->d_id == 9): ?>
